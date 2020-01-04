@@ -1,0 +1,689 @@
+[
+	{"name": "Bitop", "skip": true},
+	{"name": "ClusterSetslot", "skip": true},
+	{"name": "Object", "skip": true},
+	{"name": "Pubsub", "skip": true},
+	{"name": "Setnx", "skip": true},
+	{"name": "Setex", "skip": true},
+	{"name": "Psetex", "skip": true},
+	{"name": "Slowlog", "skip": true},
+	{"name": "Hmset", "skip": true},
+	{"name": "Slaveof", "skip": true},
+	{"name": "Sync","skip": true},
+	{"name": "Xgroup","skip": true},	
+	{"name": "Xinfo","skip": true},
+	
+	{
+		"_type": "funcConfig",
+		"name": "Subscribe",
+		"config": {"type": "subscribe", "callback": "MsgCallback", "channel": "channel"}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Psubscribe",
+		"config": {"type": "subscribe", "callback": "MsgCallback", "channel": "pattern"}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Unsubscribe",
+		"config": {"type": "unsubscribe", "channel": "channel"}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Punsubscribe",
+		"config": {"type": "unsubscribe", "channel": "pattern"}
+	},
+
+	{
+		"_type": "funcAttr",
+		"name": "Do",
+		"summary": "Generic command.",
+		"since": "-",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hello",
+		"summary": "Connection handshake.",
+		"since": "6.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientTracking",
+		"summary": "Enable client side caching.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"name": "Do",
+		"attr": "Do",
+		"list": [
+			{"name": "v", "type": {"_type": "ellipsisType", "node": {"name": "interface{}"}}}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "UserPassword",
+		"list": [
+			{"name": "User", "type": {"name": "string"}},
+			{"name": "Password", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "Hello",
+		"attr": "Hello",
+		"token": ["HELLO"],
+		"list": [
+			{"name": "version", "type": {"name": "string"}},
+			{"name": "userPassword", "cmd": "AUTH", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "UserPassword"}}},
+			{"name": "clientName", "cmd": "SETNAME", "type": {"_type": "pointerType", "node": {"name": "string"}}}
+		]
+	},
+	{
+		"name": "ClientTracking",
+		"attr": "ClientTracking",
+		"token": ["CLIENT", "TRACKING"],
+		"list": [
+			{"name": "on", "type": {"_type": "enumBoolType", "values": ["ON", "OFF"]}},
+			{"name": "redirect", "cmd": "REDIRECT", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+		]
+	},
+	{"_type": "enumDecl", "name": "Overflow", "values": ["WRAP", "SAT", "FAIL"]},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffset",
+		"list": [
+			{"name": "Type", "type": {"name": "string"}},
+			{"name": "Offset", "type": {"name": "int64"}}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffsetIncrement",
+		"list": [
+			{"name": "Type", "type": {"name": "string"}},
+			{"name": "Offset", "type": {"name": "int64"}},
+			{"name": "Increment", "type": {"name": "int64"}}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffsetValue",
+		"list": [
+			{"name": "Type", "type": {"name": "string"}},
+			{"name": "Offset", "type": {"name": "int64"}},
+			{"name": "Value", "type": {"name": "int64"}}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "ScoreMember",
+		"list": [
+			{"name": "Score", "type": {"name": "float64"}},
+			{"name": "Member", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "OffsetCount",
+		"list": [
+			{"name": "Offset", "type": {"name": "int64"}},
+			{"name": "Count", "type": {"name": "int64"}}
+		]
+	},
+	{
+		"name": "Bitfield",
+		"attr": "Bitfield",
+		"token": [
+			"BITFIELD"
+		],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{ "_type": "alternative", "name": "operation", "type": {"_type": "sliceType", "node": {"name": "interface{}"}},
+				"list": [
+					{"name": "Get", 	"cmd": "GET", "type": {"_type": "dataType", "name": "TypeOffset"}},
+					{"name": "Set", 	"cmd": "SET", "type": {"_type": "dataType", "name": "TypeOffsetValue"}},
+					{"name": "Incrby", "cmd": "INCRBY", "type": {"_type": "dataType", "name": "TypeOffsetIncrement"}},
+					{"name": "Overflow", "cmd": "OVERFLOW", "type": {"_type": "dataType", "name": "Overflow"}},
+					{"name": "Get", 	"cmd": "GET", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "TypeOffset"}}},
+					{"name": "Set", 	"cmd": "SET", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "TypeOffsetValue"}}},
+					{"name": "Incrby", "cmd": "INCRBY", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "TypeOffsetIncrement"}}},
+					{"name": "Overflow", "cmd": "OVERFLOW", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "Overflow"}}}
+				]
+			}
+		]
+	},	
+	{
+		"name": "BitopAnd",
+		"attr": "Bitop",
+		"token": ["BITOP", "AND"],
+		"list": [
+			{"name": "destkey", "type": {"name": "interface{}"}},
+			{"name": "srckey", "type": {"_type": "sliceType", "node": {"name": "interface{}"}}}
+		]
+	},
+	{
+		"name": "BitopNot",
+		"attr": "Bitop",
+		"token": ["BITOP", "NOT"],
+		"list": [
+			{"name": "destkey", "type": {	"name": "interface{}"}},
+			{"name": "srckey", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "BitopOr",
+		"attr": "Bitop",
+		"token": ["BITOP", "OR"],
+		"list": [
+			{"name": "destkey", "type": {	"name": "interface{}"}},
+			{"name": "srckey", "type": {"_type": "sliceType", "node": {"name": "interface{}"}}}
+		]
+	},
+	{
+		"name": "BitopXor",
+		"attr": "Bitop",
+		"token": ["BITOP", "XOR"],
+		"list": [
+			{"name": "destkey", 	"type": {"name": "interface{}"}},
+			{"name": "srckey", "type": {"_type": "sliceType", "node": {"name": "interface{}"}}}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Clienttype",
+		"values": ["normal", "master", "replica", "pubsub"]
+	},
+	{
+		"name": "ClientKill",
+		"attr": "ClientKill",
+		"token": ["CLIENT", "KILL"],
+		"list": [
+			{"name": "id", "cmd": "ID", "type": {"_type": "pointerType", "node": {"name": "int64"}}},
+			{"name": "typ", "cmd": "TYPE", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "Clienttype"}}},
+			{"name": "addr", "cmd": "ADDR", "type": {"_type": "pointerType", "node": {"name": "string"}}},
+			{"name": "skipme", "cmd": "SKIPME", "type": {"_type": "enumBoolType", "values": ["YES", "NO"]}}
+		]
+	},
+	{
+		"name": "ClientList",
+		"attr": "ClientList",
+		"token": ["CLIENT", "LIST"],
+		"list": [
+			{"name": "typ", "cmd": "TYPE", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "Clienttype"}}}
+		]
+	},
+	{
+		"name": "ClusterSetslotImporting",
+		"attr": "ClusterSetslot",
+		"token": ["CLUSTER", "SETSLOT"],
+		"list": [
+			{"name": "slot", "type": {"name": "int64"}},
+			{"cmd": "IMPORTING"},
+			{"name": "sourceNodeId", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "ClusterSetslotMigrating",
+		"attr": "ClusterSetslot",
+		"token": ["CLUSTER", "SETSLOT"],
+		"list": [
+			{"name": "slot", "type": {"name": "int64"}},
+			{"cmd": "MIGRATING"},
+			{"name": "destNodeId", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "ClusterSetslotStable",
+		"attr": "ClusterSetslot",
+		"token": ["CLUSTER", "SETSLOT"],
+		"list": [
+			{"name": "slot", "type": {"name": "int64"}},
+			{"cmd": "STABLE"}
+		]
+	},
+	{
+		"name": "ClusterSetslotNode",
+		"attr": "ClusterSetslot",
+		"token": ["CLUSTER", "SETSLOT"],
+		"list": [
+			{"name": "slot", "type": {"name": "int64"}},
+			{"cmd": "NODE"},
+			{"name": "nodeId", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "CommandGetkeys",
+		"attr": "CommandGetkeys",
+		"token": ["COMMAND", "GETKEYS"],
+		"list": [
+			{"name": "arg", "type": {"_type": "sliceType", "node": {"name": "interface{}"}}}
+		]
+	},
+	{
+		"name": "ObjectEncoding",
+		"attr": "Object",
+		"token": ["OBJECT", "ENCODING"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "ObjectFreq",
+		"attr": "Object",
+		"token": ["OBJECT", "FREQ"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "ObjectHelp",
+		"attr": "Object",
+		"token": ["OBJECT", "HELP"]
+	},
+	{
+		"name": "ObjectIdletime",
+		"attr": "Object",
+		"token": ["OBJECT", "IDLETIME"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "ObjectRefcount",
+		"attr": "Object",
+		"token": ["OBJECT", "REFCOUNT"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "PubsubChannels",
+		"attr": "Pubsub",
+		"token": ["PUBSUB", "CHANNELS"],
+		"list": [
+			{"name": "pattern", 	"type": {"_type": "pointerType", "node": {"name": "string"	}}}
+		]
+	},
+	{
+		"name": "PubsubNumpat",
+		"attr": "Pubsub",
+		"token": ["PUBSUB", "NUMPAT"]		
+	},
+	{
+		"name": "PubsubNumsub",
+		"attr": "Pubsub",
+		"token": ["PUBSUB", "NUMSUB"],
+		"list": [
+			{"name": "channel", "type": {	"_type": "sliceType", "node": {"name": "string"}}}
+		]
+	},
+	{
+		"name": "Set",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "SetEx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "seconds", "cmd": "EX", "type": {"name": "int64"}	}
+		]
+	},
+	{
+		"name": "SetExNx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "seconds", "cmd": "EX", "type": {"name": "int64"}	},
+			{"cmd": "NX"}
+		]
+	},
+	{
+		"name": "SetExXx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "seconds", "cmd": "EX", 	"type": {"name": "int64"}},
+			{"cmd": "XX"}
+		]
+	},
+	{
+		"name": "SetNx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"cmd": "NX"}
+		]
+	},
+	{
+		"name": "SetPx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "milliseconds", "cmd": "PX", "type": {"name": "int64"}}
+		]
+	},
+	{
+		"name": "SetPxNx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "milliseconds", "cmd": "PX", "type": {"name": "int64"	}},
+			{"cmd": "NX"}
+		]
+	},
+	{
+		"name": "SetPxXx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"name": "milliseconds", "cmd": "PX", "type": {"name": "int64"}},
+			{"cmd": "XX"}
+		]
+	},
+	{
+		"name": "SetXx",
+		"attr": "Set",
+		"token": ["SET"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "value", "type": {"name": "interface{}"}},
+			{"cmd": "XX"}
+		]
+	},
+	{
+		"name": "SlowlogGet",
+		"attr": "Slowlog",
+		"token": ["SLOWLOG", "GET"],
+		"list": [
+			{"name": "count", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+		]
+	},
+	{
+		"name": "SlowlogLen",
+		"attr": "Slowlog",
+		"token": ["SLOWLOG", "LEN"]
+	},
+	{
+		"name": "SlowlogReset",
+		"attr": "Slowlog",
+		"token": ["SLOWLOG", "RESET"]
+	},
+	{
+		"name": "Zadd",
+		"attr": "Zadd",
+		"token": ["ZADD"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "scoreMember", "type": {	"_type": "sliceType", "node": {"_type": "dataType", "name": "ScoreMember"}}}
+		]
+	},
+	{
+		"name": "ZaddCh",
+		"attr": "Zadd",
+		"token": ["ZADD"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"cmd": "CH"},
+			{"name": "scoreMember", "type": {	"_type": "sliceType", "node": {"_type": "dataType", "name": "ScoreMember"}}}
+		]
+	},
+	{
+		"name": "ZaddNx",
+		"attr": "Zadd",
+		"token": ["ZADD"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"cmd": "NX"},
+			{"name": "scoreMember", "type": {	"_type": "sliceType", "node": {"_type": "dataType", "name": "ScoreMember"}}}
+		]
+	},
+	{
+		"name": "ZaddXx",
+		"attr": "Zadd",
+		"token": ["ZADD"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"cmd": "XX"},
+			{"name": "scoreMember", "type": {	"_type": "sliceType", "node": {"_type": "dataType", "name": "ScoreMember"}}}
+		]
+	},
+	{
+		"name": "ZaddXxCh",
+		"attr": "Zadd",
+		"token": ["ZADD"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"cmd": "XX"},
+			{"cmd": "CH"},
+			{"name": "scoreMember", "type": {	"_type": "sliceType", "node": {"_type": "dataType", "name": "ScoreMember"}}}
+		]
+	},
+	{
+		"name": "Zcount",
+		"attr": "Zcount",
+		"token": ["ZCOUNT"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "min", "type": {"name": "Zfloat64"}},
+			{"name": "max", "type": {"name": "Zfloat64"}}
+		]
+	},
+	{
+		"name": "Zrangebyscore",
+		"attr": "Zrangebyscore",
+		"token": ["ZRANGEBYSCORE"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "min", "type": {"name": "Zfloat64"}},
+			{"name": "max", "type": {"name": "Zfloat64"}},
+			{"name": "withscores", "type": {"_type": "enumBoolType", "values": ["WITHSCORES"]}},
+			{"name": "limit", "cmd": "LIMIT", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "OffsetCount"}}}
+		]
+	},
+	{
+		"name": "Zremrangebyscore",
+		"attr": "Zremrangebyscore",
+		"token": ["ZREMRANGEBYSCORE"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "min", "type": {"name": "Zfloat64"}},
+			{"name": "max", "type": {"name": "Zfloat64"}}
+		]
+	},
+	{
+		"name": "Zrevrangebyscore",
+		"attr": "Zrevrangebyscore",
+		"token": ["ZREVRANGEBYSCORE"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "max", "type": {"name": "Zfloat64"}},
+			{"name": "min", "type": {"name": "Zfloat64"}},
+			{"name": "withscores", "type": {"_type": "enumBoolType", "values": ["WITHSCORES"]}},
+			{"name": "limit", "cmd": "LIMIT", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "OffsetCount"}}}
+		]
+	},
+	{
+		"name": "XgroupCreate",
+		"attr": "Xgroup",
+		"token": ["XGROUP", "CREATE"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "groupname", "type": {"name": "string"}},
+			{"name": "id", "type": {"name": "string"}},
+			{"name": "mkstream", "type": {"_type": "enumBoolType", "values": ["MKSTREAM"]}}			
+		]
+	},
+	{
+		"name": "XgroupSetid",
+		"attr": "Xgroup",
+		"token": ["XGROUP", "SETID"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "groupname", "type": {"name": "string"}},
+			{"name": "id", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "XgroupDestroy",
+		"attr": "Xgroup",
+		"token": ["XGROUP", "DESTROY"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "groupname", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "XgroupDelconsumer",
+		"attr": "Xgroup",
+		"token": ["XGROUP", "DELCONSUMER"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "groupname", "type": {"name": "string"}},
+			{"name": "consumername", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "XgroupHelp",
+		"attr": "Xgroup",
+		"token": ["XGROUP", "HELP"]
+	},
+	{
+		"name": "XinfoConsumers",
+		"attr": "Xinfo",
+		"token": ["XINFO", "CONSUMERS"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "groupname", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "XinfoGroups",
+		"attr": "Xinfo",
+		"token": ["XINFO", "GROUPS"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "XinfoStream",
+		"attr": "Xinfo",
+		"token": ["XINFO", "STREAM"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "XinfoHelp",
+		"attr": "Xinfo",
+		"token": ["XINFO", "HELP"]
+	},
+	{
+		"name": "Zincrby",
+		"attr": "Zincrby",
+		"token": ["ZINCRBY"],
+		"list": [
+			{"name": "key", "type": {"name": "interface{}"}},
+			{"name": "increment", "type": {"name": "float64"}},
+			{"name": "member", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "Auth",
+		"attr": "Auth",
+		"token": ["AUTH"],
+		"list": [
+			{"name": "username", "type": {"_type": "pointerType", "node": {"name": "string"}}},
+			{"name": "password", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "AclCat",
+		"attr": "Auth",
+		"token": ["ACL", "CAT"],
+		"list": [
+			{"name": "category", "type": {"_type": "pointerType", "node": {"name": "string"}}}
+		]
+	},
+	{
+		"name": "AclHelp",
+		"attr": "Auth",
+		"token": ["ACL", "HELP"]
+	},
+	{
+		"name": "AclGenpass",
+		"attr": "Auth",
+		"token": ["ACL", "GENPASS"]
+	},
+	{
+		"name": "AclList",
+		"attr": "Auth",
+		"token": ["ACL", "LIST"]
+	},
+	{
+		"name": "AclUsers",
+		"attr": "Auth",
+		"token": ["ACL", "USERS"]
+	},
+	{
+		"name": "AclWhoami",
+		"attr": "Auth",
+		"token": ["ACL", "WHOAMI"]
+	},
+	{
+		"name": "AclLoad",
+		"attr": "Auth",
+		"token": ["ACL", "LOAD"]
+	},
+	{
+		"name": "AclSave",
+		"attr": "Auth",
+		"token": ["ACL", "SAVE"]
+	},
+	{
+		"name": "AclSetuser",
+		"attr": "Auth",
+		"token": ["ACL", "SETUSER"],
+		"list": [
+			{"name": "username", "type": {"name": "string"}},
+			{"name": "rules", "type": {"_type": "sliceType", "AllowNil": true, "node": {"name": "string"}}}
+		]
+	},
+	{
+		"name": "AclDeluser",
+		"attr": "Auth",
+		"token": ["ACL", "DELUSER"],
+		"list": [
+			{"name": "username", "type": {"_type": "sliceType", "node": {"name": "string"}}}
+		]
+	},
+	{
+		"name": "AclGetuser",
+		"attr": "Auth",
+		"token": ["ACL", "GETUSER"],
+		"list": [
+			{"name": "username", "type": {"name": "string"}}
+		]
+	}	
+]
