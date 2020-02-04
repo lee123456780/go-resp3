@@ -17,16 +17,11 @@ limitations under the License.
 package client
 
 import (
-	"bytes"
-	"sync"
-)
-
-const (
-	minResults = 10
-	maxResults = 10000
+	"sync/atomic"
 )
 
 // Pipeline supports redis pipelining capabilities.
+// Multiple goroutines must not invoke methods on a Pipeline simultaneously.
 type Pipeline interface {
 	Commands
 	Reset()
@@ -36,66 +31,32 @@ type Pipeline interface {
 var _ Pipeline = (*pipeline)(nil)
 
 type pipeline struct {
-	mu      sync.Mutex
-	c       *conn
-	w       *bytes.Buffer
-	enc     Encoder
-	err     error
-	results flushResults
+	c    *conn
+	err  error
+	list *resultList
 	*command
 }
 
 func newPipeline(c *conn) *pipeline {
-	p := &pipeline{
-		c:       c,
-		w:       new(bytes.Buffer),
-		results: make(flushResults, 0, minResults),
-	}
-	p.enc = NewEncoder(p.w)
-	p.command = newCommand(&p.mu, p.enc.Encode, p.send, c.sendInterceptor)
+	p := &pipeline{c: c, list: freeResultlist.get()}
+	p.command = newCommand(p.send, c.sendInterceptor)
 	return p
 }
 
-func (p *pipeline) send(name string, result result) {
-	if p.err != nil {
-		result.setErr(p.err)
-		p.mu.Unlock()
+func (p *pipeline) send(name string, r *result) {
+	if atomic.LoadUint32(&p.c.inShutdown) != 0 {
+		r.setErr(ErrInShutdown)
 		return
 	}
-
-	err := p.enc.Flush()
-	if err != nil {
-		p.err = err
-		result.setErr(err)
-		p.mu.Unlock()
-		return
-	}
-
-	result.setTimeout(p.c.asyncTimeout)
-	//result.setFlushed(false) // pipeline - default value
-
-	p.results = append(p.results, result)
-	p.mu.Unlock()
+	p.list.items = append(p.list.items, r)
 }
 
 func (p *pipeline) Reset() {
-	p.err = nil
-	p.w.Reset()
-	if cap(p.results) > maxResults {
-		p.results = make(flushResults, 0, maxResults)
-	} else {
-		p.results = p.results[:0]
-	}
+	p.list.items = p.list.items[:0]
 }
 
 func (p *pipeline) Flush() error {
-	defer p.Reset()
-
-	if p.err != nil {
-		return p.err
-	}
-	if err := p.c.flushPipeline(p.w, p.results); err != nil {
-		return err
-	}
-	return nil
+	err := p.c.flush(true, p.list)
+	p.list = freeResultlist.get()
+	return err
 }

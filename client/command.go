@@ -16,22 +16,21 @@ limitations under the License.
 
 package client
 
-// A Set represents the redis set type.
-type Set []RedisValue
+//go:generate commander
 
-// Kind returns the type of a Set.
-func (s Set) Kind() RedisKind { return RkSet }
-
-// ToStringSet returns a map with keys of type string and boolean true values. In case key conversion to string is not possible
-// a ConvertionError is returned.
-func (s Set) ToStringSet() (map[string]bool, error) {
-	r := make(map[string]bool, len(s))
-	for _, item := range s {
-		key, err := item.ToString()
-		if err != nil {
-			return nil, err
-		}
-		r[key] = true
-	}
-	return r, nil
+type command struct {
+	send sendFct
 }
+
+func newCommand(send sendFct, sendInterceptor SendInterceptor) *command {
+	if sendInterceptor == nil {
+		return &command{send: send}
+	}
+	return &command{send: func(name string, r *result) {
+		sendInterceptor(name, r.cmd())
+		send(name, r)
+	}}
+}
+
+// check interface implementations.
+var _ Commands = (*command)(nil)

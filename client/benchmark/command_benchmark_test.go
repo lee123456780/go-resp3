@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"go-resp3/client"
+	"github.com/d024441/go-resp3/client"
 )
 
 func lpadName(name string, cnt, n int) string {
@@ -31,28 +31,64 @@ func lpadName(name string, cnt, n int) string {
 	return name + strings.Repeat("_", n-len(num)) + num
 }
 
-func benchmarkSet(conn client.Conn, cnt int, b *testing.B) {
+func benchmarkSetGet(conn client.Conn, cnt int, b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < cnt; j++ {
-			conn.Set("mykey", "myvalue")
+			conn.Set("foo", "bar")
+			value, err := conn.Get("foo").ToString()
+			if err != nil {
+				b.Fatal(err)
+			}
+			if value != "bar" {
+				b.Fatal("got wrong value")
+			}
 		}
 	}
 }
 
-func benchmarkPipelineSet(conn client.Conn, cnt int, b *testing.B) {
+func benchmarkSetGetAsync(conn client.Conn, cnt int, b *testing.B) {
 	for i := 0; i < b.N; i++ {
+		results := make([]client.Result, cnt)
+		for j := 0; j < cnt; j++ {
+			conn.Set("foo", "bar")
+			results[j] = conn.Get("foo")
+		}
+		for j := 0; j < cnt; j++ {
+			value, err := results[j].ToString()
+			if err != nil {
+				b.Fatal(err)
+			}
+			if value != "bar" {
+				b.Fatal("got wrong value")
+			}
+		}
+	}
+}
+
+func benchmarkPipelineSetGet(conn client.Conn, cnt int, b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		results := make([]client.Result, cnt)
 		p := conn.Pipeline()
 		for j := 0; j < cnt; j++ {
-			p.Set("mykey", "myvalue")
+			p.Set("foo", "bar")
+			results[j] = p.Get("foo")
 		}
 		if err := p.Flush(); err != nil {
 			b.Fatal(err)
+		}
+		for j := 0; j < cnt; j++ {
+			value, err := results[j].ToString()
+			if err != nil {
+				b.Fatal(err)
+			}
+			if value != "bar" {
+				b.Fatal("got wrong value")
+			}
 		}
 	}
 }
 
 func BenchmarkCommand(b *testing.B) {
-
 	dialer := client.Dialer{Logger: log.New(os.Stderr, "", log.LstdFlags)}
 	conn, err := dialer.Dial("")
 	if err != nil {
@@ -60,17 +96,28 @@ func BenchmarkCommand(b *testing.B) {
 	}
 
 	b.Run("SingleCall", func(b *testing.B) {
+		const x = 6 // 10^x
 		cnt := 1
-		for i := 0; i < 6; i++ {
-			b.Run(lpadName("Set", cnt, 6), func(b *testing.B) { benchmarkSet(conn, cnt, b) })
+		for i := 0; i < x; i++ {
+			b.Run(lpadName("SetGet", cnt, x), func(b *testing.B) { benchmarkSetGet(conn, cnt, b) })
+			cnt *= 10
+		}
+	})
+
+	b.Run("SingleCallAsync", func(b *testing.B) {
+		const x = 6 // 10^x
+		cnt := 1
+		for i := 0; i < x; i++ {
+			b.Run(lpadName("SetGet", cnt, x), func(b *testing.B) { benchmarkSetGetAsync(conn, cnt, b) })
 			cnt *= 10
 		}
 	})
 
 	b.Run("Pipeline", func(b *testing.B) {
+		const x = 7 // 10^x
 		cnt := 1
-		for i := 0; i < 6; i++ {
-			b.Run(lpadName("Set", cnt, 6), func(b *testing.B) { benchmarkPipelineSet(conn, cnt, b) })
+		for i := 0; i < x; i++ {
+			b.Run(lpadName("SetGet", cnt, x), func(b *testing.B) { benchmarkPipelineSetGet(conn, cnt, b) })
 			cnt *= 10
 		}
 	})

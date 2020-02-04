@@ -83,11 +83,10 @@ func isGenerated(filename string) bool {
 }
 
 var (
-	sourceDirFlag      = flag.String("sourceDir", sourceDir(), "Source directory")
-	outResultIntfFlag  = flag.String("outResult", filepath.Join(sourceDir(), "result_gen.go"), "Result interface output file name")
-	outAsyncResultFlag = flag.String("outAsyncResult", filepath.Join(sourceDir(), "asyncresult_gen.go"), "Async result output file name")
-	outRedisValueFlag  = flag.String("outRedisValue", filepath.Join(sourceDir(), "redisvalue_gen.go"), "Redis value output file name")
-	pkgNameFlag        = flag.String("package", goPackage(), "package")
+	sourceDirFlag     = flag.String("sourceDir", sourceDir(), "Source directory")
+	outResultFlag     = flag.String("outResult", filepath.Join(sourceDir(), "result_gen.go"), "Result output file name")
+	outRedisValueFlag = flag.String("outRedisValue", filepath.Join(sourceDir(), "redisvalue_gen.go"), "Redis value output file name")
+	pkgNameFlag       = flag.String("package", goPackage(), "package")
 )
 
 func main() {
@@ -131,29 +130,21 @@ func main() {
 		log.Fatalf("package %s not found", *pkgNameFlag)
 	}
 
-	a := newAnalyzer()
-
-	for name, f := range pkg.Files {
-		if a.analyze(f) {
-			if err := writeAstFile(astOutName(name), fset, f); err != nil {
-				log.Fatalf("write file %s error: %s", astOutName(name), err)
-			}
-		}
+	if err := writeAstFile(astOutName(*pkgNameFlag), fset, pkg); err != nil {
+		log.Fatalf("write file %s error: %s", astOutName(*pkgNameFlag), err)
 	}
+
+	a := newAnalyzer()
+	a.analyze(pkg)
 
 	g := newGenerator()
 
-	outSrc := g.generateResultIntf(a.fcts, *pkgNameFlag)
-	if err := writeFile(*outResultIntfFlag, outSrc); err != nil {
-		log.Fatalf("write file %s error: %s", *outResultIntfFlag, err)
+	outSrc := g.generateResultFcts(a, *pkgNameFlag)
+	if err := writeFile(*outResultFlag, outSrc); err != nil {
+		log.Fatalf("write file %s error: %s", *outResultFlag, err)
 	}
 
-	outSrc = g.generateAsyncResultFcts(a.fcts, *pkgNameFlag)
-	if err := writeFile(*outAsyncResultFlag, outSrc); err != nil {
-		log.Fatalf("write file %s error: %s", *outAsyncResultFlag, err)
-	}
-
-	outSrc = g.generateRedisValueFcts(a.fcts, *pkgNameFlag)
+	outSrc = g.generateRedisValueFcts(a, *pkgNameFlag)
 	if err := writeFile(*outRedisValueFlag, outSrc); err != nil {
 		log.Fatalf("write file %s error: %s", *outRedisValueFlag, err)
 	}
@@ -173,13 +164,13 @@ func writeFile(filename string, b []byte) error {
 	return nil
 }
 
-func writeAstFile(filename string, fset *token.FileSet, f *ast.File) error {
+func writeAstFile(filename string, fset *token.FileSet, node ast.Node) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	ast.Fprint(file, fset, f, ast.NotNilFilter)
+	ast.Fprint(file, fset, node, nil)
 	return nil
 }
 

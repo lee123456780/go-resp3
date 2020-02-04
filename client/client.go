@@ -17,19 +17,17 @@ limitations under the License.
 package client
 
 import (
-	"bytes"
 	"context"
-	"io"
+	"errors"
 	"log"
 	"net"
 	"os"
 	"sync"
+	"sync/atomic"
 	"time"
 
-	"go-resp3/client/internal/monitor"
+	"github.com/d024441/go-resp3/client/internal/monitor"
 )
-
-//go:generate rediser
 
 //go:generate converter
 
@@ -68,7 +66,7 @@ func hostPort(address string) string {
 type MsgCallback func(pattern, channel, msg string)
 
 // MonitorCallback is the function type for the Redis monitor callback function.
-type MonitorCallback func(time time.Time, db int64, addr string, cmd []string)
+type MonitorCallback func(time time.Time, db int64, addr string, cmds []string)
 
 // TraceCallback is the function type for the tracing callback function.
 type TraceCallback func(dir bool, b []byte)
@@ -76,8 +74,7 @@ type TraceCallback func(dir bool, b []byte)
 // SendInterceptor is the function type for the send interceptor function.
 type SendInterceptor func(name string, values []interface{})
 
-type sendFct func(name string, result result)
-type encodeFct func(values ...interface{}) error
+type sendFct func(name string, r *result)
 
 // Conn represents the redis network connection.
 type Conn interface {
@@ -144,42 +141,12 @@ func (d *Dialer) DialContext(ctx context.Context, address string) (Conn, error) 
 	return newConn(c, d)
 }
 
-// command
-type command struct {
-	mu     *sync.Mutex
-	encode encodeFct
-	send   sendFct
-	values []interface{}
-}
-
-func newCommand(mu *sync.Mutex, encode encodeFct, send sendFct, sendInterceptor SendInterceptor) *command {
-	if sendInterceptor == nil {
-		return &command{
-			mu:     mu,
-			encode: encode,
-			send:   send,
-			values: make([]interface{}, 0),
-		}
-	}
-	c := &command{
-		mu:     mu,
-		values: make([]interface{}, 0),
-	}
-	c.encode = func(values ...interface{}) error {
-		c.values = append(c.values, values...)
-		return encode(values...)
-	}
-	c.send = func(name string, result result) {
-		sendInterceptor(name, c.values)
-		c.values = c.values[:0]
-		send(name, result)
-	}
-	return c
-}
-
 // check interface implementations.
-var _ Commands = (*command)(nil)
 var _ Conn = (*conn)(nil)
+
+const (
+	defResultListItems = 1000
+)
 
 type conn struct {
 	mu sync.Mutex
@@ -189,17 +156,12 @@ type conn struct {
 
 	*command
 
-	cancel context.CancelFunc
-
-	wg sync.WaitGroup // wait for all goroutines to complete
-
 	dec Decoder
 	enc Encoder
 
-	cmdChan chan RedisValue
-	resChan chan result
-
-	err error
+	readChan chan interface{}
+	resChan  chan *resultList
+	sendChan chan *result
 
 	hello Result
 
@@ -208,10 +170,15 @@ type conn struct {
 	monitorCallback MonitorCallback
 
 	sendInterceptor SendInterceptor
+
+	nextResult func() *result
+
+	shutdown   <-chan bool
+	inShutdown uint32
 }
 
 const (
-	defaultChannelSize = 1000
+	defaultChannelSize = 10000
 	minimumChannelSize = 100
 )
 
@@ -219,8 +186,9 @@ func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 	c := &conn{
 		netConn:         netConn,
 		logger:          d.Logger,
-		cmdChan:         make(chan RedisValue, d.channelSize()),
-		resChan:         make(chan result, d.channelSize()),
+		readChan:        make(chan interface{}, d.channelSize()),
+		resChan:         make(chan *resultList, defResultListItems),
+		sendChan:        make(chan *result, d.channelSize()),
 		asyncTimeout:    d.AsyncTimeout,
 		cache:           d.Cache,
 		monitorCallback: d.MonitorCallback,
@@ -231,6 +199,8 @@ func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 		c.logger.Printf("remote address %s - local address %s", c.netConn.RemoteAddr().String(), c.netConn.LocalAddr().String())
 	}
 
+	c.command = newCommand(c.send, c.sendInterceptor)
+
 	if d.TraceCallback != nil {
 		c.enc, c.dec = tracer(d.TraceCallback, netConn)
 	} else {
@@ -238,14 +208,9 @@ func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 		c.dec = NewDecoder(netConn)
 	}
 
-	c.command = newCommand(&c.mu, c.enc.Encode, c.send, c.sendInterceptor)
+	c.nextResult = c.resultIterator()
 
-	var ctx context.Context
-	ctx, c.cancel = context.WithCancel(context.Background())
-
-	c.wg.Add(2) //cmdHandler, reader
-	go c.cmdHandler(ctx, c.cmdChan, c.resChan)
-	go c.reader(ctx, c.cmdChan)
+	c.shutdown = c.watch()
 
 	var userPassword *UserPassword
 	if d.User != "" || d.Password != "" {
@@ -258,66 +223,59 @@ func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 
 	c.hello = c.Hello(redisVersion, userPassword, clientName)
 	if err := c.hello.Err(); err != nil {
-		c.cancel() //TODO how to shutdown gracefully
+		//c.cancel() //TODO how to shutdown gracefully
 		return nil, err
 	}
 	return c, nil
 }
 
-func (c *conn) send(name string, result result) {
-	if c.err != nil {
-		result.setErr(c.err)
-		c.mu.Unlock()
-		return
+func (c *conn) resultIterator() func() *result {
+	var (
+		list      *resultList
+		size, pos int
+	)
+
+	return func() *result {
+		if pos >= size {
+			if list != nil {
+				freeResultlist.put(list)
+			}
+			pos = 0
+			var ok bool
+			for {
+				list, ok = <-c.resChan
+				if !ok {
+					return nil
+				}
+				// skip empty list
+				if size = len(list.items); size != 0 {
+					break
+				}
+			}
+		}
+		i := pos
+		pos++
+		return list.items[i]
 	}
-
-	err := c.enc.Flush()
-	if err != nil {
-		c.err = err
-		result.setErr(err)
-		c.mu.Unlock()
-		return
-	}
-
-	result.setTimeout(c.asyncTimeout)
-	result.setFlushed(true) // no pipeline
-
-	c.resChan <- result
-	c.mu.Unlock()
 }
 
-func (c *conn) flushPipeline(b *bytes.Buffer, results flushResults) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+// ErrInShutdown is returned by a command executed during client is in shutdown status.
+var ErrInShutdown = errors.New("connection is shutdown")
 
-	if c.err != nil {
-		results.setErr(c.err)
-		return c.err
+func (c *conn) send(name string, r *result) {
+	if atomic.LoadUint32(&c.inShutdown) != 0 {
+		r.setErr(ErrInShutdown)
+		return
 	}
-	if _, err := b.WriteTo(c.netConn); err != nil {
-		c.err = err
-		results.setErr(err)
-		return err
-	}
-	for _, result := range results {
-		result.flush()
-		c.resChan <- result
-	}
-	return nil
+	r.flush() // no pipeline
+	c.sendChan <- r
 }
 
 func (c *conn) Close() error {
-	c.cancel()
 	if err := c.Quit().Err(); err != nil {
 		return err
 	}
-	if c.logger != nil {
-		c.logger.Println("...wait for goroutines")
-	}
-	c.wg.Wait() // wait for all goroutines to complete
-	if c.logger != nil {
-		c.logger.Println("...close connection")
-	}
+	<-c.shutdown // wait for watcher to shutdown
 	return c.netConn.Close()
 }
 
@@ -325,166 +283,243 @@ func (c *conn) Pipeline() Pipeline {
 	return newPipeline(c)
 }
 
-func (c *conn) cmdHandler(ctx context.Context, readChan <-chan RedisValue, resChan chan result) {
-	channels := map[string]MsgCallback{}
+func (c *conn) watch() <-chan bool {
 
-	defer c.wg.Done()
+	shutdown := make(chan bool)
+
+	go func() {
+
+		var wgReader sync.WaitGroup  // wait for reader
+		var wgHandler sync.WaitGroup // wait for handler
+		var wgSender sync.WaitGroup  // wait for reader
+
+		var event = make(chan error)
+
+		wgHandler.Add(1)
+		go c.cmdHandler(&wgHandler, c.readChan)
+		wgReader.Add(1)
+		go c.reader(&wgReader, c.readChan, event)
+		wgSender.Add(1)
+		go c.sender(&wgSender, c.sendChan, c.resChan)
+
+		err := <-event
+		wgReader.Wait() // wait for reader
+
+		atomic.StoreUint32(&c.inShutdown, 1)
+
+		close(c.readChan) // stop handler
+		wgHandler.Wait()  // wait for handler
+
+		close(c.sendChan) // stop sender
+		wgSender.Wait()   // wait for sender
+
+		// drain resChan
+		close(c.resChan)
+		for {
+			r := c.nextResult()
+			if r == nil {
+				break
+			}
+			r.ack(nil, err)
+		}
+
+		close(shutdown)
+
+	}()
+
+	return shutdown
+
+}
+
+func (c *conn) cmdHandler(wg *sync.WaitGroup, readChan <-chan interface{}) {
+	channelMap := map[string]MsgCallback{}
+
+	defer wg.Done()
 
 	for {
 
 		val, ok := <-readChan
 		if !ok { // channel closed
-			goto close
+			return
 		}
 
-		switch val.Kind {
-		case RkInvalid:
-			panic("cmdHandler: invalid value type")
-		case RkError:
-			result := <-resChan
-			result.setErr(val.Value.(*RedisError))
-		case RkPush:
+		switch val := val.(type) {
 
-			switch notification := val.Value.(type) {
+		case RedisValue:
+			result := c.nextResult()
+			result.ack(val, nil)
 
-			case subscribeNotification:
-				result := <-resChan
-				result.ack()
+		case error:
+			result := c.nextResult()
+			result.ack(nil, val)
 
-				subscribe, ok := result.(*asyncSubscribeResult)
-				if !ok {
-					panic("subscribe: result mismatch")
-				}
-
-				for i, ch := range subscribe.channel { // expect a push message for all subscribed channels
-
-					if i != 0 {
-						val, ok := <-readChan
-						if !ok { // channel closed
-							goto close
-						}
-						notification = val.Value.(subscribeNotification)
-					}
-					if notification.channel != ch {
-						panic("subscribe: command message channel mismatch")
-					}
-					channels[notification.channel] = subscribe.cb
-				}
-
-			case unsubscribeNotification:
-				result := <-resChan
-				result.ack()
-
-				unsubscribe, ok := result.(*asyncUnsubscribeResult)
-				if !ok {
-					panic("subscribe: result mismatch")
-				}
-
-				if len(unsubscribe.channel) != 0 { // unsubscribe list of channels
-
-					for i, ch := range unsubscribe.channel { // expect a push message for all unsubscribed channels
-
-						if i != 0 {
-							val, ok := <-readChan
-							if !ok { // channel closed
-								goto close
-							}
-							notification = val.Value.(unsubscribeNotification)
-						}
-						if notification.channel != ch {
-							panic("subscribe: command message channel mismatch")
-						}
-						delete(channels, notification.channel)
-					}
-
-				} else { // unsubscribe from all channels
-					for {
-						delete(channels, notification.channel)
-						if notification.count == 0 {
-							break
-						}
-						val, ok := <-readChan
-						if !ok { // channel closed
-							goto close
-						}
-						notification = val.Value.(unsubscribeNotification)
-					}
-				}
-
-			case publishNotification:
-				if cb, ok := channels[notification.channel]; ok && cb != nil {
-					cb(notification.pattern, notification.channel, notification.msg)
-				}
-
-			case invalidateNotification:
-				if c.cache != nil {
-					c.cache.invalidate(uint32(notification))
-				}
-
-			case monitor.Notification:
-				if c.monitorCallback != nil {
-					c.monitorCallback(notification.Time, notification.DB, notification.Addr, notification.Cmd)
-				}
-
-			case genericNotification:
-
-			default:
-				panic("push message: invalid messsage type")
+		case *subscribeNotification:
+			if ok := c.handleSubscribeNotification(val, channelMap, readChan); !ok {
+				return
 			}
 
+		case *unsubscribeNotification:
+			if ok := c.handleUnsubscribeNotification(val, channelMap, readChan); !ok {
+				return
+			}
+
+		case *publishNotification:
+			if cb, ok := channelMap[val.channel]; ok && cb != nil {
+				cb(val.pattern, val.channel, val.msg)
+			}
+
+		case invalidateNotification:
+			if c.cache != nil {
+				c.cache.invalidate(uint32(val))
+			}
+
+		case *monitor.Notification:
+			if c.monitorCallback != nil {
+				c.monitorCallback(val.Time, val.Db, val.Addr, val.Cmds)
+			}
+
+		case *genericNotification:
+
 		default:
-			result := <-resChan
-			result.setValue(val)
+			panic("invalid messsage type")
 		}
-	}
-
-close:
-
-	// drain resChan
-	if c.logger != nil {
-		c.logger.Println("...draining commands in command handler")
-	}
-	close(resChan)
-	for result := range resChan {
-		result.setErr(c.err)
-	}
-	if c.logger != nil {
-		c.logger.Println("...stopping command handler")
 	}
 }
 
-func (c *conn) reader(ctx context.Context, cmdChan chan<- RedisValue) {
-	defer c.wg.Done()
+func (c *conn) handleSubscribeNotification(n *subscribeNotification, channelMap map[string]MsgCallback, readChan <-chan interface{}) bool {
+	result := c.nextResult()
+
+	size := len(result.request.cmd)
+	channels := result.request.cmd[1:size]
+
+	for i, ch := range channels { // expect a push message for all subscribed channels
+
+		ch := ch.(string)
+
+		if i != 0 {
+			val, ok := <-readChan
+			if !ok { // channel closed
+				return false
+			}
+			n = val.(*subscribeNotification)
+		}
+
+		if n.channel != ch {
+			panic("subscribe: command message channel mismatch")
+		}
+		channelMap[ch] = result.request.cb
+	}
+
+	result.ack(nil, nil)
+	return true
+}
+
+func (c *conn) handleUnsubscribeNotification(n *unsubscribeNotification, channelMap map[string]MsgCallback, readChan <-chan interface{}) bool {
+	result := c.nextResult()
+
+	size := len(result.request.cmd)
+	channels := result.request.cmd[1:size]
+
+	if size > 1 { // unsubscribe list of channels
+
+		for i, ch := range channels { // expect a push message for all unsubscribed channels
+
+			ch := ch.(string)
+
+			if i != 0 {
+				val, ok := <-readChan
+				if !ok { // channel closed
+					return false
+				}
+				n = val.(*unsubscribeNotification)
+			}
+			if n.channel != ch {
+				panic("unsubscribe: command message channel mismatch")
+			}
+			delete(channelMap, ch)
+		}
+
+		result.ack(nil, nil)
+		return true
+	}
+
+	// unsubscribe from all channels
+	for {
+		delete(channelMap, n.channel)
+		if n.count == 0 {
+			break
+		}
+		val, ok := <-readChan
+		if !ok { // channel closed
+			return false
+		}
+		n = val.(*unsubscribeNotification)
+	}
+
+	result.ack(nil, nil)
+	return true
+}
+
+func (c *conn) reader(wg *sync.WaitGroup, readChan chan<- interface{}, event chan<- error) {
+	defer wg.Done()
 
 	for {
 		val, err := c.dec.Decode()
-		switch err {
-
-		case nil: // ok
-
-		case io.EOF:
-			c.err = err
-			if c.logger != nil {
-				c.logger.Println("received EOF - connection closed")
-			}
-			goto close
-
-		default:
-			c.err = err
-			if c.logger != nil {
-				c.logger.Printf("error %s", err)
-			}
-			goto close
+		if err != nil {
+			event <- err
+			return
 		}
-
-		cmdChan <- val
+		readChan <- val
 	}
+}
 
+func (c *conn) flush(pipeline bool, list *resultList) error {
+	c.mu.Lock()
+	for _, r := range list.items {
+		if pipeline {
+			r.flush()
+		}
+		r.setTimeout(c.asyncTimeout)
+		c.enc.Encode(r.cmd())
+	}
+	if err := c.enc.Flush(); err != nil {
+		c.mu.Unlock()
+		panic(err) // TODO
+	}
+	c.resChan <- list
+	c.mu.Unlock()
+	return nil
+}
+
+func (c *conn) sender(wg *sync.WaitGroup, sendChan <-chan *result, resChan chan<- *resultList) {
+	defer wg.Done()
+
+	list := freeResultlist.get()
+
+	for {
+		select {
+		case r, ok := <-sendChan:
+			if !ok {
+				goto close
+			}
+			list.items = append(list.items, r)
+
+			burst := true
+			for burst {
+				select {
+				case r, ok := <-sendChan:
+					if !ok {
+						goto close
+					}
+					list.items = append(list.items, r)
+				default:
+					burst = false
+				}
+			}
+			c.flush(false, list)
+			list = freeResultlist.get()
+		}
+	}
 close:
-	// stop handler
-	if c.logger != nil {
-		c.logger.Println("...stopping reader")
-	}
-	// stop handler
-	close(cmdChan)
+	c.flush(false, list)
 }

@@ -26,7 +26,7 @@ import (
 	"testing"
 	"time"
 
-	"go-resp3/client"
+	"github.com/d024441/go-resp3/client"
 )
 
 const (
@@ -777,7 +777,8 @@ func testSave(conn client.Conn, ctx *testCTX, t *testing.T) {
 func testSlowlog(conn client.Conn, ctx *testCTX, t *testing.T) {
 	l, err := conn.SlowlogLen().ToInt64()
 	assertNil(t, err)
-	slice, err := conn.SlowlogGet(nil).ToSlice()
+	//slice, err := conn.SlowlogGet(nil).ToSlice() // Redis 6 beta: slowlog get without number of entries returns max. 10 entries
+	slice, err := conn.SlowlogGet(client.Int64Ptr(l)).ToSlice()
 	assertNil(t, err)
 	assertEqual(t, l, len(slice))
 	ok, err := conn.SlowlogReset().ToBool()

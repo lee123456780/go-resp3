@@ -16,22 +16,22 @@ limitations under the License.
 
 package client
 
-// A Set represents the redis set type.
-type Set []RedisValue
+import (
+	"strings"
+)
 
-// Kind returns the type of a Set.
-func (s Set) Kind() RedisKind { return RkSet }
-
-// ToStringSet returns a map with keys of type string and boolean true values. In case key conversion to string is not possible
-// a ConvertionError is returned.
-func (s Set) ToStringSet() (map[string]bool, error) {
-	r := make(map[string]bool, len(s))
-	for _, item := range s {
-		key, err := item.ToString()
-		if err != nil {
-			return nil, err
-		}
-		r[key] = true
-	}
-	return r, nil
+// A RedisError represents the redis error message if a redis command was executed unsuccessfully.
+type RedisError struct {
+	Code string
+	Msg  string
 }
+
+func newRedisError(s string) *RedisError {
+	p := strings.Split(s, " ")
+	return &RedisError{
+		Code: p[0],
+		Msg:  strings.Join(p[1:], " "),
+	}
+}
+
+func (e *RedisError) Error() string { return e.Code + " " + e.Msg }

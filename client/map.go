@@ -25,6 +25,9 @@ type MapItem struct {
 // A Map represents the redis map type.
 type Map []MapItem
 
+// Kind returns the type of a Map.
+func (m Map) Kind() RedisKind { return RkMap }
+
 // ToStringMap returns a map with keys of type string. In case key conversion to string is not possible
 // a ConvertionError is returned.
 func (m Map) ToStringMap() (map[string]interface{}, error) {
@@ -34,7 +37,12 @@ func (m Map) ToStringMap() (map[string]interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		r[key] = item.Value.Value
+		switch value := item.Value.(type) {
+		case baseRedisType:
+			r[key] = value._interface()
+		default:
+			r[key] = value
+		}
 	}
 	return r, nil
 }

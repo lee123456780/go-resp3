@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"log"
 
-	"go-resp3/client"
+	"github.com/d024441/go-resp3/client"
 )
 
 func Example_clientcache() {

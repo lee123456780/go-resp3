@@ -1,0 +1,10872 @@
+[
+	{
+		"_type": "funcAttr",
+		"name": "Append",
+		"summary": "Append a value to a key",
+		"complexity": "O(1). The amortized time complexity is O(1) assuming the appended value is small and the already present value is of any size, since the dynamic string library used by Redis will double the free space available on every reallocation.",
+		"since": "2.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Auth",
+		"summary": "Authenticate to the server",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bgrewriteaof",
+		"summary": "Asynchronously rewrite the append-only file",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bgsave",
+		"summary": "Asynchronously save the dataset to disk",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bitcount",
+		"summary": "Count set bits in a string",
+		"complexity": "O(N)",
+		"since": "2.6.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bitfield",
+		"summary": "Perform arbitrary bitfield integer operations on strings",
+		"complexity": "O(1) for each subcommand specified",
+		"since": "3.2.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bitop",
+		"summary": "Perform bitwise operations between strings",
+		"complexity": "O(N)",
+		"since": "2.6.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bitpos",
+		"summary": "Find first bit set or clear in a string",
+		"complexity": "O(N)",
+		"since": "2.8.7",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Blpop",
+		"summary": "Remove and get the first element in a list, or block until one is available",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Brpop",
+		"summary": "Remove and get the last element in a list, or block until one is available",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Brpoplpush",
+		"summary": "Pop an element from a list, push it to another list and return it; or block until one is available",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bzpopmax",
+		"summary": "Remove and return the member with the highest score from one or more sorted sets, or block until one is available",
+		"complexity": "O(log(N)) with N being the number of elements in the sorted set.",
+		"since": "5.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Bzpopmin",
+		"summary": "Remove and return the member with the lowest score from one or more sorted sets, or block until one is available",
+		"complexity": "O(log(N)) with N being the number of elements in the sorted set.",
+		"since": "5.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientGetname",
+		"summary": "Get the current connection name",
+		"complexity": "O(1)",
+		"since": "2.6.9",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientId",
+		"summary": "Returns the client ID for the current connection",
+		"complexity": "O(1)",
+		"since": "5.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientKill",
+		"summary": "Kill the connection of a client",
+		"complexity": "O(N) where N is the number of client connections",
+		"since": "2.4.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientList",
+		"summary": "Get the list of client connections",
+		"complexity": "O(N) where N is the number of client connections",
+		"since": "2.4.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientPause",
+		"summary": "Stop processing commands from clients for some time",
+		"complexity": "O(1)",
+		"since": "2.9.50",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientReply",
+		"summary": "Instruct the server whether to reply to commands",
+		"complexity": "O(1)",
+		"since": "3.2",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientSetname",
+		"summary": "Set the current connection name",
+		"complexity": "O(1)",
+		"since": "2.6.9",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientTracking",
+		"summary": "Enable client side caching.",
+		"complexity": "",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientUnblock",
+		"summary": "Unblock a client blocked in a blocking command from a different connection",
+		"complexity": "O(log N) where N is the number of client connections",
+		"since": "5.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterAddslots",
+		"summary": "Assign new hash slots to receiving node",
+		"complexity": "O(N) where N is the total number of hash slot arguments",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterBumpepoch",
+		"summary": "Advance the cluster config epoch",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterCountFailureReports",
+		"summary": "Return the number of failure reports active for a given node",
+		"complexity": "O(N) where N is the number of failure reports",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterCountkeysinslot",
+		"summary": "Return the number of local keys in the specified hash slot",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterDelslots",
+		"summary": "Set hash slots as unbound in receiving node",
+		"complexity": "O(N) where N is the total number of hash slot arguments",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterFailover",
+		"summary": "Forces a replica to perform a manual failover of its master.",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterFlushslots",
+		"summary": "Delete a node's own slots information",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterForget",
+		"summary": "Remove a node from the nodes table",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterGetkeysinslot",
+		"summary": "Return local key names in the specified hash slot",
+		"complexity": "O(log(N)) where N is the number of requested keys",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterInfo",
+		"summary": "Provides info about Redis Cluster node state",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterKeyslot",
+		"summary": "Returns the hash slot of the specified key",
+		"complexity": "O(N) where N is the number of bytes in the key",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterMeet",
+		"summary": "Force a node cluster to handshake with another node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterMyid",
+		"summary": "Return the node id",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterNodes",
+		"summary": "Get Cluster config for the node",
+		"complexity": "O(N) where N is the total number of Cluster nodes",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterReplicas",
+		"summary": "List replica nodes of the specified master node",
+		"complexity": "O(1)",
+		"since": "5.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterReplicate",
+		"summary": "Reconfigure a node as a replica of the specified master node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterReset",
+		"summary": "Reset a Redis Cluster node",
+		"complexity": "O(N) where N is the number of known nodes. The command may execute a FLUSHALL as a side effect.",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterSaveconfig",
+		"summary": "Forces the node to save cluster state on disk",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterSetConfigEpoch",
+		"summary": "Set the configuration epoch in a new node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterSetslot",
+		"summary": "Bind a hash slot to a specific node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterSlaves",
+		"summary": "List replica nodes of the specified master node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClusterSlots",
+		"summary": "Get array of Cluster slot to node mappings",
+		"complexity": "O(N) where N is the total number of Cluster nodes",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Command",
+		"summary": "Get array of Redis command details",
+		"complexity": "O(N) where N is the total number of Redis commands",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "CommandCount",
+		"summary": "Get total number of Redis commands",
+		"complexity": "O(1)",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "CommandGetkeys",
+		"summary": "Extract keys given a full Redis command",
+		"complexity": "O(N) where N is the number of arguments to the command",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "CommandInfo",
+		"summary": "Get array of specific Redis command details",
+		"complexity": "O(N) when N is number of commands to look up",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ConfigGet",
+		"summary": "Get the value of a configuration parameter",
+		"complexity": "",
+		"since": "2.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ConfigResetstat",
+		"summary": "Reset the stats returned by INFO",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ConfigRewrite",
+		"summary": "Rewrite the configuration file with the in memory configuration",
+		"complexity": "",
+		"since": "2.8.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ConfigSet",
+		"summary": "Set a configuration parameter to the given value",
+		"complexity": "",
+		"since": "2.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Dbsize",
+		"summary": "Return the number of keys in the selected database",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "DebugObject",
+		"summary": "Get debugging information about a key",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "DebugSegfault",
+		"summary": "Make the server crash",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Decr",
+		"summary": "Decrement the integer value of a key by one",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Decrby",
+		"summary": "Decrement the integer value of a key by the given number",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Del",
+		"summary": "Delete a key",
+		"complexity": "O(N) where N is the number of keys that will be removed. When a key to remove holds a value other than a string, the individual complexity for this key is O(M) where M is the number of elements in the list, set, sorted set or hash. Removing a single key that holds a string value is O(1).",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Discard",
+		"summary": "Discard all commands issued after MULTI",
+		"complexity": "",
+		"since": "2.0.0",
+		"group": "transactions"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Do",
+		"summary": "Generic command.",
+		"complexity": "",
+		"since": "-",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Dump",
+		"summary": "Return a serialized version of the value stored at the specified key.",
+		"complexity": "O(1) to access the key and additional O(N*M) to serialized it, where N is the number of Redis objects composing the value and M their average size. For small string values the time complexity is thus O(1)+O(1*M) where M is small, so simply O(1).",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Echo",
+		"summary": "Echo the given string",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Eval",
+		"summary": "Execute a Lua script server side",
+		"complexity": "Depends on the script that is executed.",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Evalsha",
+		"summary": "Execute a Lua script server side",
+		"complexity": "Depends on the script that is executed.",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Exec",
+		"summary": "Execute all commands issued after MULTI",
+		"complexity": "",
+		"since": "1.2.0",
+		"group": "transactions"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Exists",
+		"summary": "Determine if a key exists",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Expire",
+		"summary": "Set a key's time to live in seconds",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Expireat",
+		"summary": "Set the expiration for a key as a UNIX timestamp",
+		"complexity": "O(1)",
+		"since": "1.2.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Flushall",
+		"summary": "Remove all keys from all databases",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Flushdb",
+		"summary": "Remove all keys from the current database",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Geoadd",
+		"summary": "Add one or more geospatial items in the geospatial index represented using a sorted set",
+		"complexity": "O(log(N)) for each item added, where N is the number of elements in the sorted set.",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Geodist",
+		"summary": "Returns the distance between two members of a geospatial index",
+		"complexity": "O(log(N))",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Geohash",
+		"summary": "Returns members of a geospatial index as standard geohash strings",
+		"complexity": "O(log(N)) for each member requested, where N is the number of elements in the sorted set.",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Geopos",
+		"summary": "Returns longitude and latitude of members of a geospatial index",
+		"complexity": "O(log(N)) for each member requested, where N is the number of elements in the sorted set.",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Georadius",
+		"summary": "Query a sorted set representing a geospatial index to fetch members matching a given maximum distance from a point",
+		"complexity": "O(N+log(M)) where N is the number of elements inside the bounding box of the circular area delimited by center and radius and M is the number of items inside the index.",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Georadiusbymember",
+		"summary": "Query a sorted set representing a geospatial index to fetch members matching a given maximum distance from a member",
+		"complexity": "O(N+log(M)) where N is the number of elements inside the bounding box of the circular area delimited by center and radius and M is the number of items inside the index.",
+		"since": "3.2.0",
+		"group": "geo"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Get",
+		"summary": "Get the value of a key",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Getbit",
+		"summary": "Returns the bit value at offset in the string value stored at key",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Getrange",
+		"summary": "Get a substring of the string stored at a key",
+		"complexity": "O(N) where N is the length of the returned string. The complexity is ultimately determined by the returned length, but because creating a substring from an existing string is very cheap, it can be considered O(1) for small strings.",
+		"since": "2.4.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Getset",
+		"summary": "Set the string value of a key and return its old value",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hdel",
+		"summary": "Delete one or more hash fields",
+		"complexity": "O(N) where N is the number of fields to be removed.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hello",
+		"summary": "Connection handshake.",
+		"complexity": "",
+		"since": "6.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hexists",
+		"summary": "Determine if a hash field exists",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hget",
+		"summary": "Get the value of a hash field",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hgetall",
+		"summary": "Get all the fields and values in a hash",
+		"complexity": "O(N) where N is the size of the hash.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hincrby",
+		"summary": "Increment the integer value of a hash field by the given number",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hincrbyfloat",
+		"summary": "Increment the float value of a hash field by the given amount",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hkeys",
+		"summary": "Get all the fields in a hash",
+		"complexity": "O(N) where N is the size of the hash.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hlen",
+		"summary": "Get the number of fields in a hash",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hmget",
+		"summary": "Get the values of all the given hash fields",
+		"complexity": "O(N) where N is the number of fields being requested.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hmset",
+		"summary": "Set multiple hash fields to multiple values",
+		"complexity": "O(N) where N is the number of fields being set.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hscan",
+		"summary": "Incrementally iterate hash fields and associated values",
+		"complexity": "O(1) for every call. O(N) for a complete iteration, including enough command calls for the cursor to return back to 0. N is the number of elements inside the collection..",
+		"since": "2.8.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hset",
+		"summary": "Set the string value of a hash field",
+		"complexity": "O(1) for each field/value pair added, so O(N) to add N field/value pairs when the command is called with multiple field/value pairs.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "HsetNx",
+		"summary": "Set the value of a hash field, only if the field does not exist",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hstrlen",
+		"summary": "Get the length of the value of a hash field",
+		"complexity": "O(1)",
+		"since": "3.2.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Hvals",
+		"summary": "Get all the values in a hash",
+		"complexity": "O(N) where N is the size of the hash.",
+		"since": "2.0.0",
+		"group": "hash"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Incr",
+		"summary": "Increment the integer value of a key by one",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Incrby",
+		"summary": "Increment the integer value of a key by the given amount",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Incrbyfloat",
+		"summary": "Increment the float value of a key by the given amount",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Info",
+		"summary": "Get information and statistics about the server",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Keys",
+		"summary": "Find all keys matching the given pattern",
+		"complexity": "O(N) with N being the number of keys in the database, under the assumption that the key names in the database and the given pattern have limited length.",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lastsave",
+		"summary": "Get the UNIX time stamp of the last successful save to disk",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyDoctor",
+		"summary": "Return a human readable latency analysis report.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyGraph",
+		"summary": "Return a latency graph for the event.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyHelp",
+		"summary": "Show helpful text about the different subcommands.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyHistory",
+		"summary": "Return timestamp-latency samples for the event.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyLatest",
+		"summary": "Return the latest latency samples for all events.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "LatencyReset",
+		"summary": "Reset latency data for one or more events.",
+		"complexity": "",
+		"since": "2.8.13",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lindex",
+		"summary": "Get an element from a list by its index",
+		"complexity": "O(N) where N is the number of elements to traverse to get to the element at index. This makes asking for the first or the last element of the list O(1).",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Linsert",
+		"summary": "Insert an element before or after another element in a list",
+		"complexity": "O(N) where N is the number of elements to traverse before seeing the value pivot. This means that inserting somewhere on the left end on the list (head) can be considered O(1) and inserting somewhere on the right end (tail) is O(N).",
+		"since": "2.2.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Llen",
+		"summary": "Get the length of a list",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lolwut",
+		"summary": "Display some computer art and the Redis version",
+		"complexity": "",
+		"since": "5.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lpop",
+		"summary": "Remove and get the first element in a list",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lpush",
+		"summary": "Prepend one or multiple elements to a list",
+		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lpushx",
+		"summary": "Prepend an element to a list, only if the list exists",
+		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+		"since": "2.2.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lrange",
+		"summary": "Get a range of elements from a list",
+		"complexity": "O(S+N) where S is the distance of start offset from HEAD for small lists, from nearest end (HEAD or TAIL) for large lists; and N is the number of elements in the specified range.",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lrem",
+		"summary": "Remove elements from a list",
+		"complexity": "O(N+M) where N is the length of the list and M is the number of elements removed.",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Lset",
+		"summary": "Set the value of an element in a list by its index",
+		"complexity": "O(N) where N is the length of the list. Setting either the first or the last element of the list is O(1).",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Ltrim",
+		"summary": "Trim a list to the specified range",
+		"complexity": "O(N) where N is the number of elements to be removed by the operation.",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryDoctor",
+		"summary": "Outputs memory problems report",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryHelp",
+		"summary": "Show helpful text about the different subcommands",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryMallocStats",
+		"summary": "Show allocator internal stats",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryPurge",
+		"summary": "Ask the allocator to release memory",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryStats",
+		"summary": "Show memory usage details",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MemoryUsage",
+		"summary": "Estimate the memory usage of a key",
+		"complexity": "O(N) where N is the number of samples.",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Mget",
+		"summary": "Get the values of all the given keys",
+		"complexity": "O(N) where N is the number of keys to retrieve.",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Migrate",
+		"summary": "Atomically transfer a key from a Redis instance to another one.",
+		"complexity": "This command actually executes a DUMP+DEL in the source instance, and a RESTORE in the target instance. See the pages of these commands for time complexity. Also an O(N) data transfer between the two instances is performed.",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ModuleList",
+		"summary": "List all modules loaded by the server",
+		"complexity": "O(N) where N is the number of loaded modules.",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ModuleLoad",
+		"summary": "Load a module",
+		"complexity": "O(1)",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ModuleUnload",
+		"summary": "Unload a module",
+		"complexity": "O(1)",
+		"since": "4.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Monitor",
+		"summary": "Listen for all requests received by the server in real time",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Move",
+		"summary": "Move a key to another database",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Mset",
+		"summary": "Set multiple keys to multiple values",
+		"complexity": "O(N) where N is the number of keys to set.",
+		"since": "1.0.1",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "MsetNx",
+		"summary": "Set multiple keys to multiple values, only if none of the keys exist",
+		"complexity": "O(N) where N is the number of keys to set.",
+		"since": "1.0.1",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Multi",
+		"summary": "Mark the start of a transaction block",
+		"complexity": "",
+		"since": "1.2.0",
+		"group": "transactions"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Object",
+		"summary": "Inspect the internals of Redis objects",
+		"complexity": "O(1) for all the currently implemented subcommands.",
+		"since": "2.2.3",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "PTTL",
+		"summary": "Get the time to live for a key in milliseconds",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Persist",
+		"summary": "Remove the expiration from a key",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pexpire",
+		"summary": "Set a key's time to live in milliseconds",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pexpireat",
+		"summary": "Set the expiration for a key as a UNIX timestamp specified in milliseconds",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pfadd",
+		"summary": "Adds the specified elements to the specified HyperLogLog.",
+		"complexity": "O(1) to add every element.",
+		"since": "2.8.9",
+		"group": "hyperloglog"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pfcount",
+		"summary": "Return the approximated cardinality of the set(s) observed by the HyperLogLog at key(s).",
+		"complexity": "O(1) with a very small average constant time when called with a single key. O(N) with N being the number of keys, and much bigger constant times, when called with multiple keys.",
+		"since": "2.8.9",
+		"group": "hyperloglog"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pfmerge",
+		"summary": "Merge N different HyperLogLogs into a single one.",
+		"complexity": "O(N) to merge N HyperLogLogs, but with high constant times.",
+		"since": "2.8.9",
+		"group": "hyperloglog"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Ping",
+		"summary": "Ping the server",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Psetex",
+		"summary": "Set the value and expiration in milliseconds of a key",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Psubscribe",
+		"summary": "Listen for messages published to channels matching the given patterns",
+		"complexity": "O(N) where N is the number of patterns the client is already subscribed to.",
+		"since": "2.0.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Psync",
+		"summary": "Internal command used for replication",
+		"complexity": "",
+		"since": "2.8.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Publish",
+		"summary": "Post a message to a channel",
+		"complexity": "O(N+M) where N is the number of clients subscribed to the receiving channel and M is the total number of subscribed patterns (by any client).",
+		"since": "2.0.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Pubsub",
+		"summary": "Inspect the state of the Pub/Sub subsystem",
+		"complexity": "O(N) for the CHANNELS subcommand, where N is the number of active channels, and assuming constant time pattern matching (relatively short channels and patterns). O(N) for the NUMSUB subcommand, where N is the number of requested channels. O(1) for the NUMPAT subcommand.",
+		"since": "2.8.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Punsubscribe",
+		"summary": "Stop listening for messages posted to channels matching the given patterns",
+		"complexity": "O(N+M) where N is the number of patterns the client is already subscribed and M is the number of total patterns subscribed in the system (by any client).",
+		"since": "2.0.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Quit",
+		"summary": "Close the connection",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Randomkey",
+		"summary": "Return a random key from the keyspace",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Readonly",
+		"summary": "Enables read queries for a connection to a cluster replica node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Readwrite",
+		"summary": "Disables read queries for a connection to a cluster replica node",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "cluster"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Rename",
+		"summary": "Rename a key",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "RenameNx",
+		"summary": "Rename a key, only if the new key does not exist",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Replicaof",
+		"summary": "Make the server a replica of another instance, or promote it as master.",
+		"complexity": "",
+		"since": "5.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Restore",
+		"summary": "Create a key using the provided serialized value, previously obtained using DUMP.",
+		"complexity": "O(1) to create the new key and additional O(N*M) to reconstruct the serialized value, where N is the number of Redis objects composing the value and M their average size. For small string values the time complexity is thus O(1)+O(1*M) where M is small, so simply O(1). However for sorted set values the complexity is O(N*M*log(N)) because inserting values into sorted sets is O(log(N)).",
+		"since": "2.6.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Role",
+		"summary": "Return the role of the instance in the context of replication",
+		"complexity": "",
+		"since": "2.8.12",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Rpop",
+		"summary": "Remove and get the last element in a list",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Rpoplpush",
+		"summary": "Remove the last element in a list, prepend it to another list and return it",
+		"complexity": "O(1)",
+		"since": "1.2.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Rpush",
+		"summary": "Append one or multiple elements to a list",
+		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+		"since": "1.0.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Rpushx",
+		"summary": "Append an element to a list, only if the list exists",
+		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+		"since": "2.2.0",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sadd",
+		"summary": "Add one or more members to a set",
+		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Save",
+		"summary": "Synchronously save the dataset to disk",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Scan",
+		"summary": "Incrementally iterate the keys space",
+		"complexity": "O(1) for every call. O(N) for a complete iteration, including enough command calls for the cursor to return back to 0. N is the number of elements inside the collection.",
+		"since": "2.8.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Scard",
+		"summary": "Get the number of members in a set",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ScriptDebug",
+		"summary": "Set the debug mode for executed scripts.",
+		"complexity": "O(1)",
+		"since": "3.2.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ScriptExists",
+		"summary": "Check existence of scripts in the script cache.",
+		"complexity": "O(N) with N being the number of scripts to check (so checking a single script is an O(1) operation).",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ScriptFlush",
+		"summary": "Remove all the scripts from the script cache.",
+		"complexity": "O(N) with N being the number of scripts in cache",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ScriptKill",
+		"summary": "Kill the script currently in execution.",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ScriptLoad",
+		"summary": "Load the specified Lua script into the script cache.",
+		"complexity": "O(N) with N being the length in bytes of the script body.",
+		"since": "2.6.0",
+		"group": "scripting"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sdiff",
+		"summary": "Subtract multiple sets",
+		"complexity": "O(N) where N is the total number of elements in all given sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sdiffstore",
+		"summary": "Subtract multiple sets and store the resulting set in a key",
+		"complexity": "O(N) where N is the total number of elements in all given sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Select",
+		"summary": "Change the selected database for the current connection",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Set",
+		"summary": "Set the string value of a key",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Setbit",
+		"summary": "Sets or clears the bit at offset in the string value stored at key",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Setex",
+		"summary": "Set the value and expiration of a key",
+		"complexity": "O(1)",
+		"since": "2.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Setnx",
+		"summary": "Set the value of a key, only if the key does not exist",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Setrange",
+		"summary": "Overwrite part of a string at key starting at the specified offset",
+		"complexity": "O(1), not counting the time taken to copy the new string in place. Usually, this string is very small so the amortized complexity is O(1). Otherwise, complexity is O(M) with M being the length of the value argument.",
+		"since": "2.2.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Shutdown",
+		"summary": "Synchronously save the dataset to disk and then shut down the server",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sinter",
+		"summary": "Intersect multiple sets",
+		"complexity": "O(N*M) worst case where N is the cardinality of the smallest set and M is the number of sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sinterstore",
+		"summary": "Intersect multiple sets and store the resulting set in a key",
+		"complexity": "O(N*M) worst case where N is the cardinality of the smallest set and M is the number of sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sismember",
+		"summary": "Determine if a given value is a member of a set",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Slaveof",
+		"summary": "Make the server a replica of another instance, or promote it as master. Deprecated starting with Redis 5. Use REPLICAOF instead.",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Slowlog",
+		"summary": "Manages the Redis slow queries log",
+		"complexity": "",
+		"since": "2.2.12",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Smembers",
+		"summary": "Get all the members in a set",
+		"complexity": "O(N) where N is the set cardinality.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Smove",
+		"summary": "Move a member from one set to another",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sort",
+		"summary": "Sort the elements in a list, set or sorted set",
+		"complexity": "O(N+M*log(M)) where N is the number of elements in the list or set to sort, and M the number of returned elements. When the elements are not sorted, complexity is currently O(N) as there is a copy step that will be avoided in next releases.",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Spop",
+		"summary": "Remove and return one or multiple random members from a set",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Srandmember",
+		"summary": "Get one or multiple random members from a set",
+		"complexity": "Without the count argument O(1), otherwise O(N) where N is the absolute value of the passed count.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Srem",
+		"summary": "Remove one or more members from a set",
+		"complexity": "O(N) where N is the number of members to be removed.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sscan",
+		"summary": "Incrementally iterate Set elements",
+		"complexity": "O(1) for every call. O(N) for a complete iteration, including enough command calls for the cursor to return back to 0. N is the number of elements inside the collection..",
+		"since": "2.8.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Strlen",
+		"summary": "Get the length of the value stored in a key",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Subscribe",
+		"summary": "Listen for messages published to the given channels",
+		"complexity": "O(N) where N is the number of channels to subscribe to.",
+		"since": "2.0.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sunion",
+		"summary": "Add multiple sets",
+		"complexity": "O(N) where N is the total number of elements in all given sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sunionstore",
+		"summary": "Add multiple sets and store the resulting set in a key",
+		"complexity": "O(N) where N is the total number of elements in all given sets.",
+		"since": "1.0.0",
+		"group": "set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Swapdb",
+		"summary": "Swaps two Redis databases",
+		"complexity": "",
+		"since": "4.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Sync",
+		"summary": "Internal command used for replication",
+		"complexity": "",
+		"since": "1.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "TTL",
+		"summary": "Get the time to live for a key",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Time",
+		"summary": "Return the current server time",
+		"complexity": "O(1)",
+		"since": "2.6.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Touch",
+		"summary": "Alters the last access time of a key(s). Returns the number of existing keys specified.",
+		"complexity": "O(N) where N is the number of keys that will be touched.",
+		"since": "3.2.1",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Type",
+		"summary": "Determine the type stored at key",
+		"complexity": "O(1)",
+		"since": "1.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Unlink",
+		"summary": "Delete a key asynchronously in another thread. Otherwise it is just as DEL, but non blocking.",
+		"complexity": "O(1) for each key removed regardless of its size. Then the command does O(N) work in a different thread in order to reclaim memory, where N is the number of allocations the deleted objects where composed of.",
+		"since": "4.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Unsubscribe",
+		"summary": "Stop listening for messages posted to the given channels",
+		"complexity": "O(N) where N is the number of clients already subscribed to a channel.",
+		"since": "2.0.0",
+		"group": "pubsub"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Unwatch",
+		"summary": "Forget about all watched keys",
+		"complexity": "O(1)",
+		"since": "2.2.0",
+		"group": "transactions"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Wait",
+		"summary": "Wait for the synchronous replication of all the write commands sent in the context of the current connection",
+		"complexity": "O(1)",
+		"since": "3.0.0",
+		"group": "generic"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Watch",
+		"summary": "Watch the given keys to determine execution of the MULTI/EXEC block",
+		"complexity": "O(1) for every key.",
+		"since": "2.2.0",
+		"group": "transactions"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xack",
+		"summary": "Marks a pending message as correctly processed, effectively removing it from the pending entries list of the consumer group. Return value of the command is the number of messages successfully acknowledged, that is, the IDs we were actually able to resolve in the PEL.",
+		"complexity": "O(1) for each message ID processed.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xadd",
+		"summary": "Appends a new entry to a stream",
+		"complexity": "O(1)",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xclaim",
+		"summary": "Changes (or acquires) ownership of a message in a consumer group, as if the message was delivered to the specified consumer.",
+		"complexity": "O(log N) with N being the number of messages in the PEL of the consumer group.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xdel",
+		"summary": "Removes the specified entries from the stream. Returns the number of items actually deleted, that may be different from the number of IDs passed in case certain IDs do not exist.",
+		"complexity": "O(1) for each single item to delete in the stream, regardless of the stream size.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xgroup",
+		"summary": "Create, destroy, and manage consumer groups.",
+		"complexity": "O(1) for all the subcommands, with the exception of the DESTROY subcommand which takes an additional O(M) time in order to delete the M entries inside the consumer group pending entries list (PEL).",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xinfo",
+		"summary": "Get information on streams and consumer groups",
+		"complexity": "O(N) with N being the number of returned items for the subcommands CONSUMERS and GROUPS. The STREAM subcommand is O(log N) with N being the number of items in the stream.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xlen",
+		"summary": "Return the number of entires in a stream",
+		"complexity": "O(1)",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xpending",
+		"summary": "Return information and entries from a stream consumer group pending entries list, that are messages fetched but never acknowledged.",
+		"complexity": "O(N) with N being the number of elements returned, so asking for a small fixed number of entries per call is O(1). When the command returns just the summary it runs in O(1) time assuming the list of consumers is small, otherwise there is additional O(N) time needed to iterate every consumer.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xrange",
+		"summary": "Return a range of elements in a stream, with IDs matching the specified IDs interval",
+		"complexity": "O(N) with N being the number of elements being returned. If N is constant (e.g. always asking for the first 10 elements with COUNT), you can consider it O(1).",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xread",
+		"summary": "Return never seen elements in multiple streams, with IDs greater than the ones reported by the caller for each stream. Can block.",
+		"complexity": "For each stream mentioned: O(N) with N being the number of elements being returned, it means that XREAD-ing with a fixed COUNT is O(1). Note that when the BLOCK option is used, XADD will pay O(M) time in order to serve the M clients blocked on the stream getting new data.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xreadgroup",
+		"summary": "Return new entries from a stream using a consumer group, or access the history of the pending entries for a given consumer. Can block.",
+		"complexity": "For each stream mentioned: O(M) with M being the number of elements returned. If M is constant (e.g. always asking for the first 10 elements with COUNT), you can consider it O(1). On the other side when XREADGROUP blocks, XADD will pay the O(N) time in order to serve the N clients blocked on the stream getting new data.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xrevrange",
+		"summary": "Return a range of elements in a stream, with IDs matching the specified IDs interval, in reverse order (from greater to smaller IDs) compared to XRANGE",
+		"complexity": "O(N) with N being the number of elements returned. If N is constant (e.g. always asking for the first 10 elements with COUNT), you can consider it O(1).",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Xtrim",
+		"summary": "Trims the stream to (approximately if '~' is passed) a certain size",
+		"complexity": "O(N), with N being the number of evicted entries. Constant times are very small however, since entries are organized in macro nodes containing multiple entries that can be released with a single deallocation.",
+		"since": "5.0.0",
+		"group": "stream"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zadd",
+		"summary": "Add one or more members to a sorted set, or update its score if it already exists",
+		"complexity": "O(log(N)) for each item added, where N is the number of elements in the sorted set.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zcard",
+		"summary": "Get the number of members in a sorted set",
+		"complexity": "O(1)",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zcount",
+		"summary": "Count the members in a sorted set with scores within the given values",
+		"complexity": "O(log(N)) with N being the number of elements in the sorted set.",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zincrby",
+		"summary": "Increment the score of a member in a sorted set",
+		"complexity": "O(log(N)) where N is the number of elements in the sorted set.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zinterstore",
+		"summary": "Intersect multiple sorted sets and store the resulting sorted set in a new key",
+		"complexity": "O(N*K)+O(M*log(M)) worst case with N being the smallest input sorted set, K being the number of input sorted sets and M being the number of elements in the resulting sorted set.",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zlexcount",
+		"summary": "Count the number of members in a sorted set between a given lexicographical range",
+		"complexity": "O(log(N)) with N being the number of elements in the sorted set.",
+		"since": "2.8.9",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zpopmax",
+		"summary": "Remove and return members with the highest scores in a sorted set",
+		"complexity": "O(log(N)*M) with N being the number of elements in the sorted set, and M being the number of elements popped.",
+		"since": "5.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zpopmin",
+		"summary": "Remove and return members with the lowest scores in a sorted set",
+		"complexity": "O(log(N)*M) with N being the number of elements in the sorted set, and M being the number of elements popped.",
+		"since": "5.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrange",
+		"summary": "Return a range of members in a sorted set, by index",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements returned.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrangebylex",
+		"summary": "Return a range of members in a sorted set, by lexicographical range",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements being returned. If M is constant (e.g. always asking for the first 10 elements with LIMIT), you can consider it O(log(N)).",
+		"since": "2.8.9",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrangebyscore",
+		"summary": "Return a range of members in a sorted set, by score",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements being returned. If M is constant (e.g. always asking for the first 10 elements with LIMIT), you can consider it O(log(N)).",
+		"since": "1.0.5",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrank",
+		"summary": "Determine the index of a member in a sorted set",
+		"complexity": "O(log(N))",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrem",
+		"summary": "Remove one or more members from a sorted set",
+		"complexity": "O(M*log(N)) with N being the number of elements in the sorted set and M the number of elements to be removed.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zremrangebylex",
+		"summary": "Remove all members in a sorted set between the given lexicographical range",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements removed by the operation.",
+		"since": "2.8.9",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zremrangebyrank",
+		"summary": "Remove all members in a sorted set within the given indexes",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements removed by the operation.",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zremrangebyscore",
+		"summary": "Remove all members in a sorted set within the given scores",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements removed by the operation.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrevrange",
+		"summary": "Return a range of members in a sorted set, by index, with scores ordered from high to low",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements returned.",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrevrangebylex",
+		"summary": "Return a range of members in a sorted set, by lexicographical range, ordered from higher to lower strings.",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements being returned. If M is constant (e.g. always asking for the first 10 elements with LIMIT), you can consider it O(log(N)).",
+		"since": "2.8.9",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrevrangebyscore",
+		"summary": "Return a range of members in a sorted set, by score, with scores ordered from high to low",
+		"complexity": "O(log(N)+M) with N being the number of elements in the sorted set and M the number of elements being returned. If M is constant (e.g. always asking for the first 10 elements with LIMIT), you can consider it O(log(N)).",
+		"since": "2.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zrevrank",
+		"summary": "Determine the index of a member in a sorted set, with scores ordered from high to low",
+		"complexity": "O(log(N))",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zscan",
+		"summary": "Incrementally iterate sorted sets elements and associated scores",
+		"complexity": "O(1) for every call. O(N) for a complete iteration, including enough command calls for the cursor to return back to 0. N is the number of elements inside the collection..",
+		"since": "2.8.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zscore",
+		"summary": "Get the score associated with the given member in a sorted set",
+		"complexity": "O(1)",
+		"since": "1.2.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "Zunionstore",
+		"summary": "Add multiple sorted sets and store the resulting sorted set in a new key",
+		"complexity": "O(N)+O(M log(M)) with N being the sum of the sizes of the input sorted sets, and M being the number of elements in the resulting sorted set.",
+		"since": "2.0.0",
+		"group": "sorted_set"
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Psubscribe",
+		"config": {
+			"callback": "MsgCallback",
+			"channel": "pattern",
+			"type": "subscribe"
+		}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Punsubscribe",
+		"config": {
+			"channel": "pattern",
+			"type": "unsubscribe"
+		}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Subscribe",
+		"config": {
+			"callback": "MsgCallback",
+			"channel": "channel",
+			"type": "subscribe"
+		}
+	},
+	{
+		"_type": "funcConfig",
+		"name": "Unsubscribe",
+		"config": {
+			"channel": "channel",
+			"type": "unsubscribe"
+		}
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclCat",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"CAT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "category",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclDeluser",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"DELUSER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "username",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclGenpass",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"GENPASS"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclGetuser",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"GETUSER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "username",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclHelp",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"HELP"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclList",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"LIST"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclLoad",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"LOAD"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclSave",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"SAVE"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclSetuser",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"SETUSER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "username",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "rules",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclUsers",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"USERS"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclWhoami",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"ACL",
+			"WHOAMI"
+		],
+		"list": null
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Aggregate",
+		"values": [
+			"SUM",
+			"MIN",
+			"MAX"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Append",
+		"skip": false,
+		"attr": "Append",
+		"token": [
+			"APPEND"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Auth",
+		"skip": false,
+		"attr": "Auth",
+		"token": [
+			"AUTH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "username",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "password",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bgrewriteaof",
+		"skip": false,
+		"attr": "Bgrewriteaof",
+		"token": [
+			"BGREWRITEAOF"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bgsave",
+		"skip": false,
+		"attr": "Bgsave",
+		"token": [
+			"BGSAVE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bitcount",
+		"skip": false,
+		"attr": "Bitcount",
+		"token": [
+			"BITCOUNT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "startEnd",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "StartEnd"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bitfield",
+		"skip": false,
+		"attr": "Bitfield",
+		"token": [
+			"BITFIELD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "alternative",
+				"name": "operation",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				},
+				"list": [
+					{
+						"_type": "field",
+						"name": "Get",
+						"cmd": "GET",
+						"type": {
+							"_type": "dataType",
+							"name": "TypeOffset"
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Set",
+						"cmd": "SET",
+						"type": {
+							"_type": "dataType",
+							"name": "TypeOffsetValue"
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Incrby",
+						"cmd": "INCRBY",
+						"type": {
+							"_type": "dataType",
+							"name": "TypeOffsetIncrement"
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Overflow",
+						"cmd": "OVERFLOW",
+						"type": {
+							"_type": "dataType",
+							"name": "Overflow"
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Get",
+						"cmd": "GET",
+						"type": {
+							"_type": "pointerType",
+							"node": {
+								"_type": "dataType",
+								"name": "TypeOffset"
+							}
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Set",
+						"cmd": "SET",
+						"type": {
+							"_type": "pointerType",
+							"node": {
+								"_type": "dataType",
+								"name": "TypeOffsetValue"
+							}
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Incrby",
+						"cmd": "INCRBY",
+						"type": {
+							"_type": "pointerType",
+							"node": {
+								"_type": "dataType",
+								"name": "TypeOffsetIncrement"
+							}
+						}
+					},
+					{
+						"_type": "field",
+						"name": "Overflow",
+						"cmd": "OVERFLOW",
+						"type": {
+							"_type": "pointerType",
+							"node": {
+								"_type": "dataType",
+								"name": "Overflow"
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bitop",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "BitopAnd",
+		"skip": false,
+		"attr": "Bitop",
+		"token": [
+			"BITOP",
+			"AND"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "srckey",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "BitopNot",
+		"skip": false,
+		"attr": "Bitop",
+		"token": [
+			"BITOP",
+			"NOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "srckey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "BitopOr",
+		"skip": false,
+		"attr": "Bitop",
+		"token": [
+			"BITOP",
+			"OR"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "srckey",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "BitopXor",
+		"skip": false,
+		"attr": "Bitop",
+		"token": [
+			"BITOP",
+			"XOR"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "srckey",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bitpos",
+		"skip": false,
+		"attr": "Bitpos",
+		"token": [
+			"BITPOS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "bit",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "end",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Blpop",
+		"skip": false,
+		"attr": "Blpop",
+		"token": [
+			"BLPOP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Brpop",
+		"skip": false,
+		"attr": "Brpop",
+		"token": [
+			"BRPOP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Brpoplpush",
+		"skip": false,
+		"attr": "Brpoplpush",
+		"token": [
+			"BRPOPLPUSH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "source",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bzpopmax",
+		"skip": false,
+		"attr": "Bzpopmax",
+		"token": [
+			"BZPOPMAX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Bzpopmin",
+		"skip": false,
+		"attr": "Bzpopmin",
+		"token": [
+			"BZPOPMIN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientGetname",
+		"skip": false,
+		"attr": "ClientGetname",
+		"token": [
+			"CLIENT",
+			"GETNAME"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientId",
+		"skip": false,
+		"attr": "ClientId",
+		"token": [
+			"CLIENT",
+			"ID"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientKill",
+		"skip": false,
+		"attr": "ClientKill",
+		"token": [
+			"CLIENT",
+			"KILL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "ID",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "typ",
+				"cmd": "TYPE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "Clienttype"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "addr",
+				"cmd": "ADDR",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "skipme",
+				"cmd": "SKIPME",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"YES",
+						"NO"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientList",
+		"skip": false,
+		"attr": "ClientList",
+		"token": [
+			"CLIENT",
+			"LIST"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "typ",
+				"cmd": "TYPE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "Clienttype"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientPause",
+		"skip": false,
+		"attr": "ClientPause",
+		"token": [
+			"CLIENT",
+			"PAUSE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientReply",
+		"skip": false,
+		"attr": "ClientReply",
+		"token": [
+			"CLIENT",
+			"REPLY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "replyMode",
+				"cmd": "",
+				"type": {
+					"_type": "dataType",
+					"name": "ReplyMode"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientSetname",
+		"skip": false,
+		"attr": "ClientSetname",
+		"token": [
+			"CLIENT",
+			"SETNAME"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "connectionName",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientTracking",
+		"skip": false,
+		"attr": "ClientTracking",
+		"token": [
+			"CLIENT",
+			"TRACKING"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "on",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"ON",
+						"OFF"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "redirect",
+				"cmd": "REDIRECT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientUnblock",
+		"skip": false,
+		"attr": "ClientUnblock",
+		"token": [
+			"CLIENT",
+			"UNBLOCK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "clientId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"TIMEOUT",
+							"ERROR"
+						]
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Clienttype",
+		"values": [
+			"normal",
+			"master",
+			"replica",
+			"pubsub"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterAddslots",
+		"skip": false,
+		"attr": "ClusterAddslots",
+		"token": [
+			"CLUSTER",
+			"ADDSLOTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterBumpepoch",
+		"skip": false,
+		"attr": "ClusterBumpepoch",
+		"token": [
+			"CLUSTER",
+			"BUMPEPOCH"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterCountFailureReports",
+		"skip": false,
+		"attr": "ClusterCountFailureReports",
+		"token": [
+			"CLUSTER",
+			"COUNT-FAILURE-REPORTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterCountkeysinslot",
+		"skip": false,
+		"attr": "ClusterCountkeysinslot",
+		"token": [
+			"CLUSTER",
+			"COUNTKEYSINSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterDelslots",
+		"skip": false,
+		"attr": "ClusterDelslots",
+		"token": [
+			"CLUSTER",
+			"DELSLOTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterFailover",
+		"skip": false,
+		"attr": "ClusterFailover",
+		"token": [
+			"CLUSTER",
+			"FAILOVER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "force",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"FORCE",
+							"TAKEOVER"
+						]
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterFlushslots",
+		"skip": false,
+		"attr": "ClusterFlushslots",
+		"token": [
+			"CLUSTER",
+			"FLUSHSLOTS"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterForget",
+		"skip": false,
+		"attr": "ClusterForget",
+		"token": [
+			"CLUSTER",
+			"FORGET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterGetkeysinslot",
+		"skip": false,
+		"attr": "ClusterGetkeysinslot",
+		"token": [
+			"CLUSTER",
+			"GETKEYSINSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterInfo",
+		"skip": false,
+		"attr": "ClusterInfo",
+		"token": [
+			"CLUSTER",
+			"INFO"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterKeyslot",
+		"skip": false,
+		"attr": "ClusterKeyslot",
+		"token": [
+			"CLUSTER",
+			"KEYSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterMeet",
+		"skip": false,
+		"attr": "ClusterMeet",
+		"token": [
+			"CLUSTER",
+			"MEET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "ip",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "port",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterMyid",
+		"skip": false,
+		"attr": "ClusterMyid",
+		"token": [
+			"CLUSTER",
+			"MYID"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterNodes",
+		"skip": false,
+		"attr": "ClusterNodes",
+		"token": [
+			"CLUSTER",
+			"NODES"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterReplicas",
+		"skip": false,
+		"attr": "ClusterReplicas",
+		"token": [
+			"CLUSTER",
+			"REPLICAS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterReplicate",
+		"skip": false,
+		"attr": "ClusterReplicate",
+		"token": [
+			"CLUSTER",
+			"REPLICATE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterReset",
+		"skip": false,
+		"attr": "ClusterReset",
+		"token": [
+			"CLUSTER",
+			"RESET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "hard",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"HARD",
+							"SOFT"
+						]
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSaveconfig",
+		"skip": false,
+		"attr": "ClusterSaveconfig",
+		"token": [
+			"CLUSTER",
+			"SAVECONFIG"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetConfigEpoch",
+		"skip": false,
+		"attr": "ClusterSetConfigEpoch",
+		"token": [
+			"CLUSTER",
+			"SET-CONFIG-EPOCH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "configEpoch",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetslot",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetslotImporting",
+		"skip": false,
+		"attr": "ClusterSetslot",
+		"token": [
+			"CLUSTER",
+			"SETSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "IMPORTING",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "sourceNodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetslotMigrating",
+		"skip": false,
+		"attr": "ClusterSetslot",
+		"token": [
+			"CLUSTER",
+			"SETSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "MIGRATING",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "destNodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetslotNode",
+		"skip": false,
+		"attr": "ClusterSetslot",
+		"token": [
+			"CLUSTER",
+			"SETSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "NODE",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSetslotStable",
+		"skip": false,
+		"attr": "ClusterSetslot",
+		"token": [
+			"CLUSTER",
+			"SETSLOT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "slot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "STABLE",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSlaves",
+		"skip": false,
+		"attr": "ClusterSlaves",
+		"token": [
+			"CLUSTER",
+			"SLAVES"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nodeId",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClusterSlots",
+		"skip": false,
+		"attr": "ClusterSlots",
+		"token": [
+			"CLUSTER",
+			"SLOTS"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Command",
+		"skip": false,
+		"attr": "Command",
+		"token": [
+			"COMMAND"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "CommandCount",
+		"skip": false,
+		"attr": "CommandCount",
+		"token": [
+			"COMMAND",
+			"COUNT"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "CommandGetkeys",
+		"skip": false,
+		"attr": "CommandGetkeys",
+		"token": [
+			"COMMAND",
+			"GETKEYS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "arg",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "CommandInfo",
+		"skip": false,
+		"attr": "CommandInfo",
+		"token": [
+			"COMMAND",
+			"INFO"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "commandName",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ConfigGet",
+		"skip": false,
+		"attr": "ConfigGet",
+		"token": [
+			"CONFIG",
+			"GET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "parameter",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ConfigResetstat",
+		"skip": false,
+		"attr": "ConfigResetstat",
+		"token": [
+			"CONFIG",
+			"RESETSTAT"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ConfigRewrite",
+		"skip": false,
+		"attr": "ConfigRewrite",
+		"token": [
+			"CONFIG",
+			"REWRITE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ConfigSet",
+		"skip": false,
+		"attr": "ConfigSet",
+		"token": [
+			"CONFIG",
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "parameter",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Dbsize",
+		"skip": false,
+		"attr": "Dbsize",
+		"token": [
+			"DBSIZE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "DebugObject",
+		"skip": false,
+		"attr": "DebugObject",
+		"token": [
+			"DEBUG",
+			"OBJECT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "DebugSegfault",
+		"skip": false,
+		"attr": "DebugSegfault",
+		"token": [
+			"DEBUG",
+			"SEGFAULT"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Decr",
+		"skip": false,
+		"attr": "Decr",
+		"token": [
+			"DECR"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Decrby",
+		"skip": false,
+		"attr": "Decrby",
+		"token": [
+			"DECRBY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "decrement",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Del",
+		"skip": false,
+		"attr": "Del",
+		"token": [
+			"DEL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Discard",
+		"skip": false,
+		"attr": "Discard",
+		"token": [
+			"DISCARD"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Do",
+		"skip": false,
+		"attr": "Do",
+		"token": null,
+		"list": [
+			{
+				"_type": "field",
+				"name": "v",
+				"cmd": "",
+				"type": {
+					"_type": "ellipsisType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Dump",
+		"skip": false,
+		"attr": "Dump",
+		"token": [
+			"DUMP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Echo",
+		"skip": false,
+		"attr": "Echo",
+		"token": [
+			"ECHO"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "message",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Eval",
+		"skip": false,
+		"attr": "Eval",
+		"token": [
+			"EVAL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "script",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "numkeys",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "arg",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Evalsha",
+		"skip": false,
+		"attr": "Evalsha",
+		"token": [
+			"EVALSHA"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "sha1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "numkeys",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "arg",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Exec",
+		"skip": false,
+		"attr": "Exec",
+		"token": [
+			"EXEC"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Exists",
+		"skip": false,
+		"attr": "Exists",
+		"token": [
+			"EXISTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Expire",
+		"skip": false,
+		"attr": "Expire",
+		"token": [
+			"EXPIRE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "seconds",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Expireat",
+		"skip": false,
+		"attr": "Expireat",
+		"token": [
+			"EXPIREAT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timestamp",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "FieldValue",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Flushall",
+		"skip": false,
+		"attr": "Flushall",
+		"token": [
+			"FLUSHALL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "async",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"ASYNC"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Flushdb",
+		"skip": false,
+		"attr": "Flushdb",
+		"token": [
+			"FLUSHDB"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "async",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"ASYNC"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Geoadd",
+		"skip": false,
+		"attr": "Geoadd",
+		"token": [
+			"GEOADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "longitudeLatitudeMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "LongitudeLatitudeMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Geodist",
+		"skip": false,
+		"attr": "Geodist",
+		"token": [
+			"GEODIST"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "unit",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "Unit"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Geohash",
+		"skip": false,
+		"attr": "Geohash",
+		"token": [
+			"GEOHASH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Geopos",
+		"skip": false,
+		"attr": "Geopos",
+		"token": [
+			"GEOPOS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Georadius",
+		"skip": false,
+		"attr": "Georadius",
+		"token": [
+			"GEORADIUS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "longitude",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "latitude",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "radius",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "unit",
+				"cmd": "",
+				"type": {
+					"_type": "dataType",
+					"name": "Unit"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withcoord",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHCOORD"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withdist",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHDIST"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withhash",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHHASH"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "asc",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"ASC",
+							"DESC"
+						]
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "store",
+				"cmd": "STORE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "storedist",
+				"cmd": "STOREDIST",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Georadiusbymember",
+		"skip": false,
+		"attr": "Georadiusbymember",
+		"token": [
+			"GEORADIUSBYMEMBER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "radius",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "unit",
+				"cmd": "",
+				"type": {
+					"_type": "dataType",
+					"name": "Unit"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withcoord",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHCOORD"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withdist",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHDIST"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withhash",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHHASH"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "asc",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"ASC",
+							"DESC"
+						]
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "store",
+				"cmd": "STORE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "storedist",
+				"cmd": "STOREDIST",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Get",
+		"skip": false,
+		"attr": "Get",
+		"token": [
+			"GET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Getbit",
+		"skip": false,
+		"attr": "Getbit",
+		"token": [
+			"GETBIT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Getrange",
+		"skip": false,
+		"attr": "Getrange",
+		"token": [
+			"GETRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "end",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Getset",
+		"skip": false,
+		"attr": "Getset",
+		"token": [
+			"GETSET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "GroupConsumer",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Group",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Consumer",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hdel",
+		"skip": false,
+		"attr": "Hdel",
+		"token": [
+			"HDEL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hello",
+		"skip": false,
+		"attr": "Hello",
+		"token": [
+			"HELLO"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "version",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "userPassword",
+				"cmd": "AUTH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "UserPassword"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "clientName",
+				"cmd": "SETNAME",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hexists",
+		"skip": false,
+		"attr": "Hexists",
+		"token": [
+			"HEXISTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hget",
+		"skip": false,
+		"attr": "Hget",
+		"token": [
+			"HGET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hgetall",
+		"skip": false,
+		"attr": "Hgetall",
+		"token": [
+			"HGETALL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hincrby",
+		"skip": false,
+		"attr": "Hincrby",
+		"token": [
+			"HINCRBY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hincrbyfloat",
+		"skip": false,
+		"attr": "Hincrbyfloat",
+		"token": [
+			"HINCRBYFLOAT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hkeys",
+		"skip": false,
+		"attr": "Hkeys",
+		"token": [
+			"HKEYS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hlen",
+		"skip": false,
+		"attr": "Hlen",
+		"token": [
+			"HLEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hmget",
+		"skip": false,
+		"attr": "Hmget",
+		"token": [
+			"HMGET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hmset",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hscan",
+		"skip": false,
+		"attr": "Hscan",
+		"token": [
+			"HSCAN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "cursor",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "match",
+				"cmd": "MATCH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hset",
+		"skip": false,
+		"attr": "Hset",
+		"token": [
+			"HSET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "fieldValue",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "FieldValue"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "HsetNx",
+		"skip": false,
+		"attr": "HsetNx",
+		"token": [
+			"HSETNX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hstrlen",
+		"skip": false,
+		"attr": "Hstrlen",
+		"token": [
+			"HSTRLEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "field",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Hvals",
+		"skip": false,
+		"attr": "Hvals",
+		"token": [
+			"HVALS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Incr",
+		"skip": false,
+		"attr": "Incr",
+		"token": [
+			"INCR"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Incrby",
+		"skip": false,
+		"attr": "Incrby",
+		"token": [
+			"INCRBY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Incrbyfloat",
+		"skip": false,
+		"attr": "Incrbyfloat",
+		"token": [
+			"INCRBYFLOAT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Info",
+		"skip": false,
+		"attr": "Info",
+		"token": [
+			"INFO"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "section",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "KeyValue",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Keys",
+		"skip": false,
+		"attr": "Keys",
+		"token": [
+			"KEYS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "pattern",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lastsave",
+		"skip": false,
+		"attr": "Lastsave",
+		"token": [
+			"LASTSAVE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyDoctor",
+		"skip": false,
+		"attr": "LatencyDoctor",
+		"token": [
+			"LATENCY",
+			"DOCTOR"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyGraph",
+		"skip": false,
+		"attr": "LatencyGraph",
+		"token": [
+			"LATENCY",
+			"GRAPH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "event",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyHelp",
+		"skip": false,
+		"attr": "LatencyHelp",
+		"token": [
+			"LATENCY",
+			"HELP"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyHistory",
+		"skip": false,
+		"attr": "LatencyHistory",
+		"token": [
+			"LATENCY",
+			"HISTORY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "event",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyLatest",
+		"skip": false,
+		"attr": "LatencyLatest",
+		"token": [
+			"LATENCY",
+			"LATEST"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "LatencyReset",
+		"skip": false,
+		"attr": "LatencyReset",
+		"token": [
+			"LATENCY",
+			"RESET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "event",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lindex",
+		"skip": false,
+		"attr": "Lindex",
+		"token": [
+			"LINDEX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "index",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Linsert",
+		"skip": false,
+		"attr": "Linsert",
+		"token": [
+			"LINSERT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "before",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"BEFORE",
+						"AFTER"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "pivot",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Llen",
+		"skip": false,
+		"attr": "Llen",
+		"token": [
+			"LLEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lolwut",
+		"skip": false,
+		"attr": "Lolwut",
+		"token": [
+			"LOLWUT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "version",
+				"cmd": "VERSION",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "LongitudeLatitudeMember",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Longitude",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Latitude",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lpop",
+		"skip": false,
+		"attr": "Lpop",
+		"token": [
+			"LPOP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lpush",
+		"skip": false,
+		"attr": "Lpush",
+		"token": [
+			"LPUSH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lpushx",
+		"skip": false,
+		"attr": "Lpushx",
+		"token": [
+			"LPUSHX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lrange",
+		"skip": false,
+		"attr": "Lrange",
+		"token": [
+			"LRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "stop",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lrem",
+		"skip": false,
+		"attr": "Lrem",
+		"token": [
+			"LREM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lset",
+		"skip": false,
+		"attr": "Lset",
+		"token": [
+			"LSET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "index",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Ltrim",
+		"skip": false,
+		"attr": "Ltrim",
+		"token": [
+			"LTRIM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "stop",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryDoctor",
+		"skip": false,
+		"attr": "MemoryDoctor",
+		"token": [
+			"MEMORY",
+			"DOCTOR"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryHelp",
+		"skip": false,
+		"attr": "MemoryHelp",
+		"token": [
+			"MEMORY",
+			"HELP"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryMallocStats",
+		"skip": false,
+		"attr": "MemoryMallocStats",
+		"token": [
+			"MEMORY",
+			"MALLOC-STATS"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryPurge",
+		"skip": false,
+		"attr": "MemoryPurge",
+		"token": [
+			"MEMORY",
+			"PURGE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryStats",
+		"skip": false,
+		"attr": "MemoryStats",
+		"token": [
+			"MEMORY",
+			"STATS"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MemoryUsage",
+		"skip": false,
+		"attr": "MemoryUsage",
+		"token": [
+			"MEMORY",
+			"USAGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "samples",
+				"cmd": "SAMPLES",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Mget",
+		"skip": false,
+		"attr": "Mget",
+		"token": [
+			"MGET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Migrate",
+		"skip": false,
+		"attr": "Migrate",
+		"token": [
+			"MIGRATE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "host",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "port",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "destinationDb",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "copy",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"COPY"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "replace",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"REPLACE"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "auth",
+				"cmd": "AUTH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "keys",
+				"cmd": "KEYS",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Mode",
+		"values": [
+			"YES",
+			"SYNC",
+			"NO"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ModuleList",
+		"skip": false,
+		"attr": "ModuleList",
+		"token": [
+			"MODULE",
+			"LIST"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ModuleLoad",
+		"skip": false,
+		"attr": "ModuleLoad",
+		"token": [
+			"MODULE",
+			"LOAD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "path",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "arg",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ModuleUnload",
+		"skip": false,
+		"attr": "ModuleUnload",
+		"token": [
+			"MODULE",
+			"UNLOAD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "name",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Monitor",
+		"skip": false,
+		"attr": "Monitor",
+		"token": [
+			"MONITOR"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Move",
+		"skip": false,
+		"attr": "Move",
+		"token": [
+			"MOVE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "db",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Mset",
+		"skip": false,
+		"attr": "Mset",
+		"token": [
+			"MSET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "keyValue",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "KeyValue"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "MsetNx",
+		"skip": false,
+		"attr": "MsetNx",
+		"token": [
+			"MSETNX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "keyValue",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "KeyValue"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Multi",
+		"skip": false,
+		"attr": "Multi",
+		"token": [
+			"MULTI"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Object",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ObjectEncoding",
+		"skip": false,
+		"attr": "Object",
+		"token": [
+			"OBJECT",
+			"ENCODING"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ObjectFreq",
+		"skip": false,
+		"attr": "Object",
+		"token": [
+			"OBJECT",
+			"FREQ"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ObjectHelp",
+		"skip": false,
+		"attr": "Object",
+		"token": [
+			"OBJECT",
+			"HELP"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ObjectIdletime",
+		"skip": false,
+		"attr": "Object",
+		"token": [
+			"OBJECT",
+			"IDLETIME"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ObjectRefcount",
+		"skip": false,
+		"attr": "Object",
+		"token": [
+			"OBJECT",
+			"REFCOUNT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "OffsetCount",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Count",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Overflow",
+		"values": [
+			"WRAP",
+			"SAT",
+			"FAIL"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "PTTL",
+		"skip": false,
+		"attr": "PTTL",
+		"token": [
+			"PTTL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Persist",
+		"skip": false,
+		"attr": "Persist",
+		"token": [
+			"PERSIST"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pexpire",
+		"skip": false,
+		"attr": "Pexpire",
+		"token": [
+			"PEXPIRE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "milliseconds",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pexpireat",
+		"skip": false,
+		"attr": "Pexpireat",
+		"token": [
+			"PEXPIREAT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "millisecondsTimestamp",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pfadd",
+		"skip": false,
+		"attr": "Pfadd",
+		"token": [
+			"PFADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pfcount",
+		"skip": false,
+		"attr": "Pfcount",
+		"token": [
+			"PFCOUNT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pfmerge",
+		"skip": false,
+		"attr": "Pfmerge",
+		"token": [
+			"PFMERGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "sourcekey",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Ping",
+		"skip": false,
+		"attr": "Ping",
+		"token": [
+			"PING"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "message",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Psetex",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Psubscribe",
+		"skip": false,
+		"attr": "Psubscribe",
+		"token": [
+			"PSUBSCRIBE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "pattern",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Psync",
+		"skip": false,
+		"attr": "Psync",
+		"token": [
+			"PSYNC"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "replicationid",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Publish",
+		"skip": false,
+		"attr": "Publish",
+		"token": [
+			"PUBLISH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "channel",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "message",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Pubsub",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "PubsubChannels",
+		"skip": false,
+		"attr": "Pubsub",
+		"token": [
+			"PUBSUB",
+			"CHANNELS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "pattern",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "PubsubNumpat",
+		"skip": false,
+		"attr": "Pubsub",
+		"token": [
+			"PUBSUB",
+			"NUMPAT"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "PubsubNumsub",
+		"skip": false,
+		"attr": "Pubsub",
+		"token": [
+			"PUBSUB",
+			"NUMSUB"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "channel",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Punsubscribe",
+		"skip": false,
+		"attr": "Punsubscribe",
+		"token": [
+			"PUNSUBSCRIBE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "pattern",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Quit",
+		"skip": false,
+		"attr": "Quit",
+		"token": [
+			"QUIT"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Randomkey",
+		"skip": false,
+		"attr": "Randomkey",
+		"token": [
+			"RANDOMKEY"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Readonly",
+		"skip": false,
+		"attr": "Readonly",
+		"token": [
+			"READONLY"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Readwrite",
+		"skip": false,
+		"attr": "Readwrite",
+		"token": [
+			"READWRITE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Rename",
+		"skip": false,
+		"attr": "Rename",
+		"token": [
+			"RENAME"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "newkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "RenameNx",
+		"skip": false,
+		"attr": "RenameNx",
+		"token": [
+			"RENAMENX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "newkey",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Replicaof",
+		"skip": false,
+		"attr": "Replicaof",
+		"token": [
+			"REPLICAOF"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "host",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "port",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "ReplyMode",
+		"values": [
+			"ON",
+			"OFF",
+			"SKIP"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Restore",
+		"skip": false,
+		"attr": "Restore",
+		"token": [
+			"RESTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "ttl",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "serializedValue",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "replace",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"REPLACE"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "absttl",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"ABSTTL"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "idletime",
+				"cmd": "IDLETIME",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "freq",
+				"cmd": "FREQ",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Role",
+		"skip": false,
+		"attr": "Role",
+		"token": [
+			"ROLE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Rpop",
+		"skip": false,
+		"attr": "Rpop",
+		"token": [
+			"RPOP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Rpoplpush",
+		"skip": false,
+		"attr": "Rpoplpush",
+		"token": [
+			"RPOPLPUSH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "source",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Rpush",
+		"skip": false,
+		"attr": "Rpush",
+		"token": [
+			"RPUSH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Rpushx",
+		"skip": false,
+		"attr": "Rpushx",
+		"token": [
+			"RPUSHX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sadd",
+		"skip": false,
+		"attr": "Sadd",
+		"token": [
+			"SADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Save",
+		"skip": false,
+		"attr": "Save",
+		"token": [
+			"SAVE"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Scan",
+		"skip": false,
+		"attr": "Scan",
+		"token": [
+			"SCAN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "cursor",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "match",
+				"cmd": "MATCH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "typ",
+				"cmd": "TYPE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Scard",
+		"skip": false,
+		"attr": "Scard",
+		"token": [
+			"SCARD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "ScoreMember",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Score",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ScriptDebug",
+		"skip": false,
+		"attr": "ScriptDebug",
+		"token": [
+			"SCRIPT",
+			"DEBUG"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "mode",
+				"cmd": "",
+				"type": {
+					"_type": "dataType",
+					"name": "Mode"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ScriptExists",
+		"skip": false,
+		"attr": "ScriptExists",
+		"token": [
+			"SCRIPT",
+			"EXISTS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "sha1",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ScriptFlush",
+		"skip": false,
+		"attr": "ScriptFlush",
+		"token": [
+			"SCRIPT",
+			"FLUSH"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ScriptKill",
+		"skip": false,
+		"attr": "ScriptKill",
+		"token": [
+			"SCRIPT",
+			"KILL"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ScriptLoad",
+		"skip": false,
+		"attr": "ScriptLoad",
+		"token": [
+			"SCRIPT",
+			"LOAD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "script",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sdiff",
+		"skip": false,
+		"attr": "Sdiff",
+		"token": [
+			"SDIFF"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sdiffstore",
+		"skip": false,
+		"attr": "Sdiffstore",
+		"token": [
+			"SDIFFSTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Select",
+		"skip": false,
+		"attr": "Select",
+		"token": [
+			"SELECT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "index",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Set",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetEx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "seconds",
+				"cmd": "EX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetExNx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "seconds",
+				"cmd": "EX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "NX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetExXx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "seconds",
+				"cmd": "EX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "XX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetNx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "NX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetPx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "milliseconds",
+				"cmd": "PX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetPxNx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "milliseconds",
+				"cmd": "PX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "NX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetPxXx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "milliseconds",
+				"cmd": "PX",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "XX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SetXx",
+		"skip": false,
+		"attr": "Set",
+		"token": [
+			"SET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "XX",
+				"type": null
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Setbit",
+		"skip": false,
+		"attr": "Setbit",
+		"token": [
+			"SETBIT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Setex",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Setnx",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Setrange",
+		"skip": false,
+		"attr": "Setrange",
+		"token": [
+			"SETRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Shutdown",
+		"skip": false,
+		"attr": "Shutdown",
+		"token": [
+			"SHUTDOWN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "nosave",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"NOSAVE",
+							"SAVE"
+						]
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sinter",
+		"skip": false,
+		"attr": "Sinter",
+		"token": [
+			"SINTER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sinterstore",
+		"skip": false,
+		"attr": "Sinterstore",
+		"token": [
+			"SINTERSTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sismember",
+		"skip": false,
+		"attr": "Sismember",
+		"token": [
+			"SISMEMBER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Slaveof",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Slowlog",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SlowlogGet",
+		"skip": false,
+		"attr": "Slowlog",
+		"token": [
+			"SLOWLOG",
+			"GET"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SlowlogLen",
+		"skip": false,
+		"attr": "Slowlog",
+		"token": [
+			"SLOWLOG",
+			"LEN"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "SlowlogReset",
+		"skip": false,
+		"attr": "Slowlog",
+		"token": [
+			"SLOWLOG",
+			"RESET"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Smembers",
+		"skip": false,
+		"attr": "Smembers",
+		"token": [
+			"SMEMBERS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Smove",
+		"skip": false,
+		"attr": "Smove",
+		"token": [
+			"SMOVE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "source",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sort",
+		"skip": false,
+		"attr": "Sort",
+		"token": [
+			"SORT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "by",
+				"cmd": "BY",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "limit",
+				"cmd": "LIMIT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "OffsetCount"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "get",
+				"cmd": "GET",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "asc",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "enumBoolType",
+						"values": [
+							"ASC",
+							"DESC"
+						]
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "sorting",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"ALPHA"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "store",
+				"cmd": "STORE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Spop",
+		"skip": false,
+		"attr": "Spop",
+		"token": [
+			"SPOP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Srandmember",
+		"skip": false,
+		"attr": "Srandmember",
+		"token": [
+			"SRANDMEMBER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Srem",
+		"skip": false,
+		"attr": "Srem",
+		"token": [
+			"SREM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sscan",
+		"skip": false,
+		"attr": "Sscan",
+		"token": [
+			"SSCAN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "cursor",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "match",
+				"cmd": "MATCH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "StartEnd",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "End",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "StartEndCount",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "End",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Count",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Strlen",
+		"skip": false,
+		"attr": "Strlen",
+		"token": [
+			"STRLEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Subscribe",
+		"skip": false,
+		"attr": "Subscribe",
+		"token": [
+			"SUBSCRIBE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "channel",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sunion",
+		"skip": false,
+		"attr": "Sunion",
+		"token": [
+			"SUNION"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sunionstore",
+		"skip": false,
+		"attr": "Sunionstore",
+		"token": [
+			"SUNIONSTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Swapdb",
+		"skip": false,
+		"attr": "Swapdb",
+		"token": [
+			"SWAPDB"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "index1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "index2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Sync",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "TTL",
+		"skip": false,
+		"attr": "TTL",
+		"token": [
+			"TTL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Time",
+		"skip": false,
+		"attr": "Time",
+		"token": [
+			"TIME"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Touch",
+		"skip": false,
+		"attr": "Touch",
+		"token": [
+			"TOUCH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Type",
+		"skip": false,
+		"attr": "Type",
+		"token": [
+			"TYPE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffset",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Type",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffsetIncrement",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Type",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "structDecl",
+		"name": "TypeOffsetValue",
+		"list": [
+			{
+				"_type": "field",
+				"name": "Type",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Offset",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Value",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "enumDecl",
+		"name": "Unit",
+		"values": [
+			"m",
+			"km",
+			"ft",
+			"mi"
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Unlink",
+		"skip": false,
+		"attr": "Unlink",
+		"token": [
+			"UNLINK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Unsubscribe",
+		"skip": false,
+		"attr": "Unsubscribe",
+		"token": [
+			"UNSUBSCRIBE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "channel",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Unwatch",
+		"skip": false,
+		"attr": "Unwatch",
+		"token": [
+			"UNWATCH"
+		],
+		"list": []
+	},
+	{
+		"_type": "structDecl",
+		"name": "UserPassword",
+		"list": [
+			{
+				"_type": "field",
+				"name": "User",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "Password",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Wait",
+		"skip": false,
+		"attr": "Wait",
+		"token": [
+			"WAIT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "numreplicas",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "timeout",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Watch",
+		"skip": false,
+		"attr": "Watch",
+		"token": [
+			"WATCH"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xack",
+		"skip": false,
+		"attr": "Xack",
+		"token": [
+			"XACK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "group",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xadd",
+		"skip": false,
+		"attr": "Xadd",
+		"token": [
+			"XADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "fieldValue",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "FieldValue"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xclaim",
+		"skip": false,
+		"attr": "Xclaim",
+		"token": [
+			"XCLAIM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "group",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "consumer",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "minIdleTime",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "idle",
+				"cmd": "IDLE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "time",
+				"cmd": "TIME",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "retrycount",
+				"cmd": "RETRYCOUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "force",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"FORCE"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "justid",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"JUSTID"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xdel",
+		"skip": false,
+		"attr": "Xdel",
+		"token": [
+			"XDEL"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xgroup",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XgroupCreate",
+		"skip": false,
+		"attr": "Xgroup",
+		"token": [
+			"XGROUP",
+			"CREATE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "groupname",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "mkstream",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"MKSTREAM"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XgroupDelconsumer",
+		"skip": false,
+		"attr": "Xgroup",
+		"token": [
+			"XGROUP",
+			"DELCONSUMER"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "groupname",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "consumername",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XgroupDestroy",
+		"skip": false,
+		"attr": "Xgroup",
+		"token": [
+			"XGROUP",
+			"DESTROY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "groupname",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XgroupHelp",
+		"skip": false,
+		"attr": "Xgroup",
+		"token": [
+			"XGROUP",
+			"HELP"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XgroupSetid",
+		"skip": false,
+		"attr": "Xgroup",
+		"token": [
+			"XGROUP",
+			"SETID"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "groupname",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xinfo",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XinfoConsumers",
+		"skip": false,
+		"attr": "Xinfo",
+		"token": [
+			"XINFO",
+			"CONSUMERS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "groupname",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XinfoGroups",
+		"skip": false,
+		"attr": "Xinfo",
+		"token": [
+			"XINFO",
+			"GROUPS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XinfoHelp",
+		"skip": false,
+		"attr": "Xinfo",
+		"token": [
+			"XINFO",
+			"HELP"
+		],
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "XinfoStream",
+		"skip": false,
+		"attr": "Xinfo",
+		"token": [
+			"XINFO",
+			"STREAM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xlen",
+		"skip": false,
+		"attr": "Xlen",
+		"token": [
+			"XLEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xpending",
+		"skip": false,
+		"attr": "Xpending",
+		"token": [
+			"XPENDING"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "group",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "startEndCount",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "StartEndCount"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "consumer",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xrange",
+		"skip": false,
+		"attr": "Xrange",
+		"token": [
+			"XRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "end",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xread",
+		"skip": false,
+		"attr": "Xread",
+		"token": [
+			"XREAD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "block",
+				"cmd": "BLOCK",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "streams",
+				"cmd": "STREAMS",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xreadgroup",
+		"skip": false,
+		"attr": "Xreadgroup",
+		"token": [
+			"XREADGROUP"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "group",
+				"cmd": "GROUP",
+				"type": {
+					"_type": "dataType",
+					"name": "GroupConsumer"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "block",
+				"cmd": "BLOCK",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "noack",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"NOACK"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "streams",
+				"cmd": "STREAMS",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "id",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xrevrange",
+		"skip": false,
+		"attr": "Xrevrange",
+		"token": [
+			"XREVRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "end",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Xtrim",
+		"skip": false,
+		"attr": "Xtrim",
+		"token": [
+			"XTRIM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "strategy",
+				"cmd": "MAXLEN",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "approx",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"~"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zadd",
+		"skip": false,
+		"attr": "Zadd",
+		"token": [
+			"ZADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "scoreMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "ScoreMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ZaddCh",
+		"skip": false,
+		"attr": "Zadd",
+		"token": [
+			"ZADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "CH",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "scoreMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "ScoreMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ZaddNx",
+		"skip": false,
+		"attr": "Zadd",
+		"token": [
+			"ZADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "NX",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "scoreMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "ScoreMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ZaddXx",
+		"skip": false,
+		"attr": "Zadd",
+		"token": [
+			"ZADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "XX",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "scoreMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "ScoreMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ZaddXxCh",
+		"skip": false,
+		"attr": "Zadd",
+		"token": [
+			"ZADD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "XX",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "CH",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "scoreMember",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "dataType",
+						"name": "ScoreMember"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zcard",
+		"skip": false,
+		"attr": "Zcard",
+		"token": [
+			"ZCARD"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zcount",
+		"skip": false,
+		"attr": "Zcount",
+		"token": [
+			"ZCOUNT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zincrby",
+		"skip": false,
+		"attr": "Zincrby",
+		"token": [
+			"ZINCRBY"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "increment",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "float64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zinterstore",
+		"skip": false,
+		"attr": "Zinterstore",
+		"token": [
+			"ZINTERSTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "numkeys",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "weights",
+				"cmd": "WEIGHTS",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "aggregate",
+				"cmd": "AGGREGATE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "Aggregate"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zlexcount",
+		"skip": false,
+		"attr": "Zlexcount",
+		"token": [
+			"ZLEXCOUNT"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zpopmax",
+		"skip": false,
+		"attr": "Zpopmax",
+		"token": [
+			"ZPOPMAX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zpopmin",
+		"skip": false,
+		"attr": "Zpopmin",
+		"token": [
+			"ZPOPMIN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrange",
+		"skip": false,
+		"attr": "Zrange",
+		"token": [
+			"ZRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "stop",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withscores",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHSCORES"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrangebylex",
+		"skip": false,
+		"attr": "Zrangebylex",
+		"token": [
+			"ZRANGEBYLEX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "limit",
+				"cmd": "LIMIT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "OffsetCount"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrangebyscore",
+		"skip": false,
+		"attr": "Zrangebyscore",
+		"token": [
+			"ZRANGEBYSCORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withscores",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHSCORES"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "limit",
+				"cmd": "LIMIT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "OffsetCount"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrank",
+		"skip": false,
+		"attr": "Zrank",
+		"token": [
+			"ZRANK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrem",
+		"skip": false,
+		"attr": "Zrem",
+		"token": [
+			"ZREM"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zremrangebylex",
+		"skip": false,
+		"attr": "Zremrangebylex",
+		"token": [
+			"ZREMRANGEBYLEX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zremrangebyrank",
+		"skip": false,
+		"attr": "Zremrangebyrank",
+		"token": [
+			"ZREMRANGEBYRANK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "stop",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zremrangebyscore",
+		"skip": false,
+		"attr": "Zremrangebyscore",
+		"token": [
+			"ZREMRANGEBYSCORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrevrange",
+		"skip": false,
+		"attr": "Zrevrange",
+		"token": [
+			"ZREVRANGE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "start",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "stop",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withscores",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHSCORES"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrevrangebylex",
+		"skip": false,
+		"attr": "Zrevrangebylex",
+		"token": [
+			"ZREVRANGEBYLEX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "limit",
+				"cmd": "LIMIT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "OffsetCount"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrevrangebyscore",
+		"skip": false,
+		"attr": "Zrevrangebyscore",
+		"token": [
+			"ZREVRANGEBYSCORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "max",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "min",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "Zfloat64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withscores",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHSCORES"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "limit",
+				"cmd": "LIMIT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "OffsetCount"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zrevrank",
+		"skip": false,
+		"attr": "Zrevrank",
+		"token": [
+			"ZREVRANK"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zscan",
+		"skip": false,
+		"attr": "Zscan",
+		"token": [
+			"ZSCAN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "cursor",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "match",
+				"cmd": "MATCH",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zscore",
+		"skip": false,
+		"attr": "Zscore",
+		"token": [
+			"ZSCORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "member",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Zunionstore",
+		"skip": false,
+		"attr": "Zunionstore",
+		"token": [
+			"ZUNIONSTORE"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "destination",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "numkeys",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "int64"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": false,
+					"node": {
+						"_type": "baseType",
+						"name": "interface{}"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "weights",
+				"cmd": "WEIGHTS",
+				"type": {
+					"_type": "sliceType",
+					"AllowNil": true,
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "aggregate",
+				"cmd": "AGGREGATE",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "dataType",
+						"name": "Aggregate"
+					}
+				}
+			}
+		]
+	}
+]

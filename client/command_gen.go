@@ -438,11 +438,10 @@ type TransactionsCommands interface {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclCat(category *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "CAT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "CAT")
 	if category != nil {
-		c.encode(category)
+		r.request.cmd = append(r.request.cmd, category)
 	}
 	c.send(CmdAclCat, r)
 	return r
@@ -452,15 +451,14 @@ func (c *command) AclCat(category *string) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclDeluser(username []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if username == nil {
 		r.setErr(newInvalidValueError("username", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ACL", "DELUSER")
+	r.request.cmd = append(r.request.cmd, "ACL", "DELUSER")
 	for _, v := range username {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdAclDeluser, r)
 	return r
@@ -470,9 +468,8 @@ func (c *command) AclDeluser(username []string) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclGenpass() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "GENPASS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "GENPASS")
 	c.send(CmdAclGenpass, r)
 	return r
 }
@@ -481,9 +478,8 @@ func (c *command) AclGenpass() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclGetuser(username string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "GETUSER", username)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "GETUSER", username)
 	c.send(CmdAclGetuser, r)
 	return r
 }
@@ -492,9 +488,8 @@ func (c *command) AclGetuser(username string) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "HELP")
 	c.send(CmdAclHelp, r)
 	return r
 }
@@ -503,9 +498,8 @@ func (c *command) AclHelp() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclList() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "LIST")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "LIST")
 	c.send(CmdAclList, r)
 	return r
 }
@@ -514,9 +508,8 @@ func (c *command) AclList() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclLoad() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "LOAD")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "LOAD")
 	c.send(CmdAclLoad, r)
 	return r
 }
@@ -525,9 +518,8 @@ func (c *command) AclLoad() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclSave() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "SAVE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "SAVE")
 	c.send(CmdAclSave, r)
 	return r
 }
@@ -536,11 +528,10 @@ func (c *command) AclSave() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclSetuser(username string, rules []string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "SETUSER", username)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "SETUSER", username)
 	for _, v := range rules {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdAclSetuser, r)
 	return r
@@ -550,9 +541,8 @@ func (c *command) AclSetuser(username string, rules []string) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclUsers() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "USERS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "USERS")
 	c.send(CmdAclUsers, r)
 	return r
 }
@@ -561,9 +551,8 @@ func (c *command) AclUsers() Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) AclWhoami() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ACL", "WHOAMI")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ACL", "WHOAMI")
 	c.send(CmdAclWhoami, r)
 	return r
 }
@@ -576,9 +565,8 @@ func (c *command) AclWhoami() Result {
 // small and the already present value is of any size, since the dynamic string library
 // used by Redis will double the free space available on every reallocation.
 func (c *command) Append(key, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("APPEND", key, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "APPEND", key, value)
 	c.send(CmdAppend, r)
 	return r
 }
@@ -587,13 +575,12 @@ func (c *command) Append(key, value interface{}) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) Auth(username *string, password string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("AUTH")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "AUTH")
 	if username != nil {
-		c.encode(username)
+		r.request.cmd = append(r.request.cmd, username)
 	}
-	c.encode(password)
+	r.request.cmd = append(r.request.cmd, password)
 	c.send(CmdAuth, r)
 	return r
 }
@@ -602,9 +589,8 @@ func (c *command) Auth(username *string, password string) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Bgrewriteaof() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BGREWRITEAOF")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BGREWRITEAOF")
 	c.send(CmdBgrewriteaof, r)
 	return r
 }
@@ -613,9 +599,8 @@ func (c *command) Bgrewriteaof() Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Bgsave() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BGSAVE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BGSAVE")
 	c.send(CmdBgsave, r)
 	return r
 }
@@ -625,11 +610,10 @@ func (c *command) Bgsave() Result {
 // Since: 2.6.0
 // Complexity: O(N)
 func (c *command) Bitcount(key interface{}, startEnd *StartEnd) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BITCOUNT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BITCOUNT", key)
 	if startEnd != nil {
-		c.encode(startEnd.Start, startEnd.End)
+		r.request.cmd = append(r.request.cmd, startEnd.Start, startEnd.End)
 	}
 	c.send(CmdBitcount, r)
 	return r
@@ -640,33 +624,33 @@ func (c *command) Bitcount(key interface{}, startEnd *StartEnd) Result {
 // Since: 3.2.0
 // Complexity: O(1) for each subcommand specified
 func (c *command) Bitfield(key interface{}, operation []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if operation == nil {
 		r.setErr(newInvalidValueError("operation", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BITFIELD", key)
+	r.request.cmd = append(r.request.cmd, "BITFIELD", key)
 	for _, v := range operation {
 		switch v := v.(type) {
 		case TypeOffset:
-			c.encode("GET", v.Type, v.Offset)
+			r.request.cmd = append(r.request.cmd, "GET", v.Type, v.Offset)
 		case TypeOffsetValue:
-			c.encode("SET", v.Type, v.Offset, v.Value)
+			r.request.cmd = append(r.request.cmd, "SET", v.Type, v.Offset, v.Value)
 		case TypeOffsetIncrement:
-			c.encode("INCRBY", v.Type, v.Offset, v.Increment)
+			r.request.cmd = append(r.request.cmd, "INCRBY", v.Type, v.Offset, v.Increment)
 		case Overflow:
-			c.encode("OVERFLOW", v)
+			r.request.cmd = append(r.request.cmd, "OVERFLOW", v)
 		case *TypeOffset:
-			c.encode("GET", v.Type, v.Offset)
+			r.request.cmd = append(r.request.cmd, "GET", v.Type, v.Offset)
 		case *TypeOffsetValue:
-			c.encode("SET", v.Type, v.Offset, v.Value)
+			r.request.cmd = append(r.request.cmd, "SET", v.Type, v.Offset, v.Value)
 		case *TypeOffsetIncrement:
-			c.encode("INCRBY", v.Type, v.Offset, v.Increment)
+			r.request.cmd = append(r.request.cmd, "INCRBY", v.Type, v.Offset, v.Increment)
 		case *Overflow:
-			c.encode("OVERFLOW", v)
+			r.request.cmd = append(r.request.cmd, "OVERFLOW", v)
 		default:
 			r.setErr(newInvalidValueError("operation", v))
+			return r
 		}
 	}
 	c.send(CmdBitfield, r)
@@ -678,15 +662,14 @@ func (c *command) Bitfield(key interface{}, operation []interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(N)
 func (c *command) BitopAnd(destkey interface{}, srckey []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if srckey == nil {
 		r.setErr(newInvalidValueError("srckey", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BITOP", "AND", destkey)
+	r.request.cmd = append(r.request.cmd, "BITOP", "AND", destkey)
 	for _, v := range srckey {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdBitopAnd, r)
 	return r
@@ -697,9 +680,8 @@ func (c *command) BitopAnd(destkey interface{}, srckey []interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(N)
 func (c *command) BitopNot(destkey, srckey interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BITOP", "NOT", destkey, srckey)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BITOP", "NOT", destkey, srckey)
 	c.send(CmdBitopNot, r)
 	return r
 }
@@ -709,15 +691,14 @@ func (c *command) BitopNot(destkey, srckey interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(N)
 func (c *command) BitopOr(destkey interface{}, srckey []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if srckey == nil {
 		r.setErr(newInvalidValueError("srckey", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BITOP", "OR", destkey)
+	r.request.cmd = append(r.request.cmd, "BITOP", "OR", destkey)
 	for _, v := range srckey {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdBitopOr, r)
 	return r
@@ -728,15 +709,14 @@ func (c *command) BitopOr(destkey interface{}, srckey []interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(N)
 func (c *command) BitopXor(destkey interface{}, srckey []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if srckey == nil {
 		r.setErr(newInvalidValueError("srckey", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BITOP", "XOR", destkey)
+	r.request.cmd = append(r.request.cmd, "BITOP", "XOR", destkey)
 	for _, v := range srckey {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdBitopXor, r)
 	return r
@@ -747,14 +727,13 @@ func (c *command) BitopXor(destkey interface{}, srckey []interface{}) Result {
 // Since: 2.8.7
 // Complexity: O(N)
 func (c *command) Bitpos(key interface{}, bit int64, start, end *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BITPOS", key, bit)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BITPOS", key, bit)
 	if start != nil {
-		c.encode(start)
+		r.request.cmd = append(r.request.cmd, start)
 	}
 	if end != nil {
-		c.encode(end)
+		r.request.cmd = append(r.request.cmd, end)
 	}
 	c.send(CmdBitpos, r)
 	return r
@@ -765,17 +744,16 @@ func (c *command) Bitpos(key interface{}, bit int64, start, end *int64) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Blpop(key []interface{}, timeout int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BLPOP")
+	r.request.cmd = append(r.request.cmd, "BLPOP")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
-	c.encode(timeout)
+	r.request.cmd = append(r.request.cmd, timeout)
 	c.send(CmdBlpop, r)
 	return r
 }
@@ -785,17 +763,16 @@ func (c *command) Blpop(key []interface{}, timeout int64) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Brpop(key []interface{}, timeout int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BRPOP")
+	r.request.cmd = append(r.request.cmd, "BRPOP")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
-	c.encode(timeout)
+	r.request.cmd = append(r.request.cmd, timeout)
 	c.send(CmdBrpop, r)
 	return r
 }
@@ -805,9 +782,8 @@ func (c *command) Brpop(key []interface{}, timeout int64) Result {
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Brpoplpush(source, destination interface{}, timeout int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("BRPOPLPUSH", source, destination, timeout)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "BRPOPLPUSH", source, destination, timeout)
 	c.send(CmdBrpoplpush, r)
 	return r
 }
@@ -817,17 +793,16 @@ func (c *command) Brpoplpush(source, destination interface{}, timeout int64) Res
 // Since: 5.0.0
 // Complexity: O(log(N)) with N being the number of elements in the sorted set.
 func (c *command) Bzpopmax(key []interface{}, timeout int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BZPOPMAX")
+	r.request.cmd = append(r.request.cmd, "BZPOPMAX")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
-	c.encode(timeout)
+	r.request.cmd = append(r.request.cmd, timeout)
 	c.send(CmdBzpopmax, r)
 	return r
 }
@@ -837,17 +812,16 @@ func (c *command) Bzpopmax(key []interface{}, timeout int64) Result {
 // Since: 5.0.0
 // Complexity: O(log(N)) with N being the number of elements in the sorted set.
 func (c *command) Bzpopmin(key []interface{}, timeout int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("BZPOPMIN")
+	r.request.cmd = append(r.request.cmd, "BZPOPMIN")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
-	c.encode(timeout)
+	r.request.cmd = append(r.request.cmd, timeout)
 	c.send(CmdBzpopmin, r)
 	return r
 }
@@ -857,9 +831,8 @@ func (c *command) Bzpopmin(key []interface{}, timeout int64) Result {
 // Since: 2.6.9
 // Complexity: O(1)
 func (c *command) ClientGetname() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "GETNAME")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "GETNAME")
 	c.send(CmdClientGetname, r)
 	return r
 }
@@ -869,9 +842,8 @@ func (c *command) ClientGetname() Result {
 // Since: 5.0.0
 // Complexity: O(1)
 func (c *command) ClientId() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "ID")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "ID")
 	c.send(CmdClientId, r)
 	return r
 }
@@ -881,22 +853,21 @@ func (c *command) ClientId() Result {
 // Since: 2.4.0
 // Complexity: O(N) where N is the number of client connections
 func (c *command) ClientKill(id *int64, typ *Clienttype, addr *string, skipme bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "KILL")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "KILL")
 	if id != nil {
-		c.encode("ID", id)
+		r.request.cmd = append(r.request.cmd, "ID", id)
 	}
 	if typ != nil {
-		c.encode("TYPE", typ)
+		r.request.cmd = append(r.request.cmd, "TYPE", typ)
 	}
 	if addr != nil {
-		c.encode("ADDR", addr)
+		r.request.cmd = append(r.request.cmd, "ADDR", addr)
 	}
 	if skipme {
-		c.encode("SKIPME", "YES")
+		r.request.cmd = append(r.request.cmd, "SKIPME", "YES")
 	} else {
-		c.encode("SKIPME", "NO")
+		r.request.cmd = append(r.request.cmd, "SKIPME", "NO")
 	}
 	c.send(CmdClientKill, r)
 	return r
@@ -907,11 +878,10 @@ func (c *command) ClientKill(id *int64, typ *Clienttype, addr *string, skipme bo
 // Since: 2.4.0
 // Complexity: O(N) where N is the number of client connections
 func (c *command) ClientList(typ *Clienttype) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "LIST")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "LIST")
 	if typ != nil {
-		c.encode("TYPE", typ)
+		r.request.cmd = append(r.request.cmd, "TYPE", typ)
 	}
 	c.send(CmdClientList, r)
 	return r
@@ -922,9 +892,8 @@ func (c *command) ClientList(typ *Clienttype) Result {
 // Since: 2.9.50
 // Complexity: O(1)
 func (c *command) ClientPause(timeout int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "PAUSE", timeout)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "PAUSE", timeout)
 	c.send(CmdClientPause, r)
 	return r
 }
@@ -934,9 +903,8 @@ func (c *command) ClientPause(timeout int64) Result {
 // Since: 3.2
 // Complexity: O(1)
 func (c *command) ClientReply(replyMode ReplyMode) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "REPLY", replyMode)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "REPLY", replyMode)
 	c.send(CmdClientReply, r)
 	return r
 }
@@ -946,9 +914,8 @@ func (c *command) ClientReply(replyMode ReplyMode) Result {
 // Since: 2.6.9
 // Complexity: O(1)
 func (c *command) ClientSetname(connectionName string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "SETNAME", connectionName)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "SETNAME", connectionName)
 	c.send(CmdClientSetname, r)
 	return r
 }
@@ -957,16 +924,15 @@ func (c *command) ClientSetname(connectionName string) Result {
 // Group: server
 // Since: 6.0.0
 func (c *command) ClientTracking(on bool, redirect *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "TRACKING")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "TRACKING")
 	if on {
-		c.encode("ON")
+		r.request.cmd = append(r.request.cmd, "ON")
 	} else {
-		c.encode("OFF")
+		r.request.cmd = append(r.request.cmd, "OFF")
 	}
 	if redirect != nil {
-		c.encode("REDIRECT", redirect)
+		r.request.cmd = append(r.request.cmd, "REDIRECT", redirect)
 	}
 	c.send(CmdClientTracking, r)
 	return r
@@ -977,14 +943,13 @@ func (c *command) ClientTracking(on bool, redirect *int64) Result {
 // Since: 5.0.0
 // Complexity: O(log N) where N is the number of client connections
 func (c *command) ClientUnblock(clientId int64, timeout *bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLIENT", "UNBLOCK", clientId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLIENT", "UNBLOCK", clientId)
 	if timeout != nil {
 		if *timeout {
-			c.encode("TIMEOUT")
+			r.request.cmd = append(r.request.cmd, "TIMEOUT")
 		} else {
-			c.encode("ERROR")
+			r.request.cmd = append(r.request.cmd, "ERROR")
 		}
 	}
 	c.send(CmdClientUnblock, r)
@@ -996,15 +961,14 @@ func (c *command) ClientUnblock(clientId int64, timeout *bool) Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the total number of hash slot arguments
 func (c *command) ClusterAddslots(slot []int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if slot == nil {
 		r.setErr(newInvalidValueError("slot", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("CLUSTER", "ADDSLOTS")
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "ADDSLOTS")
 	for _, v := range slot {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdClusterAddslots, r)
 	return r
@@ -1015,9 +979,8 @@ func (c *command) ClusterAddslots(slot []int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterBumpepoch() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "BUMPEPOCH")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "BUMPEPOCH")
 	c.send(CmdClusterBumpepoch, r)
 	return r
 }
@@ -1027,9 +990,8 @@ func (c *command) ClusterBumpepoch() Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the number of failure reports
 func (c *command) ClusterCountFailureReports(nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "COUNT-FAILURE-REPORTS", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "COUNT-FAILURE-REPORTS", nodeId)
 	c.send(CmdClusterCountFailureReports, r)
 	return r
 }
@@ -1039,9 +1001,8 @@ func (c *command) ClusterCountFailureReports(nodeId string) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterCountkeysinslot(slot int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "COUNTKEYSINSLOT", slot)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "COUNTKEYSINSLOT", slot)
 	c.send(CmdClusterCountkeysinslot, r)
 	return r
 }
@@ -1051,15 +1012,14 @@ func (c *command) ClusterCountkeysinslot(slot int64) Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the total number of hash slot arguments
 func (c *command) ClusterDelslots(slot []int64) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if slot == nil {
 		r.setErr(newInvalidValueError("slot", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("CLUSTER", "DELSLOTS")
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "DELSLOTS")
 	for _, v := range slot {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdClusterDelslots, r)
 	return r
@@ -1070,14 +1030,13 @@ func (c *command) ClusterDelslots(slot []int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterFailover(force *bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "FAILOVER")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "FAILOVER")
 	if force != nil {
 		if *force {
-			c.encode("FORCE")
+			r.request.cmd = append(r.request.cmd, "FORCE")
 		} else {
-			c.encode("TAKEOVER")
+			r.request.cmd = append(r.request.cmd, "TAKEOVER")
 		}
 	}
 	c.send(CmdClusterFailover, r)
@@ -1089,9 +1048,8 @@ func (c *command) ClusterFailover(force *bool) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterFlushslots() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "FLUSHSLOTS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "FLUSHSLOTS")
 	c.send(CmdClusterFlushslots, r)
 	return r
 }
@@ -1101,9 +1059,8 @@ func (c *command) ClusterFlushslots() Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterForget(nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "FORGET", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "FORGET", nodeId)
 	c.send(CmdClusterForget, r)
 	return r
 }
@@ -1113,9 +1070,8 @@ func (c *command) ClusterForget(nodeId string) Result {
 // Since: 3.0.0
 // Complexity: O(log(N)) where N is the number of requested keys
 func (c *command) ClusterGetkeysinslot(slot, count int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "GETKEYSINSLOT", slot, count)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "GETKEYSINSLOT", slot, count)
 	c.send(CmdClusterGetkeysinslot, r)
 	return r
 }
@@ -1125,9 +1081,8 @@ func (c *command) ClusterGetkeysinslot(slot, count int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterInfo() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "INFO")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "INFO")
 	c.send(CmdClusterInfo, r)
 	return r
 }
@@ -1137,9 +1092,8 @@ func (c *command) ClusterInfo() Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the number of bytes in the key
 func (c *command) ClusterKeyslot(key string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "KEYSLOT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "KEYSLOT", key)
 	c.send(CmdClusterKeyslot, r)
 	return r
 }
@@ -1149,9 +1103,8 @@ func (c *command) ClusterKeyslot(key string) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterMeet(ip string, port int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "MEET", ip, port)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "MEET", ip, port)
 	c.send(CmdClusterMeet, r)
 	return r
 }
@@ -1161,9 +1114,8 @@ func (c *command) ClusterMeet(ip string, port int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterMyid() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "MYID")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "MYID")
 	c.send(CmdClusterMyid, r)
 	return r
 }
@@ -1173,9 +1125,8 @@ func (c *command) ClusterMyid() Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the total number of Cluster nodes
 func (c *command) ClusterNodes() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "NODES")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "NODES")
 	c.send(CmdClusterNodes, r)
 	return r
 }
@@ -1185,9 +1136,8 @@ func (c *command) ClusterNodes() Result {
 // Since: 5.0.0
 // Complexity: O(1)
 func (c *command) ClusterReplicas(nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "REPLICAS", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "REPLICAS", nodeId)
 	c.send(CmdClusterReplicas, r)
 	return r
 }
@@ -1197,9 +1147,8 @@ func (c *command) ClusterReplicas(nodeId string) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterReplicate(nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "REPLICATE", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "REPLICATE", nodeId)
 	c.send(CmdClusterReplicate, r)
 	return r
 }
@@ -1211,14 +1160,13 @@ func (c *command) ClusterReplicate(nodeId string) Result {
 // O(N) where N is the number of known nodes. The command may execute a FLUSHALL
 // as a side effect.
 func (c *command) ClusterReset(hard *bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "RESET")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "RESET")
 	if hard != nil {
 		if *hard {
-			c.encode("HARD")
+			r.request.cmd = append(r.request.cmd, "HARD")
 		} else {
-			c.encode("SOFT")
+			r.request.cmd = append(r.request.cmd, "SOFT")
 		}
 	}
 	c.send(CmdClusterReset, r)
@@ -1230,9 +1178,8 @@ func (c *command) ClusterReset(hard *bool) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSaveconfig() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SAVECONFIG")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SAVECONFIG")
 	c.send(CmdClusterSaveconfig, r)
 	return r
 }
@@ -1242,9 +1189,8 @@ func (c *command) ClusterSaveconfig() Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSetConfigEpoch(configEpoch int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SET-CONFIG-EPOCH", configEpoch)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SET-CONFIG-EPOCH", configEpoch)
 	c.send(CmdClusterSetConfigEpoch, r)
 	return r
 }
@@ -1254,9 +1200,8 @@ func (c *command) ClusterSetConfigEpoch(configEpoch int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSetslotImporting(slot int64, sourceNodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SETSLOT", slot, "IMPORTING", sourceNodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SETSLOT", slot, "IMPORTING", sourceNodeId)
 	c.send(CmdClusterSetslotImporting, r)
 	return r
 }
@@ -1266,9 +1211,8 @@ func (c *command) ClusterSetslotImporting(slot int64, sourceNodeId string) Resul
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSetslotMigrating(slot int64, destNodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SETSLOT", slot, "MIGRATING", destNodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SETSLOT", slot, "MIGRATING", destNodeId)
 	c.send(CmdClusterSetslotMigrating, r)
 	return r
 }
@@ -1278,9 +1222,8 @@ func (c *command) ClusterSetslotMigrating(slot int64, destNodeId string) Result 
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSetslotNode(slot int64, nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SETSLOT", slot, "NODE", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SETSLOT", slot, "NODE", nodeId)
 	c.send(CmdClusterSetslotNode, r)
 	return r
 }
@@ -1290,9 +1233,8 @@ func (c *command) ClusterSetslotNode(slot int64, nodeId string) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSetslotStable(slot int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SETSLOT", slot, "STABLE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SETSLOT", slot, "STABLE")
 	c.send(CmdClusterSetslotStable, r)
 	return r
 }
@@ -1302,9 +1244,8 @@ func (c *command) ClusterSetslotStable(slot int64) Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) ClusterSlaves(nodeId string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SLAVES", nodeId)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SLAVES", nodeId)
 	c.send(CmdClusterSlaves, r)
 	return r
 }
@@ -1314,9 +1255,8 @@ func (c *command) ClusterSlaves(nodeId string) Result {
 // Since: 3.0.0
 // Complexity: O(N) where N is the total number of Cluster nodes
 func (c *command) ClusterSlots() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CLUSTER", "SLOTS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CLUSTER", "SLOTS")
 	c.send(CmdClusterSlots, r)
 	return r
 }
@@ -1326,9 +1266,8 @@ func (c *command) ClusterSlots() Result {
 // Since: 2.8.13
 // Complexity: O(N) where N is the total number of Redis commands
 func (c *command) Command() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("COMMAND")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "COMMAND")
 	c.send(CmdCommand, r)
 	return r
 }
@@ -1338,9 +1277,8 @@ func (c *command) Command() Result {
 // Since: 2.8.13
 // Complexity: O(1)
 func (c *command) CommandCount() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("COMMAND", "COUNT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "COMMAND", "COUNT")
 	c.send(CmdCommandCount, r)
 	return r
 }
@@ -1350,15 +1288,14 @@ func (c *command) CommandCount() Result {
 // Since: 2.8.13
 // Complexity: O(N) where N is the number of arguments to the command
 func (c *command) CommandGetkeys(arg []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if arg == nil {
 		r.setErr(newInvalidValueError("arg", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("COMMAND", "GETKEYS")
+	r.request.cmd = append(r.request.cmd, "COMMAND", "GETKEYS")
 	for _, v := range arg {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdCommandGetkeys, r)
 	return r
@@ -1369,15 +1306,14 @@ func (c *command) CommandGetkeys(arg []interface{}) Result {
 // Since: 2.8.13
 // Complexity: O(N) when N is number of commands to look up
 func (c *command) CommandInfo(commandName []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if commandName == nil {
 		r.setErr(newInvalidValueError("commandName", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("COMMAND", "INFO")
+	r.request.cmd = append(r.request.cmd, "COMMAND", "INFO")
 	for _, v := range commandName {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdCommandInfo, r)
 	return r
@@ -1387,9 +1323,8 @@ func (c *command) CommandInfo(commandName []string) Result {
 // Group: server
 // Since: 2.0.0
 func (c *command) ConfigGet(parameter string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CONFIG", "GET", parameter)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CONFIG", "GET", parameter)
 	c.send(CmdConfigGet, r)
 	return r
 }
@@ -1399,9 +1334,8 @@ func (c *command) ConfigGet(parameter string) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) ConfigResetstat() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CONFIG", "RESETSTAT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CONFIG", "RESETSTAT")
 	c.send(CmdConfigResetstat, r)
 	return r
 }
@@ -1410,9 +1344,8 @@ func (c *command) ConfigResetstat() Result {
 // Group: server
 // Since: 2.8.0
 func (c *command) ConfigRewrite() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CONFIG", "REWRITE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CONFIG", "REWRITE")
 	c.send(CmdConfigRewrite, r)
 	return r
 }
@@ -1421,9 +1354,8 @@ func (c *command) ConfigRewrite() Result {
 // Group: server
 // Since: 2.0.0
 func (c *command) ConfigSet(parameter, value string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("CONFIG", "SET", parameter, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "CONFIG", "SET", parameter, value)
 	c.send(CmdConfigSet, r)
 	return r
 }
@@ -1432,9 +1364,8 @@ func (c *command) ConfigSet(parameter, value string) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Dbsize() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DBSIZE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DBSIZE")
 	c.send(CmdDbsize, r)
 	return r
 }
@@ -1443,9 +1374,8 @@ func (c *command) Dbsize() Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) DebugObject(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DEBUG", "OBJECT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DEBUG", "OBJECT", key)
 	c.send(CmdDebugObject, r)
 	return r
 }
@@ -1454,9 +1384,8 @@ func (c *command) DebugObject(key interface{}) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) DebugSegfault() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DEBUG", "SEGFAULT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DEBUG", "SEGFAULT")
 	c.send(CmdDebugSegfault, r)
 	return r
 }
@@ -1466,9 +1395,8 @@ func (c *command) DebugSegfault() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Decr(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DECR", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DECR", key)
 	c.send(CmdDecr, r)
 	return r
 }
@@ -1478,9 +1406,8 @@ func (c *command) Decr(key interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Decrby(key interface{}, decrement int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DECRBY", key, decrement)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DECRBY", key, decrement)
 	c.send(CmdDecrby, r)
 	return r
 }
@@ -1494,15 +1421,14 @@ func (c *command) Decrby(key interface{}, decrement int64) Result {
 // where M is the number of elements in the list, set, sorted set or hash. Removing a
 // single key that holds a string value is O(1).
 func (c *command) Del(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("DEL")
+	r.request.cmd = append(r.request.cmd, "DEL")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdDel, r)
 	return r
@@ -1512,9 +1438,8 @@ func (c *command) Del(key []interface{}) Result {
 // Group: transactions
 // Since: 2.0.0
 func (c *command) Discard() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DISCARD")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DISCARD")
 	c.send(CmdDiscard, r)
 	return r
 }
@@ -1523,9 +1448,8 @@ func (c *command) Discard() Result {
 // Group: generic
 // Since: -
 func (c *command) Do(v ...interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode(v...)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, v...)
 	c.send(CmdDo, r)
 	return r
 }
@@ -1538,9 +1462,8 @@ func (c *command) Do(v ...interface{}) Result {
 // number of Redis objects composing the value and M their average size. For small string
 // values the time complexity is thus O(1)+O(1*M) where M is small, so simply O(1).
 func (c *command) Dump(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("DUMP", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "DUMP", key)
 	c.send(CmdDump, r)
 	return r
 }
@@ -1549,9 +1472,8 @@ func (c *command) Dump(key interface{}) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) Echo(message string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ECHO", message)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ECHO", message)
 	c.send(CmdEcho, r)
 	return r
 }
@@ -1561,7 +1483,7 @@ func (c *command) Echo(message string) Result {
 // Since: 2.6.0
 // Complexity: Depends on the script that is executed.
 func (c *command) Eval(script string, numkeys int64, key, arg []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
@@ -1570,13 +1492,12 @@ func (c *command) Eval(script string, numkeys int64, key, arg []interface{}) Res
 		r.setErr(newInvalidValueError("arg", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("EVAL", script, numkeys)
+	r.request.cmd = append(r.request.cmd, "EVAL", script, numkeys)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	for _, v := range arg {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdEval, r)
 	return r
@@ -1587,7 +1508,7 @@ func (c *command) Eval(script string, numkeys int64, key, arg []interface{}) Res
 // Since: 2.6.0
 // Complexity: Depends on the script that is executed.
 func (c *command) Evalsha(sha1 string, numkeys int64, key, arg []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
@@ -1596,13 +1517,12 @@ func (c *command) Evalsha(sha1 string, numkeys int64, key, arg []interface{}) Re
 		r.setErr(newInvalidValueError("arg", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("EVALSHA", sha1, numkeys)
+	r.request.cmd = append(r.request.cmd, "EVALSHA", sha1, numkeys)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	for _, v := range arg {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdEvalsha, r)
 	return r
@@ -1612,9 +1532,8 @@ func (c *command) Evalsha(sha1 string, numkeys int64, key, arg []interface{}) Re
 // Group: transactions
 // Since: 1.2.0
 func (c *command) Exec() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("EXEC")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "EXEC")
 	c.send(CmdExec, r)
 	return r
 }
@@ -1624,15 +1543,14 @@ func (c *command) Exec() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Exists(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("EXISTS")
+	r.request.cmd = append(r.request.cmd, "EXISTS")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdExists, r)
 	return r
@@ -1643,9 +1561,8 @@ func (c *command) Exists(key []interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Expire(key interface{}, seconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("EXPIRE", key, seconds)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "EXPIRE", key, seconds)
 	c.send(CmdExpire, r)
 	return r
 }
@@ -1655,9 +1572,8 @@ func (c *command) Expire(key interface{}, seconds int64) Result {
 // Since: 1.2.0
 // Complexity: O(1)
 func (c *command) Expireat(key interface{}, timestamp int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("EXPIREAT", key, timestamp)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "EXPIREAT", key, timestamp)
 	c.send(CmdExpireat, r)
 	return r
 }
@@ -1666,11 +1582,10 @@ func (c *command) Expireat(key interface{}, timestamp int64) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Flushall(async bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("FLUSHALL")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "FLUSHALL")
 	if async {
-		c.encode("ASYNC")
+		r.request.cmd = append(r.request.cmd, "ASYNC")
 	}
 	c.send(CmdFlushall, r)
 	return r
@@ -1680,11 +1595,10 @@ func (c *command) Flushall(async bool) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Flushdb(async bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("FLUSHDB")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "FLUSHDB")
 	if async {
-		c.encode("ASYNC")
+		r.request.cmd = append(r.request.cmd, "ASYNC")
 	}
 	c.send(CmdFlushdb, r)
 	return r
@@ -1697,15 +1611,14 @@ func (c *command) Flushdb(async bool) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) Geoadd(key interface{}, longitudeLatitudeMember []LongitudeLatitudeMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if longitudeLatitudeMember == nil {
 		r.setErr(newInvalidValueError("longitudeLatitudeMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("GEOADD", key)
+	r.request.cmd = append(r.request.cmd, "GEOADD", key)
 	for _, v := range longitudeLatitudeMember {
-		c.encode(v.Longitude, v.Latitude, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Longitude, v.Latitude, v.Member)
 	}
 	c.send(CmdGeoadd, r)
 	return r
@@ -1716,11 +1629,10 @@ func (c *command) Geoadd(key interface{}, longitudeLatitudeMember []LongitudeLat
 // Since: 3.2.0
 // Complexity: O(log(N))
 func (c *command) Geodist(key, member1, member2 interface{}, unit *Unit) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GEODIST", key, member1, member2)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GEODIST", key, member1, member2)
 	if unit != nil {
-		c.encode(unit)
+		r.request.cmd = append(r.request.cmd, unit)
 	}
 	c.send(CmdGeodist, r)
 	return r
@@ -1733,15 +1645,14 @@ func (c *command) Geodist(key, member1, member2 interface{}, unit *Unit) Result 
 // O(log(N)) for each member requested, where N is the number of elements in the
 // sorted set.
 func (c *command) Geohash(key interface{}, member []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if member == nil {
 		r.setErr(newInvalidValueError("member", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("GEOHASH", key)
+	r.request.cmd = append(r.request.cmd, "GEOHASH", key)
 	for _, v := range member {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdGeohash, r)
 	return r
@@ -1754,15 +1665,14 @@ func (c *command) Geohash(key interface{}, member []interface{}) Result {
 // O(log(N)) for each member requested, where N is the number of elements in the
 // sorted set.
 func (c *command) Geopos(key interface{}, member []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if member == nil {
 		r.setErr(newInvalidValueError("member", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("GEOPOS", key)
+	r.request.cmd = append(r.request.cmd, "GEOPOS", key)
 	for _, v := range member {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdGeopos, r)
 	return r
@@ -1776,33 +1686,32 @@ func (c *command) Geopos(key interface{}, member []interface{}) Result {
 // circular area delimited by center and radius and M is the number of items inside the
 // index.
 func (c *command) Georadius(key interface{}, longitude, latitude, radius float64, unit Unit, withcoord, withdist, withhash bool, count *int64, asc *bool, store, storedist *interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GEORADIUS", key, longitude, latitude, radius, unit)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GEORADIUS", key, longitude, latitude, radius, unit)
 	if withcoord {
-		c.encode("WITHCOORD")
+		r.request.cmd = append(r.request.cmd, "WITHCOORD")
 	}
 	if withdist {
-		c.encode("WITHDIST")
+		r.request.cmd = append(r.request.cmd, "WITHDIST")
 	}
 	if withhash {
-		c.encode("WITHHASH")
+		r.request.cmd = append(r.request.cmd, "WITHHASH")
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	if asc != nil {
 		if *asc {
-			c.encode("ASC")
+			r.request.cmd = append(r.request.cmd, "ASC")
 		} else {
-			c.encode("DESC")
+			r.request.cmd = append(r.request.cmd, "DESC")
 		}
 	}
 	if store != nil {
-		c.encode("STORE", store)
+		r.request.cmd = append(r.request.cmd, "STORE", store)
 	}
 	if storedist != nil {
-		c.encode("STOREDIST", storedist)
+		r.request.cmd = append(r.request.cmd, "STOREDIST", storedist)
 	}
 	c.send(CmdGeoradius, r)
 	return r
@@ -1816,33 +1725,32 @@ func (c *command) Georadius(key interface{}, longitude, latitude, radius float64
 // circular area delimited by center and radius and M is the number of items inside the
 // index.
 func (c *command) Georadiusbymember(key, member interface{}, radius float64, unit Unit, withcoord, withdist, withhash bool, count *int64, asc *bool, store, storedist *interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GEORADIUSBYMEMBER", key, member, radius, unit)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GEORADIUSBYMEMBER", key, member, radius, unit)
 	if withcoord {
-		c.encode("WITHCOORD")
+		r.request.cmd = append(r.request.cmd, "WITHCOORD")
 	}
 	if withdist {
-		c.encode("WITHDIST")
+		r.request.cmd = append(r.request.cmd, "WITHDIST")
 	}
 	if withhash {
-		c.encode("WITHHASH")
+		r.request.cmd = append(r.request.cmd, "WITHHASH")
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	if asc != nil {
 		if *asc {
-			c.encode("ASC")
+			r.request.cmd = append(r.request.cmd, "ASC")
 		} else {
-			c.encode("DESC")
+			r.request.cmd = append(r.request.cmd, "DESC")
 		}
 	}
 	if store != nil {
-		c.encode("STORE", store)
+		r.request.cmd = append(r.request.cmd, "STORE", store)
 	}
 	if storedist != nil {
-		c.encode("STOREDIST", storedist)
+		r.request.cmd = append(r.request.cmd, "STOREDIST", storedist)
 	}
 	c.send(CmdGeoradiusbymember, r)
 	return r
@@ -1853,9 +1761,8 @@ func (c *command) Georadiusbymember(key, member interface{}, radius float64, uni
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Get(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GET", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GET", key)
 	c.send(CmdGet, r)
 	return r
 }
@@ -1865,9 +1772,8 @@ func (c *command) Get(key interface{}) Result {
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Getbit(key interface{}, offset int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GETBIT", key, offset)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GETBIT", key, offset)
 	c.send(CmdGetbit, r)
 	return r
 }
@@ -1880,9 +1786,8 @@ func (c *command) Getbit(key interface{}, offset int64) Result {
 // determined by the returned length, but because creating a substring from an existing
 // string is very cheap, it can be considered O(1) for small strings.
 func (c *command) Getrange(key interface{}, start, end int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GETRANGE", key, start, end)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GETRANGE", key, start, end)
 	c.send(CmdGetrange, r)
 	return r
 }
@@ -1892,9 +1797,8 @@ func (c *command) Getrange(key interface{}, start, end int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Getset(key, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("GETSET", key, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "GETSET", key, value)
 	c.send(CmdGetset, r)
 	return r
 }
@@ -1904,15 +1808,14 @@ func (c *command) Getset(key, value interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the number of fields to be removed.
 func (c *command) Hdel(key interface{}, field []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if field == nil {
 		r.setErr(newInvalidValueError("field", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("HDEL", key)
+	r.request.cmd = append(r.request.cmd, "HDEL", key)
 	for _, v := range field {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdHdel, r)
 	return r
@@ -1922,14 +1825,13 @@ func (c *command) Hdel(key interface{}, field []interface{}) Result {
 // Group: connection
 // Since: 6.0.0
 func (c *command) Hello(version string, userPassword *UserPassword, clientName *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HELLO", version)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HELLO", version)
 	if userPassword != nil {
-		c.encode("AUTH", userPassword.User, userPassword.Password)
+		r.request.cmd = append(r.request.cmd, "AUTH", userPassword.User, userPassword.Password)
 	}
 	if clientName != nil {
-		c.encode("SETNAME", clientName)
+		r.request.cmd = append(r.request.cmd, "SETNAME", clientName)
 	}
 	c.send(CmdHello, r)
 	return r
@@ -1940,9 +1842,8 @@ func (c *command) Hello(version string, userPassword *UserPassword, clientName *
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Hexists(key, field interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HEXISTS", key, field)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HEXISTS", key, field)
 	c.send(CmdHexists, r)
 	return r
 }
@@ -1952,9 +1853,8 @@ func (c *command) Hexists(key, field interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Hget(key, field interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HGET", key, field)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HGET", key, field)
 	c.send(CmdHget, r)
 	return r
 }
@@ -1964,9 +1864,8 @@ func (c *command) Hget(key, field interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the size of the hash.
 func (c *command) Hgetall(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HGETALL", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HGETALL", key)
 	c.send(CmdHgetall, r)
 	return r
 }
@@ -1976,9 +1875,8 @@ func (c *command) Hgetall(key interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Hincrby(key, field interface{}, increment int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HINCRBY", key, field, increment)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HINCRBY", key, field, increment)
 	c.send(CmdHincrby, r)
 	return r
 }
@@ -1988,9 +1886,8 @@ func (c *command) Hincrby(key, field interface{}, increment int64) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) Hincrbyfloat(key, field interface{}, increment float64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HINCRBYFLOAT", key, field, increment)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HINCRBYFLOAT", key, field, increment)
 	c.send(CmdHincrbyfloat, r)
 	return r
 }
@@ -2000,9 +1897,8 @@ func (c *command) Hincrbyfloat(key, field interface{}, increment float64) Result
 // Since: 2.0.0
 // Complexity: O(N) where N is the size of the hash.
 func (c *command) Hkeys(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HKEYS", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HKEYS", key)
 	c.send(CmdHkeys, r)
 	return r
 }
@@ -2012,9 +1908,8 @@ func (c *command) Hkeys(key interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) Hlen(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HLEN", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HLEN", key)
 	c.send(CmdHlen, r)
 	return r
 }
@@ -2024,15 +1919,14 @@ func (c *command) Hlen(key interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the number of fields being requested.
 func (c *command) Hmget(key interface{}, field []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if field == nil {
 		r.setErr(newInvalidValueError("field", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("HMGET", key)
+	r.request.cmd = append(r.request.cmd, "HMGET", key)
 	for _, v := range field {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdHmget, r)
 	return r
@@ -2046,14 +1940,13 @@ func (c *command) Hmget(key interface{}, field []interface{}) Result {
 // calls for the cursor to return back to 0. N is the number of elements inside the
 // collection..
 func (c *command) Hscan(key interface{}, cursor int64, match *string, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HSCAN", key, cursor)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HSCAN", key, cursor)
 	if match != nil {
-		c.encode("MATCH", match)
+		r.request.cmd = append(r.request.cmd, "MATCH", match)
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	c.send(CmdHscan, r)
 	return r
@@ -2066,15 +1959,14 @@ func (c *command) Hscan(key interface{}, cursor int64, match *string, count *int
 // O(1) for each field/value pair added, so O(N) to add N field/value pairs when
 // the command is called with multiple field/value pairs.
 func (c *command) Hset(key interface{}, fieldValue []FieldValue) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if fieldValue == nil {
 		r.setErr(newInvalidValueError("fieldValue", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("HSET", key)
+	r.request.cmd = append(r.request.cmd, "HSET", key)
 	for _, v := range fieldValue {
-		c.encode(v.Field, v.Value)
+		r.request.cmd = append(r.request.cmd, v.Field, v.Value)
 	}
 	c.send(CmdHset, r)
 	return r
@@ -2085,9 +1977,8 @@ func (c *command) Hset(key interface{}, fieldValue []FieldValue) Result {
 // Since: 2.0.0
 // Complexity: O(1)
 func (c *command) HsetNx(key, field, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HSETNX", key, field, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HSETNX", key, field, value)
 	c.send(CmdHsetNx, r)
 	return r
 }
@@ -2097,9 +1988,8 @@ func (c *command) HsetNx(key, field, value interface{}) Result {
 // Since: 3.2.0
 // Complexity: O(1)
 func (c *command) Hstrlen(key, field interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HSTRLEN", key, field)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HSTRLEN", key, field)
 	c.send(CmdHstrlen, r)
 	return r
 }
@@ -2109,9 +1999,8 @@ func (c *command) Hstrlen(key, field interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the size of the hash.
 func (c *command) Hvals(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("HVALS", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "HVALS", key)
 	c.send(CmdHvals, r)
 	return r
 }
@@ -2121,9 +2010,8 @@ func (c *command) Hvals(key interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Incr(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("INCR", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "INCR", key)
 	c.send(CmdIncr, r)
 	return r
 }
@@ -2133,9 +2021,8 @@ func (c *command) Incr(key interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Incrby(key interface{}, increment int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("INCRBY", key, increment)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "INCRBY", key, increment)
 	c.send(CmdIncrby, r)
 	return r
 }
@@ -2145,9 +2032,8 @@ func (c *command) Incrby(key interface{}, increment int64) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) Incrbyfloat(key interface{}, increment float64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("INCRBYFLOAT", key, increment)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "INCRBYFLOAT", key, increment)
 	c.send(CmdIncrbyfloat, r)
 	return r
 }
@@ -2156,11 +2042,10 @@ func (c *command) Incrbyfloat(key interface{}, increment float64) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Info(section *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("INFO")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "INFO")
 	if section != nil {
-		c.encode(section)
+		r.request.cmd = append(r.request.cmd, section)
 	}
 	c.send(CmdInfo, r)
 	return r
@@ -2173,9 +2058,8 @@ func (c *command) Info(section *string) Result {
 // O(N) with N being the number of keys in the database, under the assumption that
 // the key names in the database and the given pattern have limited length.
 func (c *command) Keys(pattern string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("KEYS", pattern)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "KEYS", pattern)
 	c.send(CmdKeys, r)
 	return r
 }
@@ -2184,9 +2068,8 @@ func (c *command) Keys(pattern string) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Lastsave() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LASTSAVE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LASTSAVE")
 	c.send(CmdLastsave, r)
 	return r
 }
@@ -2195,9 +2078,8 @@ func (c *command) Lastsave() Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyDoctor() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "DOCTOR")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "DOCTOR")
 	c.send(CmdLatencyDoctor, r)
 	return r
 }
@@ -2206,9 +2088,8 @@ func (c *command) LatencyDoctor() Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyGraph(event string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "GRAPH", event)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "GRAPH", event)
 	c.send(CmdLatencyGraph, r)
 	return r
 }
@@ -2217,9 +2098,8 @@ func (c *command) LatencyGraph(event string) Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "HELP")
 	c.send(CmdLatencyHelp, r)
 	return r
 }
@@ -2228,9 +2108,8 @@ func (c *command) LatencyHelp() Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyHistory(event string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "HISTORY", event)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "HISTORY", event)
 	c.send(CmdLatencyHistory, r)
 	return r
 }
@@ -2239,9 +2118,8 @@ func (c *command) LatencyHistory(event string) Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyLatest() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "LATEST")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "LATEST")
 	c.send(CmdLatencyLatest, r)
 	return r
 }
@@ -2250,11 +2128,10 @@ func (c *command) LatencyLatest() Result {
 // Group: server
 // Since: 2.8.13
 func (c *command) LatencyReset(event *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LATENCY", "RESET")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LATENCY", "RESET")
 	if event != nil {
-		c.encode(event)
+		r.request.cmd = append(r.request.cmd, event)
 	}
 	c.send(CmdLatencyReset, r)
 	return r
@@ -2267,9 +2144,8 @@ func (c *command) LatencyReset(event *string) Result {
 // O(N) where N is the number of elements to traverse to get to the element at
 // index. This makes asking for the first or the last element of the list O(1).
 func (c *command) Lindex(key interface{}, index int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LINDEX", key, index)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LINDEX", key, index)
 	c.send(CmdLindex, r)
 	return r
 }
@@ -2282,15 +2158,14 @@ func (c *command) Lindex(key interface{}, index int64) Result {
 // pivot. This means that inserting somewhere on the left end on the list (head) can be
 // considered O(1) and inserting somewhere on the right end (tail) is O(N).
 func (c *command) Linsert(key interface{}, before bool, pivot, element interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LINSERT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LINSERT", key)
 	if before {
-		c.encode("BEFORE")
+		r.request.cmd = append(r.request.cmd, "BEFORE")
 	} else {
-		c.encode("AFTER")
+		r.request.cmd = append(r.request.cmd, "AFTER")
 	}
-	c.encode(pivot, element)
+	r.request.cmd = append(r.request.cmd, pivot, element)
 	c.send(CmdLinsert, r)
 	return r
 }
@@ -2300,9 +2175,8 @@ func (c *command) Linsert(key interface{}, before bool, pivot, element interface
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Llen(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LLEN", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LLEN", key)
 	c.send(CmdLlen, r)
 	return r
 }
@@ -2311,11 +2185,10 @@ func (c *command) Llen(key interface{}) Result {
 // Group: server
 // Since: 5.0.0
 func (c *command) Lolwut(version *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LOLWUT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LOLWUT")
 	if version != nil {
-		c.encode("VERSION", version)
+		r.request.cmd = append(r.request.cmd, "VERSION", version)
 	}
 	c.send(CmdLolwut, r)
 	return r
@@ -2326,9 +2199,8 @@ func (c *command) Lolwut(version *int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Lpop(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LPOP", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LPOP", key)
 	c.send(CmdLpop, r)
 	return r
 }
@@ -2340,15 +2212,14 @@ func (c *command) Lpop(key interface{}) Result {
 // O(1) for each element added, so O(N) to add N elements when the command is
 // called with multiple arguments.
 func (c *command) Lpush(key interface{}, element []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if element == nil {
 		r.setErr(newInvalidValueError("element", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("LPUSH", key)
+	r.request.cmd = append(r.request.cmd, "LPUSH", key)
 	for _, v := range element {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdLpush, r)
 	return r
@@ -2361,15 +2232,14 @@ func (c *command) Lpush(key interface{}, element []interface{}) Result {
 // O(1) for each element added, so O(N) to add N elements when the command is
 // called with multiple arguments.
 func (c *command) Lpushx(key interface{}, element []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if element == nil {
 		r.setErr(newInvalidValueError("element", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("LPUSHX", key)
+	r.request.cmd = append(r.request.cmd, "LPUSHX", key)
 	for _, v := range element {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdLpushx, r)
 	return r
@@ -2383,9 +2253,8 @@ func (c *command) Lpushx(key interface{}, element []interface{}) Result {
 // nearest end (HEAD or TAIL) for large lists; and N is the number of elements in the
 // specified range.
 func (c *command) Lrange(key interface{}, start, stop int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LRANGE", key, start, stop)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LRANGE", key, start, stop)
 	c.send(CmdLrange, r)
 	return r
 }
@@ -2397,9 +2266,8 @@ func (c *command) Lrange(key interface{}, start, stop int64) Result {
 // O(N+M) where N is the length of the list and M is the number of elements
 // removed.
 func (c *command) Lrem(key interface{}, count int64, element interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LREM", key, count, element)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LREM", key, count, element)
 	c.send(CmdLrem, r)
 	return r
 }
@@ -2411,9 +2279,8 @@ func (c *command) Lrem(key interface{}, count int64, element interface{}) Result
 // O(N) where N is the length of the list. Setting either the first or the last
 // element of the list is O(1).
 func (c *command) Lset(key interface{}, index int64, element interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LSET", key, index, element)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LSET", key, index, element)
 	c.send(CmdLset, r)
 	return r
 }
@@ -2423,9 +2290,8 @@ func (c *command) Lset(key interface{}, index int64, element interface{}) Result
 // Since: 1.0.0
 // Complexity: O(N) where N is the number of elements to be removed by the operation.
 func (c *command) Ltrim(key interface{}, start, stop int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("LTRIM", key, start, stop)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LTRIM", key, start, stop)
 	c.send(CmdLtrim, r)
 	return r
 }
@@ -2434,9 +2300,8 @@ func (c *command) Ltrim(key interface{}, start, stop int64) Result {
 // Group: server
 // Since: 4.0.0
 func (c *command) MemoryDoctor() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "DOCTOR")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "DOCTOR")
 	c.send(CmdMemoryDoctor, r)
 	return r
 }
@@ -2445,9 +2310,8 @@ func (c *command) MemoryDoctor() Result {
 // Group: server
 // Since: 4.0.0
 func (c *command) MemoryHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "HELP")
 	c.send(CmdMemoryHelp, r)
 	return r
 }
@@ -2456,9 +2320,8 @@ func (c *command) MemoryHelp() Result {
 // Group: server
 // Since: 4.0.0
 func (c *command) MemoryMallocStats() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "MALLOC-STATS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "MALLOC-STATS")
 	c.send(CmdMemoryMallocStats, r)
 	return r
 }
@@ -2467,9 +2330,8 @@ func (c *command) MemoryMallocStats() Result {
 // Group: server
 // Since: 4.0.0
 func (c *command) MemoryPurge() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "PURGE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "PURGE")
 	c.send(CmdMemoryPurge, r)
 	return r
 }
@@ -2478,9 +2340,8 @@ func (c *command) MemoryPurge() Result {
 // Group: server
 // Since: 4.0.0
 func (c *command) MemoryStats() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "STATS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "STATS")
 	c.send(CmdMemoryStats, r)
 	return r
 }
@@ -2490,11 +2351,10 @@ func (c *command) MemoryStats() Result {
 // Since: 4.0.0
 // Complexity: O(N) where N is the number of samples.
 func (c *command) MemoryUsage(key interface{}, samples *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MEMORY", "USAGE", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MEMORY", "USAGE", key)
 	if samples != nil {
-		c.encode("SAMPLES", samples)
+		r.request.cmd = append(r.request.cmd, "SAMPLES", samples)
 	}
 	c.send(CmdMemoryUsage, r)
 	return r
@@ -2505,15 +2365,14 @@ func (c *command) MemoryUsage(key interface{}, samples *int64) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the number of keys to retrieve.
 func (c *command) Mget(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("MGET")
+	r.request.cmd = append(r.request.cmd, "MGET")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdMget, r)
 	return r
@@ -2527,22 +2386,21 @@ func (c *command) Mget(key []interface{}) Result {
 // in the target instance. See the pages of these commands for time complexity. Also
 // an O(N) data transfer between the two instances is performed.
 func (c *command) Migrate(host, port string, key interface{}, destinationDb, timeout int64, copy, replace bool, auth *string, keys []interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MIGRATE", host, port, key, destinationDb, timeout)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MIGRATE", host, port, key, destinationDb, timeout)
 	if copy {
-		c.encode("COPY")
+		r.request.cmd = append(r.request.cmd, "COPY")
 	}
 	if replace {
-		c.encode("REPLACE")
+		r.request.cmd = append(r.request.cmd, "REPLACE")
 	}
 	if auth != nil {
-		c.encode("AUTH", auth)
+		r.request.cmd = append(r.request.cmd, "AUTH", auth)
 	}
 	if keys != nil {
-		c.encode("KEYS")
+		r.request.cmd = append(r.request.cmd, "KEYS")
 		for _, v := range keys {
-			c.encode(v)
+			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
 	c.send(CmdMigrate, r)
@@ -2554,9 +2412,8 @@ func (c *command) Migrate(host, port string, key interface{}, destinationDb, tim
 // Since: 4.0.0
 // Complexity: O(N) where N is the number of loaded modules.
 func (c *command) ModuleList() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MODULE", "LIST")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MODULE", "LIST")
 	c.send(CmdModuleList, r)
 	return r
 }
@@ -2566,11 +2423,10 @@ func (c *command) ModuleList() Result {
 // Since: 4.0.0
 // Complexity: O(1)
 func (c *command) ModuleLoad(path string, arg []string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MODULE", "LOAD", path)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MODULE", "LOAD", path)
 	for _, v := range arg {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdModuleLoad, r)
 	return r
@@ -2581,9 +2437,8 @@ func (c *command) ModuleLoad(path string, arg []string) Result {
 // Since: 4.0.0
 // Complexity: O(1)
 func (c *command) ModuleUnload(name string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MODULE", "UNLOAD", name)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MODULE", "UNLOAD", name)
 	c.send(CmdModuleUnload, r)
 	return r
 }
@@ -2592,9 +2447,8 @@ func (c *command) ModuleUnload(name string) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Monitor() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MONITOR")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MONITOR")
 	c.send(CmdMonitor, r)
 	return r
 }
@@ -2604,9 +2458,8 @@ func (c *command) Monitor() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Move(key interface{}, db int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MOVE", key, db)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MOVE", key, db)
 	c.send(CmdMove, r)
 	return r
 }
@@ -2616,15 +2469,14 @@ func (c *command) Move(key interface{}, db int64) Result {
 // Since: 1.0.1
 // Complexity: O(N) where N is the number of keys to set.
 func (c *command) Mset(keyValue []KeyValue) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if keyValue == nil {
 		r.setErr(newInvalidValueError("keyValue", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("MSET")
+	r.request.cmd = append(r.request.cmd, "MSET")
 	for _, v := range keyValue {
-		c.encode(v.Key, v.Value)
+		r.request.cmd = append(r.request.cmd, v.Key, v.Value)
 	}
 	c.send(CmdMset, r)
 	return r
@@ -2635,15 +2487,14 @@ func (c *command) Mset(keyValue []KeyValue) Result {
 // Since: 1.0.1
 // Complexity: O(N) where N is the number of keys to set.
 func (c *command) MsetNx(keyValue []KeyValue) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if keyValue == nil {
 		r.setErr(newInvalidValueError("keyValue", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("MSETNX")
+	r.request.cmd = append(r.request.cmd, "MSETNX")
 	for _, v := range keyValue {
-		c.encode(v.Key, v.Value)
+		r.request.cmd = append(r.request.cmd, v.Key, v.Value)
 	}
 	c.send(CmdMsetNx, r)
 	return r
@@ -2653,9 +2504,8 @@ func (c *command) MsetNx(keyValue []KeyValue) Result {
 // Group: transactions
 // Since: 1.2.0
 func (c *command) Multi() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("MULTI")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "MULTI")
 	c.send(CmdMulti, r)
 	return r
 }
@@ -2665,9 +2515,8 @@ func (c *command) Multi() Result {
 // Since: 2.2.3
 // Complexity: O(1) for all the currently implemented subcommands.
 func (c *command) ObjectEncoding(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("OBJECT", "ENCODING", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "OBJECT", "ENCODING", key)
 	c.send(CmdObjectEncoding, r)
 	return r
 }
@@ -2677,9 +2526,8 @@ func (c *command) ObjectEncoding(key interface{}) Result {
 // Since: 2.2.3
 // Complexity: O(1) for all the currently implemented subcommands.
 func (c *command) ObjectFreq(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("OBJECT", "FREQ", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "OBJECT", "FREQ", key)
 	c.send(CmdObjectFreq, r)
 	return r
 }
@@ -2689,9 +2537,8 @@ func (c *command) ObjectFreq(key interface{}) Result {
 // Since: 2.2.3
 // Complexity: O(1) for all the currently implemented subcommands.
 func (c *command) ObjectHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("OBJECT", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "OBJECT", "HELP")
 	c.send(CmdObjectHelp, r)
 	return r
 }
@@ -2701,9 +2548,8 @@ func (c *command) ObjectHelp() Result {
 // Since: 2.2.3
 // Complexity: O(1) for all the currently implemented subcommands.
 func (c *command) ObjectIdletime(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("OBJECT", "IDLETIME", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "OBJECT", "IDLETIME", key)
 	c.send(CmdObjectIdletime, r)
 	return r
 }
@@ -2713,9 +2559,8 @@ func (c *command) ObjectIdletime(key interface{}) Result {
 // Since: 2.2.3
 // Complexity: O(1) for all the currently implemented subcommands.
 func (c *command) ObjectRefcount(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("OBJECT", "REFCOUNT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "OBJECT", "REFCOUNT", key)
 	c.send(CmdObjectRefcount, r)
 	return r
 }
@@ -2725,9 +2570,8 @@ func (c *command) ObjectRefcount(key interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) PTTL(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PTTL", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PTTL", key)
 	c.send(CmdPTTL, r)
 	return r
 }
@@ -2737,9 +2581,8 @@ func (c *command) PTTL(key interface{}) Result {
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Persist(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PERSIST", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PERSIST", key)
 	c.send(CmdPersist, r)
 	return r
 }
@@ -2749,9 +2592,8 @@ func (c *command) Persist(key interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) Pexpire(key interface{}, milliseconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PEXPIRE", key, milliseconds)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PEXPIRE", key, milliseconds)
 	c.send(CmdPexpire, r)
 	return r
 }
@@ -2761,9 +2603,8 @@ func (c *command) Pexpire(key interface{}, milliseconds int64) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) Pexpireat(key interface{}, millisecondsTimestamp int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PEXPIREAT", key, millisecondsTimestamp)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PEXPIREAT", key, millisecondsTimestamp)
 	c.send(CmdPexpireat, r)
 	return r
 }
@@ -2773,15 +2614,14 @@ func (c *command) Pexpireat(key interface{}, millisecondsTimestamp int64) Result
 // Since: 2.8.9
 // Complexity: O(1) to add every element.
 func (c *command) Pfadd(key interface{}, element []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if element == nil {
 		r.setErr(newInvalidValueError("element", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("PFADD", key)
+	r.request.cmd = append(r.request.cmd, "PFADD", key)
 	for _, v := range element {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdPfadd, r)
 	return r
@@ -2795,15 +2635,14 @@ func (c *command) Pfadd(key interface{}, element []interface{}) Result {
 // O(N) with N being the number of keys, and much bigger constant times, when called
 // with multiple keys.
 func (c *command) Pfcount(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("PFCOUNT")
+	r.request.cmd = append(r.request.cmd, "PFCOUNT")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdPfcount, r)
 	return r
@@ -2814,15 +2653,14 @@ func (c *command) Pfcount(key []interface{}) Result {
 // Since: 2.8.9
 // Complexity: O(N) to merge N HyperLogLogs, but with high constant times.
 func (c *command) Pfmerge(destkey interface{}, sourcekey []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if sourcekey == nil {
 		r.setErr(newInvalidValueError("sourcekey", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("PFMERGE", destkey)
+	r.request.cmd = append(r.request.cmd, "PFMERGE", destkey)
 	for _, v := range sourcekey {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdPfmerge, r)
 	return r
@@ -2832,11 +2670,10 @@ func (c *command) Pfmerge(destkey interface{}, sourcekey []interface{}) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) Ping(message *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PING")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PING")
 	if message != nil {
-		c.encode(message)
+		r.request.cmd = append(r.request.cmd, message)
 	}
 	c.send(CmdPing, r)
 	return r
@@ -2847,18 +2684,16 @@ func (c *command) Ping(message *string) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the number of patterns the client is already subscribed to.
 func (c *command) Psubscribe(pattern []string, cb MsgCallback) Result {
-	r := newAsyncSubscribeResult()
+	r := newResult()
 	if pattern == nil {
 		r.setErr(newInvalidValueError("pattern", nil))
 		return r
 	}
-	r.channel = pattern[:]
-	r.cb = cb
-	c.mu.Lock()
-	c.encode("PSUBSCRIBE")
+	r.request.cmd = append(r.request.cmd, "PSUBSCRIBE")
 	for _, v := range pattern {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
+	r.request.cb = cb
 	c.send(CmdPsubscribe, r)
 	return r
 }
@@ -2867,9 +2702,8 @@ func (c *command) Psubscribe(pattern []string, cb MsgCallback) Result {
 // Group: server
 // Since: 2.8.0
 func (c *command) Psync(replicationid, offset int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PSYNC", replicationid, offset)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PSYNC", replicationid, offset)
 	c.send(CmdPsync, r)
 	return r
 }
@@ -2881,9 +2715,8 @@ func (c *command) Psync(replicationid, offset int64) Result {
 // O(N+M) where N is the number of clients subscribed to the receiving channel and
 // M is the total number of subscribed patterns (by any client).
 func (c *command) Publish(channel, message string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PUBLISH", channel, message)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PUBLISH", channel, message)
 	c.send(CmdPublish, r)
 	return r
 }
@@ -2897,11 +2730,10 @@ func (c *command) Publish(channel, message string) Result {
 // for the NUMSUB subcommand, where N is the number of requested channels. O(1) for
 // the NUMPAT subcommand.
 func (c *command) PubsubChannels(pattern *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PUBSUB", "CHANNELS")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PUBSUB", "CHANNELS")
 	if pattern != nil {
-		c.encode(pattern)
+		r.request.cmd = append(r.request.cmd, pattern)
 	}
 	c.send(CmdPubsubChannels, r)
 	return r
@@ -2916,9 +2748,8 @@ func (c *command) PubsubChannels(pattern *string) Result {
 // for the NUMSUB subcommand, where N is the number of requested channels. O(1) for
 // the NUMPAT subcommand.
 func (c *command) PubsubNumpat() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("PUBSUB", "NUMPAT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PUBSUB", "NUMPAT")
 	c.send(CmdPubsubNumpat, r)
 	return r
 }
@@ -2932,15 +2763,14 @@ func (c *command) PubsubNumpat() Result {
 // for the NUMSUB subcommand, where N is the number of requested channels. O(1) for
 // the NUMPAT subcommand.
 func (c *command) PubsubNumsub(channel []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if channel == nil {
 		r.setErr(newInvalidValueError("channel", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("PUBSUB", "NUMSUB")
+	r.request.cmd = append(r.request.cmd, "PUBSUB", "NUMSUB")
 	for _, v := range channel {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdPubsubNumsub, r)
 	return r
@@ -2953,12 +2783,10 @@ func (c *command) PubsubNumsub(channel []string) Result {
 // O(N+M) where N is the number of patterns the client is already subscribed and M
 // is the number of total patterns subscribed in the system (by any client).
 func (c *command) Punsubscribe(pattern []string) Result {
-	r := newAsyncUnsubscribeResult()
-	r.channel = pattern[:]
-	c.mu.Lock()
-	c.encode("PUNSUBSCRIBE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "PUNSUBSCRIBE")
 	for _, v := range pattern {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdPunsubscribe, r)
 	return r
@@ -2968,9 +2796,8 @@ func (c *command) Punsubscribe(pattern []string) Result {
 // Group: connection
 // Since: 1.0.0
 func (c *command) Quit() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("QUIT")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "QUIT")
 	c.send(CmdQuit, r)
 	return r
 }
@@ -2980,9 +2807,8 @@ func (c *command) Quit() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Randomkey() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RANDOMKEY")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RANDOMKEY")
 	c.send(CmdRandomkey, r)
 	return r
 }
@@ -2992,9 +2818,8 @@ func (c *command) Randomkey() Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) Readonly() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("READONLY")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "READONLY")
 	c.send(CmdReadonly, r)
 	return r
 }
@@ -3004,9 +2829,8 @@ func (c *command) Readonly() Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) Readwrite() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("READWRITE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "READWRITE")
 	c.send(CmdReadwrite, r)
 	return r
 }
@@ -3016,9 +2840,8 @@ func (c *command) Readwrite() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Rename(key, newkey interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RENAME", key, newkey)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RENAME", key, newkey)
 	c.send(CmdRename, r)
 	return r
 }
@@ -3028,9 +2851,8 @@ func (c *command) Rename(key, newkey interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) RenameNx(key, newkey interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RENAMENX", key, newkey)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RENAMENX", key, newkey)
 	c.send(CmdRenameNx, r)
 	return r
 }
@@ -3039,9 +2861,8 @@ func (c *command) RenameNx(key, newkey interface{}) Result {
 // Group: server
 // Since: 5.0.0
 func (c *command) Replicaof(host, port string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("REPLICAOF", host, port)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "REPLICAOF", host, port)
 	c.send(CmdReplicaof, r)
 	return r
 }
@@ -3056,20 +2877,19 @@ func (c *command) Replicaof(host, port string) Result {
 // small, so simply O(1). However for sorted set values the complexity is O(N*M*log(N))
 // because inserting values into sorted sets is O(log(N)).
 func (c *command) Restore(key interface{}, ttl int64, serializedValue string, replace, absttl bool, idletime, freq *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RESTORE", key, ttl, serializedValue)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RESTORE", key, ttl, serializedValue)
 	if replace {
-		c.encode("REPLACE")
+		r.request.cmd = append(r.request.cmd, "REPLACE")
 	}
 	if absttl {
-		c.encode("ABSTTL")
+		r.request.cmd = append(r.request.cmd, "ABSTTL")
 	}
 	if idletime != nil {
-		c.encode("IDLETIME", idletime)
+		r.request.cmd = append(r.request.cmd, "IDLETIME", idletime)
 	}
 	if freq != nil {
-		c.encode("FREQ", freq)
+		r.request.cmd = append(r.request.cmd, "FREQ", freq)
 	}
 	c.send(CmdRestore, r)
 	return r
@@ -3079,9 +2899,8 @@ func (c *command) Restore(key interface{}, ttl int64, serializedValue string, re
 // Group: server
 // Since: 2.8.12
 func (c *command) Role() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ROLE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ROLE")
 	c.send(CmdRole, r)
 	return r
 }
@@ -3091,9 +2910,8 @@ func (c *command) Role() Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Rpop(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RPOP", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RPOP", key)
 	c.send(CmdRpop, r)
 	return r
 }
@@ -3103,9 +2921,8 @@ func (c *command) Rpop(key interface{}) Result {
 // Since: 1.2.0
 // Complexity: O(1)
 func (c *command) Rpoplpush(source, destination interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("RPOPLPUSH", source, destination)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "RPOPLPUSH", source, destination)
 	c.send(CmdRpoplpush, r)
 	return r
 }
@@ -3117,15 +2934,14 @@ func (c *command) Rpoplpush(source, destination interface{}) Result {
 // O(1) for each element added, so O(N) to add N elements when the command is
 // called with multiple arguments.
 func (c *command) Rpush(key interface{}, element []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if element == nil {
 		r.setErr(newInvalidValueError("element", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("RPUSH", key)
+	r.request.cmd = append(r.request.cmd, "RPUSH", key)
 	for _, v := range element {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdRpush, r)
 	return r
@@ -3138,15 +2954,14 @@ func (c *command) Rpush(key interface{}, element []interface{}) Result {
 // O(1) for each element added, so O(N) to add N elements when the command is
 // called with multiple arguments.
 func (c *command) Rpushx(key interface{}, element []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if element == nil {
 		r.setErr(newInvalidValueError("element", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("RPUSHX", key)
+	r.request.cmd = append(r.request.cmd, "RPUSHX", key)
 	for _, v := range element {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdRpushx, r)
 	return r
@@ -3159,15 +2974,14 @@ func (c *command) Rpushx(key interface{}, element []interface{}) Result {
 // O(1) for each element added, so O(N) to add N elements when the command is
 // called with multiple arguments.
 func (c *command) Sadd(key interface{}, member []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if member == nil {
 		r.setErr(newInvalidValueError("member", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SADD", key)
+	r.request.cmd = append(r.request.cmd, "SADD", key)
 	for _, v := range member {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSadd, r)
 	return r
@@ -3177,9 +2991,8 @@ func (c *command) Sadd(key interface{}, member []interface{}) Result {
 // Group: server
 // Since: 1.0.0
 func (c *command) Save() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SAVE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SAVE")
 	c.send(CmdSave, r)
 	return r
 }
@@ -3192,17 +3005,16 @@ func (c *command) Save() Result {
 // calls for the cursor to return back to 0. N is the number of elements inside the
 // collection.
 func (c *command) Scan(cursor int64, match *string, count *int64, typ *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCAN", cursor)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCAN", cursor)
 	if match != nil {
-		c.encode("MATCH", match)
+		r.request.cmd = append(r.request.cmd, "MATCH", match)
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	if typ != nil {
-		c.encode("TYPE", typ)
+		r.request.cmd = append(r.request.cmd, "TYPE", typ)
 	}
 	c.send(CmdScan, r)
 	return r
@@ -3213,9 +3025,8 @@ func (c *command) Scan(cursor int64, match *string, count *int64, typ *string) R
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Scard(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCARD", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCARD", key)
 	c.send(CmdScard, r)
 	return r
 }
@@ -3225,9 +3036,8 @@ func (c *command) Scard(key interface{}) Result {
 // Since: 3.2.0
 // Complexity: O(1)
 func (c *command) ScriptDebug(mode Mode) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCRIPT", "DEBUG", mode)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCRIPT", "DEBUG", mode)
 	c.send(CmdScriptDebug, r)
 	return r
 }
@@ -3239,15 +3049,14 @@ func (c *command) ScriptDebug(mode Mode) Result {
 // O(N) with N being the number of scripts to check (so checking a single script
 // is an O(1) operation).
 func (c *command) ScriptExists(sha1 []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if sha1 == nil {
 		r.setErr(newInvalidValueError("sha1", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SCRIPT", "EXISTS")
+	r.request.cmd = append(r.request.cmd, "SCRIPT", "EXISTS")
 	for _, v := range sha1 {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdScriptExists, r)
 	return r
@@ -3258,9 +3067,8 @@ func (c *command) ScriptExists(sha1 []string) Result {
 // Since: 2.6.0
 // Complexity: O(N) with N being the number of scripts in cache
 func (c *command) ScriptFlush() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCRIPT", "FLUSH")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCRIPT", "FLUSH")
 	c.send(CmdScriptFlush, r)
 	return r
 }
@@ -3270,9 +3078,8 @@ func (c *command) ScriptFlush() Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) ScriptKill() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCRIPT", "KILL")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCRIPT", "KILL")
 	c.send(CmdScriptKill, r)
 	return r
 }
@@ -3282,9 +3089,8 @@ func (c *command) ScriptKill() Result {
 // Since: 2.6.0
 // Complexity: O(N) with N being the length in bytes of the script body.
 func (c *command) ScriptLoad(script string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SCRIPT", "LOAD", script)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SCRIPT", "LOAD", script)
 	c.send(CmdScriptLoad, r)
 	return r
 }
@@ -3294,15 +3100,14 @@ func (c *command) ScriptLoad(script string) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the total number of elements in all given sets.
 func (c *command) Sdiff(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SDIFF")
+	r.request.cmd = append(r.request.cmd, "SDIFF")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSdiff, r)
 	return r
@@ -3313,15 +3118,14 @@ func (c *command) Sdiff(key []interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the total number of elements in all given sets.
 func (c *command) Sdiffstore(destination interface{}, key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SDIFFSTORE", destination)
+	r.request.cmd = append(r.request.cmd, "SDIFFSTORE", destination)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSdiffstore, r)
 	return r
@@ -3331,9 +3135,8 @@ func (c *command) Sdiffstore(destination interface{}, key []interface{}) Result 
 // Group: connection
 // Since: 1.0.0
 func (c *command) Select(index int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SELECT", index)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SELECT", index)
 	c.send(CmdSelect, r)
 	return r
 }
@@ -3343,9 +3146,8 @@ func (c *command) Select(index int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Set(key, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value)
 	c.send(CmdSet, r)
 	return r
 }
@@ -3355,9 +3157,8 @@ func (c *command) Set(key, value interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetEx(key, value interface{}, seconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "EX", seconds)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "EX", seconds)
 	c.send(CmdSetEx, r)
 	return r
 }
@@ -3367,9 +3168,8 @@ func (c *command) SetEx(key, value interface{}, seconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetExNx(key, value interface{}, seconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "EX", seconds, "NX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "EX", seconds, "NX")
 	c.send(CmdSetExNx, r)
 	return r
 }
@@ -3379,9 +3179,8 @@ func (c *command) SetExNx(key, value interface{}, seconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetExXx(key, value interface{}, seconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "EX", seconds, "XX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "EX", seconds, "XX")
 	c.send(CmdSetExXx, r)
 	return r
 }
@@ -3391,9 +3190,8 @@ func (c *command) SetExXx(key, value interface{}, seconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetNx(key, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "NX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "NX")
 	c.send(CmdSetNx, r)
 	return r
 }
@@ -3403,9 +3201,8 @@ func (c *command) SetNx(key, value interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetPx(key, value interface{}, milliseconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "PX", milliseconds)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "PX", milliseconds)
 	c.send(CmdSetPx, r)
 	return r
 }
@@ -3415,9 +3212,8 @@ func (c *command) SetPx(key, value interface{}, milliseconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetPxNx(key, value interface{}, milliseconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "PX", milliseconds, "NX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "PX", milliseconds, "NX")
 	c.send(CmdSetPxNx, r)
 	return r
 }
@@ -3427,9 +3223,8 @@ func (c *command) SetPxNx(key, value interface{}, milliseconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetPxXx(key, value interface{}, milliseconds int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "PX", milliseconds, "XX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "PX", milliseconds, "XX")
 	c.send(CmdSetPxXx, r)
 	return r
 }
@@ -3439,9 +3234,8 @@ func (c *command) SetPxXx(key, value interface{}, milliseconds int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) SetXx(key, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SET", key, value, "XX")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SET", key, value, "XX")
 	c.send(CmdSetXx, r)
 	return r
 }
@@ -3451,9 +3245,8 @@ func (c *command) SetXx(key, value interface{}) Result {
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Setbit(key interface{}, offset, value int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SETBIT", key, offset, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SETBIT", key, offset, value)
 	c.send(CmdSetbit, r)
 	return r
 }
@@ -3466,9 +3259,8 @@ func (c *command) Setbit(key interface{}, offset, value int64) Result {
 // this string is very small so the amortized complexity is O(1). Otherwise, complexity
 // is O(M) with M being the length of the value argument.
 func (c *command) Setrange(key interface{}, offset int64, value interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SETRANGE", key, offset, value)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SETRANGE", key, offset, value)
 	c.send(CmdSetrange, r)
 	return r
 }
@@ -3477,14 +3269,13 @@ func (c *command) Setrange(key interface{}, offset int64, value interface{}) Res
 // Group: server
 // Since: 1.0.0
 func (c *command) Shutdown(nosave *bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SHUTDOWN")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SHUTDOWN")
 	if nosave != nil {
 		if *nosave {
-			c.encode("NOSAVE")
+			r.request.cmd = append(r.request.cmd, "NOSAVE")
 		} else {
-			c.encode("SAVE")
+			r.request.cmd = append(r.request.cmd, "SAVE")
 		}
 	}
 	c.send(CmdShutdown, r)
@@ -3498,15 +3289,14 @@ func (c *command) Shutdown(nosave *bool) Result {
 // O(N*M) worst case where N is the cardinality of the smallest set and M is the
 // number of sets.
 func (c *command) Sinter(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SINTER")
+	r.request.cmd = append(r.request.cmd, "SINTER")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSinter, r)
 	return r
@@ -3519,15 +3309,14 @@ func (c *command) Sinter(key []interface{}) Result {
 // O(N*M) worst case where N is the cardinality of the smallest set and M is the
 // number of sets.
 func (c *command) Sinterstore(destination interface{}, key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SINTERSTORE", destination)
+	r.request.cmd = append(r.request.cmd, "SINTERSTORE", destination)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSinterstore, r)
 	return r
@@ -3538,9 +3327,8 @@ func (c *command) Sinterstore(destination interface{}, key []interface{}) Result
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Sismember(key, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SISMEMBER", key, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SISMEMBER", key, member)
 	c.send(CmdSismember, r)
 	return r
 }
@@ -3549,11 +3337,10 @@ func (c *command) Sismember(key, member interface{}) Result {
 // Group: server
 // Since: 2.2.12
 func (c *command) SlowlogGet(count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SLOWLOG", "GET")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SLOWLOG", "GET")
 	if count != nil {
-		c.encode(count)
+		r.request.cmd = append(r.request.cmd, count)
 	}
 	c.send(CmdSlowlogGet, r)
 	return r
@@ -3563,9 +3350,8 @@ func (c *command) SlowlogGet(count *int64) Result {
 // Group: server
 // Since: 2.2.12
 func (c *command) SlowlogLen() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SLOWLOG", "LEN")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SLOWLOG", "LEN")
 	c.send(CmdSlowlogLen, r)
 	return r
 }
@@ -3574,9 +3360,8 @@ func (c *command) SlowlogLen() Result {
 // Group: server
 // Since: 2.2.12
 func (c *command) SlowlogReset() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SLOWLOG", "RESET")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SLOWLOG", "RESET")
 	c.send(CmdSlowlogReset, r)
 	return r
 }
@@ -3586,9 +3371,8 @@ func (c *command) SlowlogReset() Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the set cardinality.
 func (c *command) Smembers(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SMEMBERS", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SMEMBERS", key)
 	c.send(CmdSmembers, r)
 	return r
 }
@@ -3598,9 +3382,8 @@ func (c *command) Smembers(key interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Smove(source, destination, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SMOVE", source, destination, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SMOVE", source, destination, member)
 	c.send(CmdSmove, r)
 	return r
 }
@@ -3613,33 +3396,32 @@ func (c *command) Smove(source, destination, member interface{}) Result {
 // M the number of returned elements. When the elements are not sorted, complexity
 // is currently O(N) as there is a copy step that will be avoided in next releases.
 func (c *command) Sort(key interface{}, by *string, limit *OffsetCount, get []string, asc *bool, sorting bool, store *interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SORT", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SORT", key)
 	if by != nil {
-		c.encode("BY", by)
+		r.request.cmd = append(r.request.cmd, "BY", by)
 	}
 	if limit != nil {
-		c.encode("LIMIT", limit.Offset, limit.Count)
+		r.request.cmd = append(r.request.cmd, "LIMIT", limit.Offset, limit.Count)
 	}
 	if get != nil {
-		c.encode("GET")
+		r.request.cmd = append(r.request.cmd, "GET")
 		for _, v := range get {
-			c.encode(v)
+			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
 	if asc != nil {
 		if *asc {
-			c.encode("ASC")
+			r.request.cmd = append(r.request.cmd, "ASC")
 		} else {
-			c.encode("DESC")
+			r.request.cmd = append(r.request.cmd, "DESC")
 		}
 	}
 	if sorting {
-		c.encode("ALPHA")
+		r.request.cmd = append(r.request.cmd, "ALPHA")
 	}
 	if store != nil {
-		c.encode("STORE", store)
+		r.request.cmd = append(r.request.cmd, "STORE", store)
 	}
 	c.send(CmdSort, r)
 	return r
@@ -3650,11 +3432,10 @@ func (c *command) Sort(key interface{}, by *string, limit *OffsetCount, get []st
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Spop(key interface{}, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SPOP", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SPOP", key)
 	if count != nil {
-		c.encode(count)
+		r.request.cmd = append(r.request.cmd, count)
 	}
 	c.send(CmdSpop, r)
 	return r
@@ -3667,11 +3448,10 @@ func (c *command) Spop(key interface{}, count *int64) Result {
 // Without the count argument O(1), otherwise O(N) where N is the absolute value
 // of the passed count.
 func (c *command) Srandmember(key interface{}, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SRANDMEMBER", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SRANDMEMBER", key)
 	if count != nil {
-		c.encode(count)
+		r.request.cmd = append(r.request.cmd, count)
 	}
 	c.send(CmdSrandmember, r)
 	return r
@@ -3682,15 +3462,14 @@ func (c *command) Srandmember(key interface{}, count *int64) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the number of members to be removed.
 func (c *command) Srem(key interface{}, member []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if member == nil {
 		r.setErr(newInvalidValueError("member", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SREM", key)
+	r.request.cmd = append(r.request.cmd, "SREM", key)
 	for _, v := range member {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSrem, r)
 	return r
@@ -3704,14 +3483,13 @@ func (c *command) Srem(key interface{}, member []interface{}) Result {
 // calls for the cursor to return back to 0. N is the number of elements inside the
 // collection..
 func (c *command) Sscan(key interface{}, cursor int64, match *string, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SSCAN", key, cursor)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SSCAN", key, cursor)
 	if match != nil {
-		c.encode("MATCH", match)
+		r.request.cmd = append(r.request.cmd, "MATCH", match)
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	c.send(CmdSscan, r)
 	return r
@@ -3722,9 +3500,8 @@ func (c *command) Sscan(key interface{}, cursor int64, match *string, count *int
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Strlen(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("STRLEN", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRLEN", key)
 	c.send(CmdStrlen, r)
 	return r
 }
@@ -3734,18 +3511,16 @@ func (c *command) Strlen(key interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the number of channels to subscribe to.
 func (c *command) Subscribe(channel []string, cb MsgCallback) Result {
-	r := newAsyncSubscribeResult()
+	r := newResult()
 	if channel == nil {
 		r.setErr(newInvalidValueError("channel", nil))
 		return r
 	}
-	r.channel = channel[:]
-	r.cb = cb
-	c.mu.Lock()
-	c.encode("SUBSCRIBE")
+	r.request.cmd = append(r.request.cmd, "SUBSCRIBE")
 	for _, v := range channel {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
+	r.request.cb = cb
 	c.send(CmdSubscribe, r)
 	return r
 }
@@ -3755,15 +3530,14 @@ func (c *command) Subscribe(channel []string, cb MsgCallback) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the total number of elements in all given sets.
 func (c *command) Sunion(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SUNION")
+	r.request.cmd = append(r.request.cmd, "SUNION")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSunion, r)
 	return r
@@ -3774,15 +3548,14 @@ func (c *command) Sunion(key []interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(N) where N is the total number of elements in all given sets.
 func (c *command) Sunionstore(destination interface{}, key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("SUNIONSTORE", destination)
+	r.request.cmd = append(r.request.cmd, "SUNIONSTORE", destination)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdSunionstore, r)
 	return r
@@ -3792,9 +3565,8 @@ func (c *command) Sunionstore(destination interface{}, key []interface{}) Result
 // Group: connection
 // Since: 4.0.0
 func (c *command) Swapdb(index1, index2 int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("SWAPDB", index1, index2)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "SWAPDB", index1, index2)
 	c.send(CmdSwapdb, r)
 	return r
 }
@@ -3804,9 +3576,8 @@ func (c *command) Swapdb(index1, index2 int64) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) TTL(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("TTL", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "TTL", key)
 	c.send(CmdTTL, r)
 	return r
 }
@@ -3816,9 +3587,8 @@ func (c *command) TTL(key interface{}) Result {
 // Since: 2.6.0
 // Complexity: O(1)
 func (c *command) Time() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("TIME")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "TIME")
 	c.send(CmdTime, r)
 	return r
 }
@@ -3828,15 +3598,14 @@ func (c *command) Time() Result {
 // Since: 3.2.1
 // Complexity: O(N) where N is the number of keys that will be touched.
 func (c *command) Touch(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("TOUCH")
+	r.request.cmd = append(r.request.cmd, "TOUCH")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdTouch, r)
 	return r
@@ -3847,9 +3616,8 @@ func (c *command) Touch(key []interface{}) Result {
 // Since: 1.0.0
 // Complexity: O(1)
 func (c *command) Type(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("TYPE", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "TYPE", key)
 	c.send(CmdType, r)
 	return r
 }
@@ -3862,15 +3630,14 @@ func (c *command) Type(key interface{}) Result {
 // work in a different thread in order to reclaim memory, where N is the number of
 // allocations the deleted objects where composed of.
 func (c *command) Unlink(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("UNLINK")
+	r.request.cmd = append(r.request.cmd, "UNLINK")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdUnlink, r)
 	return r
@@ -3881,12 +3648,10 @@ func (c *command) Unlink(key []interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(N) where N is the number of clients already subscribed to a channel.
 func (c *command) Unsubscribe(channel []string) Result {
-	r := newAsyncUnsubscribeResult()
-	r.channel = channel[:]
-	c.mu.Lock()
-	c.encode("UNSUBSCRIBE")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "UNSUBSCRIBE")
 	for _, v := range channel {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdUnsubscribe, r)
 	return r
@@ -3897,9 +3662,8 @@ func (c *command) Unsubscribe(channel []string) Result {
 // Since: 2.2.0
 // Complexity: O(1)
 func (c *command) Unwatch() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("UNWATCH")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "UNWATCH")
 	c.send(CmdUnwatch, r)
 	return r
 }
@@ -3909,9 +3673,8 @@ func (c *command) Unwatch() Result {
 // Since: 3.0.0
 // Complexity: O(1)
 func (c *command) Wait(numreplicas, timeout int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("WAIT", numreplicas, timeout)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "WAIT", numreplicas, timeout)
 	c.send(CmdWait, r)
 	return r
 }
@@ -3921,15 +3684,14 @@ func (c *command) Wait(numreplicas, timeout int64) Result {
 // Since: 2.2.0
 // Complexity: O(1) for every key.
 func (c *command) Watch(key []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("WATCH")
+	r.request.cmd = append(r.request.cmd, "WATCH")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdWatch, r)
 	return r
@@ -3940,15 +3702,14 @@ func (c *command) Watch(key []interface{}) Result {
 // Since: 5.0.0
 // Complexity: O(1) for each message ID processed.
 func (c *command) Xack(key interface{}, group string, id []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if id == nil {
 		r.setErr(newInvalidValueError("id", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XACK", key, group)
+	r.request.cmd = append(r.request.cmd, "XACK", key, group)
 	for _, v := range id {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdXack, r)
 	return r
@@ -3959,15 +3720,14 @@ func (c *command) Xack(key interface{}, group string, id []string) Result {
 // Since: 5.0.0
 // Complexity: O(1)
 func (c *command) Xadd(key interface{}, id string, fieldValue []FieldValue) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if fieldValue == nil {
 		r.setErr(newInvalidValueError("fieldValue", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XADD", key, id)
+	r.request.cmd = append(r.request.cmd, "XADD", key, id)
 	for _, v := range fieldValue {
-		c.encode(v.Field, v.Value)
+		r.request.cmd = append(r.request.cmd, v.Field, v.Value)
 	}
 	c.send(CmdXadd, r)
 	return r
@@ -3978,30 +3738,29 @@ func (c *command) Xadd(key interface{}, id string, fieldValue []FieldValue) Resu
 // Since: 5.0.0
 // Complexity: O(log N) with N being the number of messages in the PEL of the consumer group.
 func (c *command) Xclaim(key interface{}, group, consumer, minIdleTime string, id []string, idle, time, retrycount *int64, force, justid bool) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if id == nil {
 		r.setErr(newInvalidValueError("id", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XCLAIM", key, group, consumer, minIdleTime)
+	r.request.cmd = append(r.request.cmd, "XCLAIM", key, group, consumer, minIdleTime)
 	for _, v := range id {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	if idle != nil {
-		c.encode("IDLE", idle)
+		r.request.cmd = append(r.request.cmd, "IDLE", idle)
 	}
 	if time != nil {
-		c.encode("TIME", time)
+		r.request.cmd = append(r.request.cmd, "TIME", time)
 	}
 	if retrycount != nil {
-		c.encode("RETRYCOUNT", retrycount)
+		r.request.cmd = append(r.request.cmd, "RETRYCOUNT", retrycount)
 	}
 	if force {
-		c.encode("FORCE")
+		r.request.cmd = append(r.request.cmd, "FORCE")
 	}
 	if justid {
-		c.encode("JUSTID")
+		r.request.cmd = append(r.request.cmd, "JUSTID")
 	}
 	c.send(CmdXclaim, r)
 	return r
@@ -4014,15 +3773,14 @@ func (c *command) Xclaim(key interface{}, group, consumer, minIdleTime string, i
 // O(1) for each single item to delete in the stream, regardless of the stream
 // size.
 func (c *command) Xdel(key interface{}, id []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if id == nil {
 		r.setErr(newInvalidValueError("id", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XDEL", key)
+	r.request.cmd = append(r.request.cmd, "XDEL", key)
 	for _, v := range id {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdXdel, r)
 	return r
@@ -4036,11 +3794,10 @@ func (c *command) Xdel(key interface{}, id []string) Result {
 // which takes an additional O(M) time in order to delete the M entries inside the
 // consumer group pending entries list (PEL).
 func (c *command) XgroupCreate(key interface{}, groupname, id string, mkstream bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XGROUP", "CREATE", key, groupname, id)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XGROUP", "CREATE", key, groupname, id)
 	if mkstream {
-		c.encode("MKSTREAM")
+		r.request.cmd = append(r.request.cmd, "MKSTREAM")
 	}
 	c.send(CmdXgroupCreate, r)
 	return r
@@ -4054,9 +3811,8 @@ func (c *command) XgroupCreate(key interface{}, groupname, id string, mkstream b
 // which takes an additional O(M) time in order to delete the M entries inside the
 // consumer group pending entries list (PEL).
 func (c *command) XgroupDelconsumer(key interface{}, groupname, consumername string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XGROUP", "DELCONSUMER", key, groupname, consumername)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XGROUP", "DELCONSUMER", key, groupname, consumername)
 	c.send(CmdXgroupDelconsumer, r)
 	return r
 }
@@ -4069,9 +3825,8 @@ func (c *command) XgroupDelconsumer(key interface{}, groupname, consumername str
 // which takes an additional O(M) time in order to delete the M entries inside the
 // consumer group pending entries list (PEL).
 func (c *command) XgroupDestroy(key interface{}, groupname string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XGROUP", "DESTROY", key, groupname)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XGROUP", "DESTROY", key, groupname)
 	c.send(CmdXgroupDestroy, r)
 	return r
 }
@@ -4084,9 +3839,8 @@ func (c *command) XgroupDestroy(key interface{}, groupname string) Result {
 // which takes an additional O(M) time in order to delete the M entries inside the
 // consumer group pending entries list (PEL).
 func (c *command) XgroupHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XGROUP", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XGROUP", "HELP")
 	c.send(CmdXgroupHelp, r)
 	return r
 }
@@ -4099,9 +3853,8 @@ func (c *command) XgroupHelp() Result {
 // which takes an additional O(M) time in order to delete the M entries inside the
 // consumer group pending entries list (PEL).
 func (c *command) XgroupSetid(key interface{}, groupname, id string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XGROUP", "SETID", key, groupname, id)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XGROUP", "SETID", key, groupname, id)
 	c.send(CmdXgroupSetid, r)
 	return r
 }
@@ -4114,9 +3867,8 @@ func (c *command) XgroupSetid(key interface{}, groupname, id string) Result {
 // and GROUPS. The STREAM subcommand is O(log N) with N being the number of items in
 // the stream.
 func (c *command) XinfoConsumers(key interface{}, groupname string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XINFO", "CONSUMERS", key, groupname)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XINFO", "CONSUMERS", key, groupname)
 	c.send(CmdXinfoConsumers, r)
 	return r
 }
@@ -4129,9 +3881,8 @@ func (c *command) XinfoConsumers(key interface{}, groupname string) Result {
 // and GROUPS. The STREAM subcommand is O(log N) with N being the number of items in
 // the stream.
 func (c *command) XinfoGroups(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XINFO", "GROUPS", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XINFO", "GROUPS", key)
 	c.send(CmdXinfoGroups, r)
 	return r
 }
@@ -4144,9 +3895,8 @@ func (c *command) XinfoGroups(key interface{}) Result {
 // and GROUPS. The STREAM subcommand is O(log N) with N being the number of items in
 // the stream.
 func (c *command) XinfoHelp() Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XINFO", "HELP")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XINFO", "HELP")
 	c.send(CmdXinfoHelp, r)
 	return r
 }
@@ -4159,9 +3909,8 @@ func (c *command) XinfoHelp() Result {
 // and GROUPS. The STREAM subcommand is O(log N) with N being the number of items in
 // the stream.
 func (c *command) XinfoStream(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XINFO", "STREAM", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XINFO", "STREAM", key)
 	c.send(CmdXinfoStream, r)
 	return r
 }
@@ -4171,9 +3920,8 @@ func (c *command) XinfoStream(key interface{}) Result {
 // Since: 5.0.0
 // Complexity: O(1)
 func (c *command) Xlen(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XLEN", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XLEN", key)
 	c.send(CmdXlen, r)
 	return r
 }
@@ -4187,14 +3935,13 @@ func (c *command) Xlen(key interface{}) Result {
 // in O(1) time assuming the list of consumers is small, otherwise there is
 // additional O(N) time needed to iterate every consumer.
 func (c *command) Xpending(key interface{}, group string, startEndCount *StartEndCount, consumer *string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XPENDING", key, group)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XPENDING", key, group)
 	if startEndCount != nil {
-		c.encode(startEndCount.Start, startEndCount.End, startEndCount.Count)
+		r.request.cmd = append(r.request.cmd, startEndCount.Start, startEndCount.End, startEndCount.Count)
 	}
 	if consumer != nil {
-		c.encode(consumer)
+		r.request.cmd = append(r.request.cmd, consumer)
 	}
 	c.send(CmdXpending, r)
 	return r
@@ -4207,11 +3954,10 @@ func (c *command) Xpending(key interface{}, group string, startEndCount *StartEn
 // O(N) with N being the number of elements being returned. If N is constant (e.g.
 // always asking for the first 10 elements with COUNT), you can consider it O(1).
 func (c *command) Xrange(key interface{}, start, end string, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XRANGE", key, start, end)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XRANGE", key, start, end)
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	c.send(CmdXrange, r)
 	return r
@@ -4226,7 +3972,7 @@ func (c *command) Xrange(key interface{}, start, end string, count *int64) Resul
 // option is used, XADD will pay O(M) time in order to serve the M clients blocked on the
 // stream getting new data.
 func (c *command) Xread(count, block *int64, key []interface{}, id []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
@@ -4235,20 +3981,19 @@ func (c *command) Xread(count, block *int64, key []interface{}, id []string) Res
 		r.setErr(newInvalidValueError("id", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XREAD")
+	r.request.cmd = append(r.request.cmd, "XREAD")
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	if block != nil {
-		c.encode("BLOCK", block)
+		r.request.cmd = append(r.request.cmd, "BLOCK", block)
 	}
-	c.encode("STREAMS")
+	r.request.cmd = append(r.request.cmd, "STREAMS")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	for _, v := range id {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdXread, r)
 	return r
@@ -4263,7 +4008,7 @@ func (c *command) Xread(count, block *int64, key []interface{}, id []string) Res
 // can consider it O(1). On the other side when XREADGROUP blocks, XADD will pay the
 // O(N) time in order to serve the N clients blocked on the stream getting new data.
 func (c *command) Xreadgroup(group GroupConsumer, count, block *int64, noack bool, key []interface{}, id []string) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
@@ -4272,23 +4017,22 @@ func (c *command) Xreadgroup(group GroupConsumer, count, block *int64, noack boo
 		r.setErr(newInvalidValueError("id", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("XREADGROUP", "GROUP", group.Group, group.Consumer)
+	r.request.cmd = append(r.request.cmd, "XREADGROUP", "GROUP", group.Group, group.Consumer)
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	if block != nil {
-		c.encode("BLOCK", block)
+		r.request.cmd = append(r.request.cmd, "BLOCK", block)
 	}
 	if noack {
-		c.encode("NOACK")
+		r.request.cmd = append(r.request.cmd, "NOACK")
 	}
-	c.encode("STREAMS")
+	r.request.cmd = append(r.request.cmd, "STREAMS")
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	for _, v := range id {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdXreadgroup, r)
 	return r
@@ -4301,11 +4045,10 @@ func (c *command) Xreadgroup(group GroupConsumer, count, block *int64, noack boo
 // O(N) with N being the number of elements returned. If N is constant (e.g.
 // always asking for the first 10 elements with COUNT), you can consider it O(1).
 func (c *command) Xrevrange(key interface{}, end, start string, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XREVRANGE", key, end, start)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XREVRANGE", key, end, start)
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	c.send(CmdXrevrange, r)
 	return r
@@ -4319,13 +4062,12 @@ func (c *command) Xrevrange(key interface{}, end, start string, count *int64) Re
 // however, since entries are organized in macro nodes containing multiple entries that can
 // be released with a single deallocation.
 func (c *command) Xtrim(key interface{}, approx bool, count int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("XTRIM", key, "MAXLEN")
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "XTRIM", key, "MAXLEN")
 	if approx {
-		c.encode("~")
+		r.request.cmd = append(r.request.cmd, "~")
 	}
-	c.encode(count)
+	r.request.cmd = append(r.request.cmd, count)
 	c.send(CmdXtrim, r)
 	return r
 }
@@ -4337,15 +4079,14 @@ func (c *command) Xtrim(key interface{}, approx bool, count int64) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) Zadd(key interface{}, scoreMember []ScoreMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if scoreMember == nil {
 		r.setErr(newInvalidValueError("scoreMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZADD", key)
+	r.request.cmd = append(r.request.cmd, "ZADD", key)
 	for _, v := range scoreMember {
-		c.encode(v.Score, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Score, v.Member)
 	}
 	c.send(CmdZadd, r)
 	return r
@@ -4358,15 +4099,14 @@ func (c *command) Zadd(key interface{}, scoreMember []ScoreMember) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) ZaddCh(key interface{}, scoreMember []ScoreMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if scoreMember == nil {
 		r.setErr(newInvalidValueError("scoreMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZADD", key, "CH")
+	r.request.cmd = append(r.request.cmd, "ZADD", key, "CH")
 	for _, v := range scoreMember {
-		c.encode(v.Score, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Score, v.Member)
 	}
 	c.send(CmdZaddCh, r)
 	return r
@@ -4379,15 +4119,14 @@ func (c *command) ZaddCh(key interface{}, scoreMember []ScoreMember) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) ZaddNx(key interface{}, scoreMember []ScoreMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if scoreMember == nil {
 		r.setErr(newInvalidValueError("scoreMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZADD", key, "NX")
+	r.request.cmd = append(r.request.cmd, "ZADD", key, "NX")
 	for _, v := range scoreMember {
-		c.encode(v.Score, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Score, v.Member)
 	}
 	c.send(CmdZaddNx, r)
 	return r
@@ -4400,15 +4139,14 @@ func (c *command) ZaddNx(key interface{}, scoreMember []ScoreMember) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) ZaddXx(key interface{}, scoreMember []ScoreMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if scoreMember == nil {
 		r.setErr(newInvalidValueError("scoreMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZADD", key, "XX")
+	r.request.cmd = append(r.request.cmd, "ZADD", key, "XX")
 	for _, v := range scoreMember {
-		c.encode(v.Score, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Score, v.Member)
 	}
 	c.send(CmdZaddXx, r)
 	return r
@@ -4421,15 +4159,14 @@ func (c *command) ZaddXx(key interface{}, scoreMember []ScoreMember) Result {
 // O(log(N)) for each item added, where N is the number of elements in the sorted
 // set.
 func (c *command) ZaddXxCh(key interface{}, scoreMember []ScoreMember) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if scoreMember == nil {
 		r.setErr(newInvalidValueError("scoreMember", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZADD", key, "XX", "CH")
+	r.request.cmd = append(r.request.cmd, "ZADD", key, "XX", "CH")
 	for _, v := range scoreMember {
-		c.encode(v.Score, v.Member)
+		r.request.cmd = append(r.request.cmd, v.Score, v.Member)
 	}
 	c.send(CmdZaddXxCh, r)
 	return r
@@ -4440,9 +4177,8 @@ func (c *command) ZaddXxCh(key interface{}, scoreMember []ScoreMember) Result {
 // Since: 1.2.0
 // Complexity: O(1)
 func (c *command) Zcard(key interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZCARD", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZCARD", key)
 	c.send(CmdZcard, r)
 	return r
 }
@@ -4452,9 +4188,8 @@ func (c *command) Zcard(key interface{}) Result {
 // Since: 2.0.0
 // Complexity: O(log(N)) with N being the number of elements in the sorted set.
 func (c *command) Zcount(key interface{}, min, max Zfloat64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZCOUNT", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZCOUNT", key, min, max)
 	c.send(CmdZcount, r)
 	return r
 }
@@ -4464,9 +4199,8 @@ func (c *command) Zcount(key interface{}, min, max Zfloat64) Result {
 // Since: 1.2.0
 // Complexity: O(log(N)) where N is the number of elements in the sorted set.
 func (c *command) Zincrby(key interface{}, increment float64, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZINCRBY", key, increment, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZINCRBY", key, increment, member)
 	c.send(CmdZincrby, r)
 	return r
 }
@@ -4479,24 +4213,23 @@ func (c *command) Zincrby(key interface{}, increment float64, member interface{}
 // being the number of input sorted sets and M being the number of elements in the
 // resulting sorted set.
 func (c *command) Zinterstore(destination interface{}, numkeys int64, key []interface{}, weights []int64, aggregate *Aggregate) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZINTERSTORE", destination, numkeys)
+	r.request.cmd = append(r.request.cmd, "ZINTERSTORE", destination, numkeys)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	if weights != nil {
-		c.encode("WEIGHTS")
+		r.request.cmd = append(r.request.cmd, "WEIGHTS")
 		for _, v := range weights {
-			c.encode(v)
+			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
 	if aggregate != nil {
-		c.encode("AGGREGATE", aggregate)
+		r.request.cmd = append(r.request.cmd, "AGGREGATE", aggregate)
 	}
 	c.send(CmdZinterstore, r)
 	return r
@@ -4507,9 +4240,8 @@ func (c *command) Zinterstore(destination interface{}, numkeys int64, key []inte
 // Since: 2.8.9
 // Complexity: O(log(N)) with N being the number of elements in the sorted set.
 func (c *command) Zlexcount(key interface{}, min, max string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZLEXCOUNT", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZLEXCOUNT", key, min, max)
 	c.send(CmdZlexcount, r)
 	return r
 }
@@ -4521,11 +4253,10 @@ func (c *command) Zlexcount(key interface{}, min, max string) Result {
 // O(log(N)*M) with N being the number of elements in the sorted set, and M being
 // the number of elements popped.
 func (c *command) Zpopmax(key interface{}, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZPOPMAX", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZPOPMAX", key)
 	if count != nil {
-		c.encode(count)
+		r.request.cmd = append(r.request.cmd, count)
 	}
 	c.send(CmdZpopmax, r)
 	return r
@@ -4538,11 +4269,10 @@ func (c *command) Zpopmax(key interface{}, count *int64) Result {
 // O(log(N)*M) with N being the number of elements in the sorted set, and M being
 // the number of elements popped.
 func (c *command) Zpopmin(key interface{}, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZPOPMIN", key)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZPOPMIN", key)
 	if count != nil {
-		c.encode(count)
+		r.request.cmd = append(r.request.cmd, count)
 	}
 	c.send(CmdZpopmin, r)
 	return r
@@ -4555,11 +4285,10 @@ func (c *command) Zpopmin(key interface{}, count *int64) Result {
 // O(log(N)+M) with N being the number of elements in the sorted set and M the
 // number of elements returned.
 func (c *command) Zrange(key interface{}, start, stop int64, withscores bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZRANGE", key, start, stop)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZRANGE", key, start, stop)
 	if withscores {
-		c.encode("WITHSCORES")
+		r.request.cmd = append(r.request.cmd, "WITHSCORES")
 	}
 	c.send(CmdZrange, r)
 	return r
@@ -4573,11 +4302,10 @@ func (c *command) Zrange(key interface{}, start, stop int64, withscores bool) Re
 // number of elements being returned. If M is constant (e.g. always asking for the first
 // 10 elements with LIMIT), you can consider it O(log(N)).
 func (c *command) Zrangebylex(key interface{}, min, max string, limit *OffsetCount) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZRANGEBYLEX", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZRANGEBYLEX", key, min, max)
 	if limit != nil {
-		c.encode("LIMIT", limit.Offset, limit.Count)
+		r.request.cmd = append(r.request.cmd, "LIMIT", limit.Offset, limit.Count)
 	}
 	c.send(CmdZrangebylex, r)
 	return r
@@ -4591,14 +4319,13 @@ func (c *command) Zrangebylex(key interface{}, min, max string, limit *OffsetCou
 // number of elements being returned. If M is constant (e.g. always asking for the first
 // 10 elements with LIMIT), you can consider it O(log(N)).
 func (c *command) Zrangebyscore(key interface{}, min, max Zfloat64, withscores bool, limit *OffsetCount) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZRANGEBYSCORE", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZRANGEBYSCORE", key, min, max)
 	if withscores {
-		c.encode("WITHSCORES")
+		r.request.cmd = append(r.request.cmd, "WITHSCORES")
 	}
 	if limit != nil {
-		c.encode("LIMIT", limit.Offset, limit.Count)
+		r.request.cmd = append(r.request.cmd, "LIMIT", limit.Offset, limit.Count)
 	}
 	c.send(CmdZrangebyscore, r)
 	return r
@@ -4609,9 +4336,8 @@ func (c *command) Zrangebyscore(key interface{}, min, max Zfloat64, withscores b
 // Since: 2.0.0
 // Complexity: O(log(N))
 func (c *command) Zrank(key, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZRANK", key, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZRANK", key, member)
 	c.send(CmdZrank, r)
 	return r
 }
@@ -4623,15 +4349,14 @@ func (c *command) Zrank(key, member interface{}) Result {
 // O(M*log(N)) with N being the number of elements in the sorted set and M the
 // number of elements to be removed.
 func (c *command) Zrem(key interface{}, member []interface{}) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if member == nil {
 		r.setErr(newInvalidValueError("member", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZREM", key)
+	r.request.cmd = append(r.request.cmd, "ZREM", key)
 	for _, v := range member {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdZrem, r)
 	return r
@@ -4644,9 +4369,8 @@ func (c *command) Zrem(key interface{}, member []interface{}) Result {
 // O(log(N)+M) with N being the number of elements in the sorted set and M the
 // number of elements removed by the operation.
 func (c *command) Zremrangebylex(key interface{}, min, max string) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREMRANGEBYLEX", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREMRANGEBYLEX", key, min, max)
 	c.send(CmdZremrangebylex, r)
 	return r
 }
@@ -4658,9 +4382,8 @@ func (c *command) Zremrangebylex(key interface{}, min, max string) Result {
 // O(log(N)+M) with N being the number of elements in the sorted set and M the
 // number of elements removed by the operation.
 func (c *command) Zremrangebyrank(key interface{}, start, stop int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREMRANGEBYRANK", key, start, stop)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREMRANGEBYRANK", key, start, stop)
 	c.send(CmdZremrangebyrank, r)
 	return r
 }
@@ -4672,9 +4395,8 @@ func (c *command) Zremrangebyrank(key interface{}, start, stop int64) Result {
 // O(log(N)+M) with N being the number of elements in the sorted set and M the
 // number of elements removed by the operation.
 func (c *command) Zremrangebyscore(key interface{}, min, max Zfloat64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREMRANGEBYSCORE", key, min, max)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREMRANGEBYSCORE", key, min, max)
 	c.send(CmdZremrangebyscore, r)
 	return r
 }
@@ -4686,11 +4408,10 @@ func (c *command) Zremrangebyscore(key interface{}, min, max Zfloat64) Result {
 // O(log(N)+M) with N being the number of elements in the sorted set and M the
 // number of elements returned.
 func (c *command) Zrevrange(key interface{}, start, stop int64, withscores bool) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREVRANGE", key, start, stop)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREVRANGE", key, start, stop)
 	if withscores {
-		c.encode("WITHSCORES")
+		r.request.cmd = append(r.request.cmd, "WITHSCORES")
 	}
 	c.send(CmdZrevrange, r)
 	return r
@@ -4704,11 +4425,10 @@ func (c *command) Zrevrange(key interface{}, start, stop int64, withscores bool)
 // number of elements being returned. If M is constant (e.g. always asking for the first
 // 10 elements with LIMIT), you can consider it O(log(N)).
 func (c *command) Zrevrangebylex(key interface{}, max, min string, limit *OffsetCount) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREVRANGEBYLEX", key, max, min)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREVRANGEBYLEX", key, max, min)
 	if limit != nil {
-		c.encode("LIMIT", limit.Offset, limit.Count)
+		r.request.cmd = append(r.request.cmd, "LIMIT", limit.Offset, limit.Count)
 	}
 	c.send(CmdZrevrangebylex, r)
 	return r
@@ -4722,14 +4442,13 @@ func (c *command) Zrevrangebylex(key interface{}, max, min string, limit *Offset
 // number of elements being returned. If M is constant (e.g. always asking for the first
 // 10 elements with LIMIT), you can consider it O(log(N)).
 func (c *command) Zrevrangebyscore(key interface{}, max, min Zfloat64, withscores bool, limit *OffsetCount) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREVRANGEBYSCORE", key, max, min)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREVRANGEBYSCORE", key, max, min)
 	if withscores {
-		c.encode("WITHSCORES")
+		r.request.cmd = append(r.request.cmd, "WITHSCORES")
 	}
 	if limit != nil {
-		c.encode("LIMIT", limit.Offset, limit.Count)
+		r.request.cmd = append(r.request.cmd, "LIMIT", limit.Offset, limit.Count)
 	}
 	c.send(CmdZrevrangebyscore, r)
 	return r
@@ -4740,9 +4459,8 @@ func (c *command) Zrevrangebyscore(key interface{}, max, min Zfloat64, withscore
 // Since: 2.0.0
 // Complexity: O(log(N))
 func (c *command) Zrevrank(key, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZREVRANK", key, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZREVRANK", key, member)
 	c.send(CmdZrevrank, r)
 	return r
 }
@@ -4755,14 +4473,13 @@ func (c *command) Zrevrank(key, member interface{}) Result {
 // calls for the cursor to return back to 0. N is the number of elements inside the
 // collection..
 func (c *command) Zscan(key interface{}, cursor int64, match *string, count *int64) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZSCAN", key, cursor)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZSCAN", key, cursor)
 	if match != nil {
-		c.encode("MATCH", match)
+		r.request.cmd = append(r.request.cmd, "MATCH", match)
 	}
 	if count != nil {
-		c.encode("COUNT", count)
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
 	}
 	c.send(CmdZscan, r)
 	return r
@@ -4773,9 +4490,8 @@ func (c *command) Zscan(key interface{}, cursor int64, match *string, count *int
 // Since: 1.2.0
 // Complexity: O(1)
 func (c *command) Zscore(key, member interface{}) Result {
-	r := newAsyncResult()
-	c.mu.Lock()
-	c.encode("ZSCORE", key, member)
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "ZSCORE", key, member)
 	c.send(CmdZscore, r)
 	return r
 }
@@ -4787,24 +4503,23 @@ func (c *command) Zscore(key, member interface{}) Result {
 // O(N)+O(M log(M)) with N being the sum of the sizes of the input sorted sets,
 // and M being the number of elements in the resulting sorted set.
 func (c *command) Zunionstore(destination interface{}, numkeys int64, key []interface{}, weights []int64, aggregate *Aggregate) Result {
-	r := newAsyncResult()
+	r := newResult()
 	if key == nil {
 		r.setErr(newInvalidValueError("key", nil))
 		return r
 	}
-	c.mu.Lock()
-	c.encode("ZUNIONSTORE", destination, numkeys)
+	r.request.cmd = append(r.request.cmd, "ZUNIONSTORE", destination, numkeys)
 	for _, v := range key {
-		c.encode(v)
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	if weights != nil {
-		c.encode("WEIGHTS")
+		r.request.cmd = append(r.request.cmd, "WEIGHTS")
 		for _, v := range weights {
-			c.encode(v)
+			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
 	if aggregate != nil {
-		c.encode("AGGREGATE", aggregate)
+		r.request.cmd = append(r.request.cmd, "AGGREGATE", aggregate)
 	}
 	c.send(CmdZunionstore, r)
 	return r

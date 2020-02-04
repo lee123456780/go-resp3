@@ -17,3 +17,5 @@ redis-doc/
 
 # Further files to exclude
 *.ast
+*.prof
+*.txt

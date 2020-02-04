@@ -24,13 +24,14 @@ import (
 	"strconv"
 	"strings"
 
-	"go-resp3/cmd/rediser/internal/ast"
-	"go-resp3/cmd/rediser/internal/stringutils"
+	"github.com/d024441/go-resp3/cmd/commander/internal/ast"
+	"github.com/d024441/go-resp3/cmd/commander/internal/stringutils"
 )
 
 const (
 	intfName   = "Commands"
-	callSetErr = "r.setErr"
+	result     = "r"
+	callSetErr = "setErr"
 )
 
 type sorter struct {
@@ -110,11 +111,12 @@ func (b *buffer) commentln(values ...string) {
 
 // special write methods
 func (b *buffer) add(arg string) {
-	b.writeln("c.encode(", arg, ")")
+	b.writeln("r.request.cmd = append(r.request.cmd, ", arg, ")")
 }
 
 func (b *buffer) setInvalidValueError(name, value string) {
-	b.writeln(callSetErr, "(newInvalidValueError(", name, ", ", value, "))")
+	b.writeln(result, ".", callSetErr, "(newInvalidValueError(", name, ", ", value, "))")
+	b.writeln("return ", result)
 }
 
 type generator struct {
@@ -334,7 +336,6 @@ func (g *generator) generateFieldCheck(name string, typ ast.TypeNode) {
 		if !v.AllowNil {
 			g.b.startBlock("if ", name, " == nil")
 			g.b.setInvalidValueError(strconv.Quote(name), "nil")
-			g.b.writeln("return r")
 			g.b.endBlock()
 		}
 	}
@@ -347,20 +348,6 @@ func (g *generator) generateMethod(config *ast.FuncConfig, decl *ast.FuncDecl) {
 			g.generateFieldCheck(node.NodeName(), node.NodeType())
 		}
 	})
-
-	if config != nil {
-		switch config.Config[ast.ConfigType] {
-		case ast.ConfigTypeSubscribe:
-			g.b.writeln("r.channel = ", config.Config[ast.ConfigChannel], "[:]")
-			g.b.writeln("r.cb = cb")
-		case ast.ConfigTypeUnsubscribe:
-			g.b.writeln("r.channel = ", config.Config[ast.ConfigChannel], "[:]")
-		default:
-			panic("invalid function configuration type")
-		}
-	}
-
-	g.b.writeln("c.mu.Lock()")
 
 	for _, token := range decl.Token {
 		g.b.add(strconv.Quote(token))
@@ -400,22 +387,16 @@ func (g *generator) generateMethods() {
 		g.generateSignature(config, decl.List)
 		g.b.startBlock(" Result")
 
-		if config != nil {
-			switch config.Config[ast.ConfigType] {
-			case ast.ConfigTypeSubscribe:
-				g.b.writeln("r := newAsyncSubscribeResult()")
-			case ast.ConfigTypeUnsubscribe:
-				g.b.writeln("r := newAsyncUnsubscribeResult()")
-			default:
-				panic("ivalid function configuration type")
-			}
-		} else {
-			g.b.writeln("r := newAsyncResult()")
-		}
+		g.b.writeln("r := newResult()")
 
 		g.generateMethod(config, decl)
-		g.b.writeln("c.send(Cmd", decl.Name, ", r)")
-		g.b.writeln("return r")
+
+		if config != nil && config.Config[ast.ConfigType] == ast.ConfigTypeSubscribe {
+			g.b.writeln("r.request.cb = cb")
+		}
+
+		g.b.writeln("c.send(Cmd", decl.Name, ", ", result, ")")
+		g.b.writeln("return ", result)
 		g.b.endBlock()
 	})
 }

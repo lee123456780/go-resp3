@@ -14,41 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package client
+package conv
 
 import (
-	"sync"
+	"errors"
 )
 
-const maxInt = int64(^uint(0) >> 1)
+var ErrInvalidCharacter = errors.New("invalid character")
 
-var bufferPool = sync.Pool{}
-
-func getBuffer(size int64) []byte {
-	if size > maxInt {
-		panic("maximum integer size exceeded")
+func ParseInt(b []byte) (int64, error) {
+	if len(b) == 0 {
+		return 0, nil
 	}
-	switch b := bufferPool.Get().(type) {
+	switch b[0] {
+	case '+':
+		n, err := ParseUint(b[1:])
+		return int64(n), err
+	case '-':
+		n, err := ParseUint(b[1:])
+		return int64(n) * -1, err
 	default:
-		return make([]byte, size)
-	case []byte:
-		if cap(b) < int(size) {
-			return make([]byte, size)
+		n, err := ParseUint(b)
+		return int64(n), err
+	}
+}
+
+func ParseUint(b []byte) (uint64, error) {
+	var n uint64
+	for _, c := range b {
+		if c < '0' || c > '9' {
+			return 0, ErrInvalidCharacter
 		}
-		return b[:size]
+		d := c - '0'
+		n = n*10 + uint64(d)
 	}
-}
-
-func freeBuffer(b []byte) {
-	bufferPool.Put(b)
-}
-
-func resizeBuffer(b []byte, size int64) []byte {
-	if size > maxInt {
-		panic("maximum integer size exceeded")
-	}
-	if cap(b) < int(size) {
-		return make([]byte, size)
-	}
-	return b[:size]
+	return n, nil
 }

@@ -21,7 +21,7 @@ import (
 	"log"
 	"strconv"
 
-	"go-resp3/client"
+	"github.com/d024441/go-resp3/client"
 )
 
 func trace(dir bool, b []byte) {

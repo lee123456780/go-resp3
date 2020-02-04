@@ -17,70 +17,71 @@ limitations under the License.
 package monitor
 
 import (
-	"strconv"
-	"strings"
+	"bytes"
 	"time"
+
+	"github.com/d024441/go-resp3/client/internal/conv"
 )
 
-// Monitor notification ic currently in Redis 6 beta no push type but standard string.
+// Monitor notification is currently in Redis 6 beta no push type but standard string.
 
 // Notification represents the type for an out of bound monitor push notification send by Redis.
 type Notification struct {
 	Time time.Time
-	DB   int64
+	Db   int64
 	Addr string
-	Cmd  []string
+	Cmds []string
 }
 
 // dirty hack - check if string is monitor push notification
 const minNotificationLen = 34
 
 // IsNotification checks if string is a monitor push notification.
-func IsNotification(s string) bool {
-	if len(s) < minNotificationLen {
-		return false
+func Parse(b []byte) (*Notification, bool) {
+	if len(b) < minNotificationLen {
+		return nil, false
 	}
-	_, s, ok := parseInt64(s, ".")
+	b, seconds, ok := parseInt64(b, []byte{'.'})
 	if !ok {
-		return false
+		return nil, false
 	}
-	_, s, ok = parseInt64(s, " [")
+	b, fraction, ok := parseInt64(b, []byte{' ', '['})
 	if !ok {
-		return false
+		return nil, false
 	}
-	_, s, ok = parseInt64(s, " ")
+	b, db, ok := parseInt64(b, []byte{' '})
 	if !ok {
-		return false
+		return nil, false
 	}
-	_, s, ok = parseString(s, "] ")
+	b, addr, ok := parseString(b, []byte{']', ' '})
 	if !ok {
-		return false
+		return nil, false
 	}
-	_, ok = parseCmd(s)
+	cmds, ok := parseCmd(b)
 	if !ok {
-		return false
+		return nil, false
 	}
-	return true
+	return &Notification{Time: time.Unix(seconds, nanoSeconds(fraction)), Db: db, Addr: addr, Cmds: cmds}, true
 }
 
-func parseInt64(s, sep string) (int64, string, bool) {
-	pos := strings.Index(s, sep)
+func parseInt64(b, sep []byte) ([]byte, int64, bool) {
+	pos := bytes.Index(b, sep)
 	if pos == -1 {
-		return 0, "", false
+		return nil, 0, false
 	}
-	i, err := strconv.ParseInt(s[:pos], 10, 64)
+	i, err := conv.ParseInt(b[:pos])
 	if err != nil {
-		return 0, "", false
+		return nil, 0, false
 	}
-	return i, s[pos+len(sep):], true
+	return b[pos+len(sep):], i, true
 }
 
-func parseString(s, sep string) (string, string, bool) {
-	pos := strings.Index(s, sep)
+func parseString(b, sep []byte) ([]byte, string, bool) {
+	pos := bytes.Index(b, sep)
 	if pos == -1 {
-		return "", "", false
+		return nil, "", false
 	}
-	return s[:pos], s[pos+len(sep):], true
+	return b[pos+len(sep):], string(b[:pos]), true
 }
 
 const (
@@ -106,75 +107,43 @@ const (
 	esc   = '\\'
 )
 
-func parseQuotedString(s string) (string, string, bool) {
-	if s[0] != quote {
-		return "", "", false
+func parseQuotedString(b []byte) ([]byte, string, bool) {
+	if b[0] != quote {
+		return nil, "", false
 	}
-	b := make([]byte, len(s)-2)
+	buf := make([]byte, len(b)-2)
 	j, escaped := 0, false
-	for i := 1; i < len(s); i++ {
-		switch s[i] {
+	for i := 1; i < len(b); i++ {
+		switch b[i] {
 		case esc:
 			escaped = true
 		case quote:
 			if !escaped {
-				return s[i+1:], string(b[:j]), true
+				return b[i+1:], string(buf[:j]), true
 			}
 			fallthrough
 		default:
-			b[j] = s[i]
+			buf[j] = b[i]
 			j++
 			escaped = false
 		}
 	}
-	return "", "", false
+	return nil, "", false
 }
 
-func parseCmd(s string) ([]string, bool) {
+func parseCmd(b []byte) ([]string, bool) {
 	r := make([]string, 0, 2)
 	var cmd string
 	var ok bool
 	for {
-		s, cmd, ok = parseQuotedString(s)
+		b, cmd, ok = parseQuotedString(b)
 		if !ok {
 			return nil, false
 		}
 		r = append(r, cmd)
-		if s == "" {
+		if len(b) == 0 {
 			return r, true
 		}
-		s = s[1:] // skip blank between commands
+		b = b[1:] // skip blank between commands
 	}
-}
-
-// Parse parses Redis monitor push notification string.
-func Parse(s string) Notification {
-	n := Notification{}
-
-	seconds, s, ok := parseInt64(s, ".")
-	if !ok {
-		return n
-	}
-	fraction, s, ok := parseInt64(s, " [")
-	if !ok {
-		return n
-	}
-	n.Time = time.Unix(seconds, nanoSeconds(fraction))
-
-	n.DB, s, ok = parseInt64(s, " ")
-	if !ok {
-		return n
-	}
-
-	n.Addr, s, ok = parseString(s, "] ")
-	if !ok {
-		return n
-	}
-
-	n.Cmd, ok = parseCmd(s)
-	if !ok {
-		return n
-	}
-
-	return n
 }

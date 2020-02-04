@@ -1,3 +1,5 @@
+// +build debug
+
 /*
 Copyright 2019 Stefan Miller
 
@@ -16,22 +18,28 @@ limitations under the License.
 
 package client
 
-// A Set represents the redis set type.
-type Set []RedisValue
+import (
+	"fmt"
+	"reflect"
+)
 
-// Kind returns the type of a Set.
-func (s Set) Kind() RedisKind { return RkSet }
-
-// ToStringSet returns a map with keys of type string and boolean true values. In case key conversion to string is not possible
-// a ConvertionError is returned.
-func (s Set) ToStringSet() (map[string]bool, error) {
-	r := make(map[string]bool, len(s))
-	for _, item := range s {
-		key, err := item.ToString()
-		if err != nil {
-			return nil, err
-		}
-		r[key] = true
+func reflectStruct(t reflect.Type) {
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		fmt.Printf("Field %s size %d align %d offset %d\n", f.Name, f.Type.Size(), f.Type.Align(), f.Offset)
 	}
-	return r, nil
+}
+
+func reflectType(t reflect.Type) {
+	switch t.Kind() {
+
+	case reflect.Struct:
+		fmt.Printf("Struct %s size %d align %d\n", t.Name(), t.Size(), t.Align())
+		reflectStruct(t)
+	}
+}
+
+func init() {
+	reflectType(reflect.TypeOf(result{}))
+	reflectType(reflect.TypeOf(request{}))
 }

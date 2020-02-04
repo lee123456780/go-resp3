@@ -52,7 +52,7 @@ func (t *trace) call(dir bool, b []byte) {
 	t.mu.Unlock()
 }
 
-func (t *trace) Decode() (RedisValue, error) {
+func (t *trace) Decode() (interface{}, error) {
 	value, err := t.dec.Decode()
 	if err == nil {
 		t.call(false, t.b)

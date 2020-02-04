@@ -14,24 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package client
+package conv
 
-// A Set represents the redis set type.
-type Set []RedisValue
+import (
+	. "testing"
+)
 
-// Kind returns the type of a Set.
-func (s Set) Kind() RedisKind { return RkSet }
-
-// ToStringSet returns a map with keys of type string and boolean true values. In case key conversion to string is not possible
-// a ConvertionError is returned.
-func (s Set) ToStringSet() (map[string]bool, error) {
-	r := make(map[string]bool, len(s))
-	for _, item := range s {
-		key, err := item.ToString()
-		if err != nil {
-			return nil, err
-		}
-		r[key] = true
+func TestParseInt(t *T) {
+	var parseTest = []struct {
+		s string
+		n int64
+	}{
+		{"", 0}, {"1", 1}, {"+1", 1}, {"-1", -1}, {"99999", 99999},
 	}
-	return r, nil
+
+	for i, test := range parseTest {
+		n, err := ParseInt([]byte(test.s))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if n != test.n {
+			t.Fatalf("%d: %d - %d", i, n, test.n)
+		}
+	}
 }

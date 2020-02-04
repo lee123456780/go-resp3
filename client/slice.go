@@ -19,11 +19,19 @@ package client
 // A Slice represents the redis slice type.
 type Slice []RedisValue
 
+// Kind returns the type of a Slice.
+func (s Slice) Kind() RedisKind { return RkSlice }
+
 // ToSlice returns a slice with values of type interface{}.
 func (s Slice) ToSlice() ([]interface{}, error) {
 	r := make([]interface{}, len(s))
 	for i, item := range s {
-		r[i] = item.Value
+		switch value := item.(type) {
+		case baseRedisType:
+			r[i] = value._interface()
+		default:
+			r[i] = value
+		}
 	}
 	return r, nil
 }
@@ -35,7 +43,7 @@ func (s Slice) ToSlice2() ([][]interface{}, error) {
 	for i, item := range s {
 		l, err := item.ToSlice()
 		if err != nil {
-			return nil, err
+			return nil, newConversionError("toSlice", item)
 		}
 		r[i] = l
 	}
@@ -47,17 +55,19 @@ func (s Slice) ToSlice2() ([][]interface{}, error) {
 func (s Slice) ToTree() ([]interface{}, error) {
 	r := make([]interface{}, len(s))
 	for i, item := range s {
-		switch item.Kind {
-		case RkMap, RkSet:
-			return nil, newConversionError("tree", item)
-		case RkSlice:
+		if item.Kind() == RkSlice {
 			var err error
-			r[i], err = item.Value.(Slice).ToTree()
+			r[i], err = item.ToTree()
 			if err != nil {
 				return nil, err
 			}
-		default:
-			r[i] = item.Value
+		} else {
+			switch value := item.(type) {
+			case baseRedisType:
+				r[i] = value._interface()
+			default:
+				r[i] = value
+			}
 		}
 	}
 	return r, nil
@@ -110,12 +120,12 @@ func (s Slice) ToInt64Slice() ([]int64, error) {
 func (s Slice) ToXrange() ([]IDMap, error) {
 	r := make([]IDMap, len(s))
 	for i, item := range s {
-		slice, err := item.Slice()
-		if err != nil {
-			return nil, err
+		if item.Kind() != RkSlice {
+			return nil, newConversionError("toXrange", item)
 		}
+		slice := item.(Slice)
 		if len(slice) != 2 {
-			return nil, newConversionError("Xrange", item)
+			return nil, newConversionError("toXrange", item)
 		}
 		s, err := slice[0].ToString()
 		if err != nil {

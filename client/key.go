@@ -21,7 +21,7 @@ import (
 	"encoding/base64"
 	"io"
 
-	"go-resp3/client/internal/crc64"
+	"github.com/d024441/go-resp3/client/internal/crc64"
 )
 
 // RandomKey returns key + base64 encoded random bytes. Used for tests to avoid key overwrites on Redis server.

@@ -19,170 +19,102 @@ package main
 import (
 	"go/ast"
 	"sort"
-	"strings"
-	"unicode"
 )
-
-type fct struct {
-	recvType    string
-	name        string
-	doc         []string
-	destTypes   []string
-	isConverter bool
-}
-
-const (
-	recvTypeRedisValue  = "RedisValue"
-	recvTypeSlice       = "Slice"
-	recvTypeMap         = "Map"
-	recvTypeSet         = "Set"
-	recvTypeAsyncResult = "asyncResult"
-)
-
-var recvTypes = map[string]bool{
-	recvTypeRedisValue:  true,
-	recvTypeSlice:       true,
-	recvTypeMap:         true,
-	recvTypeSet:         true,
-	recvTypeAsyncResult: true,
-}
 
 type analyzer struct {
-	b    *strings.Builder
-	fcts []*fct
+	fields []*ast.Field
+	objs   map[string]map[string]*ast.FuncDecl
 }
 
 func newAnalyzer() *analyzer {
-	return &analyzer{
-		b:    new(strings.Builder),
-		fcts: make([]*fct, 0, 25),
-	}
+	return &analyzer{}
 }
 
-func (a *analyzer) isExported(fctName string) bool {
-	for _, r := range fctName {
-		return unicode.IsUpper(r)
+func (a *analyzer) findFields(name string, intfs map[string]*ast.InterfaceType) []*ast.Field {
+	intf, ok := intfs[name]
+	if !ok {
+		return nil // interface not defined in package or defined in generated file (excluded)
 	}
-	return false
-}
 
-func (a *analyzer) isConverter(fctName string) bool {
-	return fctName[:2] == "To"
-}
+	fields := make([]*ast.Field, 0, 10)
 
-func (a *analyzer) getRecvType(node *ast.FuncDecl) (string, bool) {
-	if node.Recv.NumFields() != 1 {
-		return "", false
-	}
-	list := node.Recv.List
-
-	name := ""
-
-	switch t := list[0].Type.(type) {
-	case *ast.Ident:
-		name = t.Name
-	case *ast.StarExpr:
-		switch t := t.X.(type) {
+	for _, field := range intf.Methods.List {
+		switch t := field.Type.(type) {
 		case *ast.Ident:
-			name = t.Name
+			fields = append(fields, a.findFields(t.Name, intfs)...)
+		case *ast.FuncType:
+			fields = append(fields, field)
 		}
 	}
-
-	if _, ok := recvTypes[name]; !ok {
-		return "", false
-	}
-	return name, true
+	sort.SliceStable(fields, func(i, j int) bool { return fields[i].Names[0].Name < fields[j].Names[0].Name })
+	return fields
 }
 
-func (a *analyzer) parseArray(b *strings.Builder, node *ast.ArrayType) {
-	b.WriteString("[]")
-	a.parseExpr(b, node.Elt)
-}
+func (a *analyzer) findIntfs(node ast.Node) map[string]*ast.InterfaceType {
+	intfs := make(map[string]*ast.InterfaceType, 25)
 
-func (a *analyzer) parseMap(b *strings.Builder, node *ast.MapType) {
-	b.WriteString("map[")
-	a.parseExpr(b, node.Key)
-	b.WriteString("]")
-	a.parseExpr(b, node.Value)
-}
-
-func (a *analyzer) parseExpr(b *strings.Builder, node ast.Expr) {
-	switch node := node.(type) {
-
-	case *ast.Ident:
-		b.WriteString(node.Name)
-	case *ast.InterfaceType:
-		b.WriteString("interface{}")
-	case *ast.ArrayType:
-		a.parseArray(b, node)
-	case *ast.MapType:
-		a.parseMap(b, node)
-	}
-}
-
-func (a *analyzer) getDestTypes(node *ast.FuncDecl) ([]string, bool) {
-	l := node.Type.Results.NumFields()
-
-	r := make([]string, l)
-
-	if l != 0 {
-		for i, field := range node.Type.Results.List {
-			a.b.Reset()
-			a.parseExpr(a.b, field.Type)
-			r[i] = a.b.String()
-		}
-	}
-
-	return r, true
-}
-
-func (a *analyzer) getName(node *ast.FuncDecl) string {
-	return node.Name.Name
-}
-
-func (a *analyzer) getDoc(node *ast.FuncDecl) []string {
-	if node.Doc == nil {
-		return nil
-	}
-
-	l := len(node.Doc.List)
-	r := make([]string, l)
-
-	if l != 0 {
-		for i, c := range node.Doc.List {
-			r[i] = c.Text
-		}
-	}
-	return r
-}
-
-func (a *analyzer) analyze(f *ast.File) bool {
-
-	found := false
-
-	ast.Inspect(f, func(node ast.Node) bool {
-
+	ast.Inspect(node, func(node ast.Node) bool {
 		switch node := node.(type) {
-		case *ast.FuncDecl:
-			recvType, ok := a.getRecvType(node)
-			if !ok {
-				break
-			}
-			destTypes, ok := a.getDestTypes(node)
-			if !ok {
-				break
-			}
-
-			name := a.getName(node)
-
-			if a.isExported(name) {
-				found = true
-				a.fcts = append(a.fcts, &fct{recvType: recvType, name: name, doc: a.getDoc(node), destTypes: destTypes, isConverter: a.isConverter(name)})
-			}
+		case *ast.GenDecl: // inspect generic declarations only
+			ast.Inspect(node, func(node ast.Node) bool {
+				switch node := node.(type) {
+				case *ast.TypeSpec:
+					if intf, ok := node.Type.(*ast.InterfaceType); ok {
+						intfs[node.Name.Name] = intf
+						return false
+					}
+				}
+				return true
+			})
+			return false
 		}
 		return true
 	})
+	return intfs
+}
 
-	sort.SliceStable(a.fcts, func(i, j int) bool { return a.fcts[i].name < a.fcts[j].name })
-	return found
+func (a *analyzer) objName(expr ast.Expr) string {
+	switch expr := expr.(type) {
+	case *ast.Ident:
+		return expr.Name
+	case *ast.StarExpr:
+		return a.objName(expr.X)
+	}
+	panic("cannot detect object name")
+}
+
+func (a *analyzer) findObjs(node ast.Node) map[string]map[string]*ast.FuncDecl {
+	objs := make(map[string]map[string]*ast.FuncDecl, 25)
+
+	ast.Inspect(node, func(node ast.Node) bool {
+		switch node := node.(type) {
+		case *ast.FuncDecl:
+			if node.Recv == nil || len(node.Recv.List) != 1 {
+				return true
+			}
+			field := node.Recv.List[0]
+			if len(field.Names) != 1 {
+				return true
+			}
+			if field.Names[0].Obj == nil {
+				return true
+			}
+			objName := a.objName(field.Type)
+			mths, ok := objs[objName]
+			if ok {
+				mths[node.Name.Name] = node
+			} else {
+				objs[objName] = map[string]*ast.FuncDecl{node.Name.Name: node}
+			}
+			return false
+		}
+		return true
+	})
+	return objs
+}
+
+func (a *analyzer) analyze(node ast.Node) {
+	intfs := a.findIntfs(node)
+	a.fields = a.findFields("Converter", intfs)
+	a.objs = a.findObjs(node)
 }

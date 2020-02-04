@@ -31,14 +31,14 @@ import (
 	"sync"
 	"time"
 
-	"go-resp3/cmd/rediser/internal/ast"
+	"github.com/d024441/go-resp3/cmd/commander/internal/ast"
 )
 
 const (
 	currentDir    = "."
 	redisDocDir   = "../redis-doc"
 	redisCommands = "commands.json"
-	patchDir      = "../cmd/rediser"
+	patchDir      = "../cmd/commander"
 	patchJSON     = "patch.json"
 )
 
@@ -71,19 +71,19 @@ var goFile envVar = envGOFILE
 func outputFile() string {
 	file := goFile.value()
 	ext := filepath.Ext(file)
-	return filepath.Join(currentDir, strings.TrimSuffix(file, ext)+"_redis.go")
+	return filepath.Join(currentDir, strings.TrimSuffix(file, ext)+"_gen.go")
 }
 
 func jsonOutputFile() string {
 	file := goFile.value()
 	ext := filepath.Ext(file)
-	return filepath.Join(patchDir, strings.TrimSuffix(file, ext)+"_redis.json")
+	return filepath.Join(patchDir, strings.TrimSuffix(file, ext)+".json")
 }
 
 func astOutputFile() string {
 	file := goFile.value()
 	ext := filepath.Ext(file)
-	return filepath.Join(patchDir, strings.TrimSuffix(file, ext)+"_redis.ast")
+	return filepath.Join(patchDir, strings.TrimSuffix(file, ext)+".ast")
 }
 
 var (

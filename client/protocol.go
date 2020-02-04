@@ -18,14 +18,14 @@ package client
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"io"
 	"math/big"
 	"reflect"
 	"strconv"
 
-	"go-resp3/client/internal/monitor"
+	"github.com/d024441/go-resp3/client/internal/conv"
+	"github.com/d024441/go-resp3/client/internal/monitor"
 )
 
 const (
@@ -67,15 +67,24 @@ const (
 	lineBreak = string(lf) + string(nl)
 )
 
-const (
-	pubSubSubscribe    = "subscribe"
-	pubSubUnsubscribe  = "unsubscribe"
-	pubSubPsubscribe   = "psubscribe"
-	pubSubPunsubscribe = "punsubscribe"
-	pubSubMessage      = "message"
-	pubSubPMessage     = "pmessage"
-	invalidateMessage  = "invalidate"
-)
+const maxInt = int64(^uint(0) >> 1)
+
+// A InvalidValueError is raised by a redis commend
+// provided with an invalid parameter value.
+// - Name:  Parameter name.
+// - Value: Invalid value.
+type InvalidValueError struct {
+	Name  string
+	Value interface{}
+}
+
+func newInvalidValueError(name string, value interface{}) *InvalidValueError {
+	return &InvalidValueError{Name: name, Value: value}
+}
+
+func (e *InvalidValueError) Error() string {
+	return fmt.Sprintf("Invalid value %v for %s", e.Value, e.Name)
+}
 
 // An InvalidTypeError is raised by encoding
 // an unsupported value type.
@@ -95,7 +104,7 @@ type UnexpectedCharacterError struct {
 }
 
 func (e *UnexpectedCharacterError) Error() string {
-	return fmt.Sprintf("decode: unsupported character %s expected %s"+string(e.ExpChar), e.ActChar, e.ExpChar)
+	return fmt.Sprintf("decode: unsupported character %q expected %q"+string(e.ExpChar), e.ActChar, e.ExpChar)
 }
 
 // An InvalidNumberError is raised by decoding
@@ -149,7 +158,7 @@ var _ Decoder = (*decode)(nil)
 // Encode is encoding all elements of v to BULK STRINGS.
 // In case an element is a not suported type, Encode will panic.
 type Encoder interface {
-	Encode(values ...interface{}) error
+	Encode([]interface{}) error
 	Flush() error
 }
 
@@ -159,56 +168,37 @@ func NewEncoder(w io.Writer) Encoder {
 }
 
 type encode struct {
-	wr  io.Writer
-	w   *bytes.Buffer
+	w   *bufio.Writer
 	err error
-	cnt int
 }
 
-const preBytes = 23
-
-func newEncode(wr io.Writer) *encode {
-	return &encode{
-		wr: wr,
-		w:  bytes.NewBuffer(make([]byte, preBytes)), // buffer for 'array' prefix
-	}
+func newEncode(w io.Writer) *encode {
+	//return &encode{w: bufio.NewWriterSize(w, 4096)}
+	//return &encode{w: bufio.NewWriterSize(w, 8192)}
+	//return &encode{w: bufio.NewWriterSize(w, 16384)}
+	return &encode{w: bufio.NewWriterSize(w, 32768)}
 }
 
-func (e *encode) Encode(values ...interface{}) error {
+func (e *encode) Encode(values []interface{}) error {
+	e.w.WriteByte(arrayType)
+	e.w.WriteString(strconv.Itoa(len(values)))
+	e.w.WriteString(lineBreak)
 	for _, v := range values {
 		err := e.encode(v)
 		if err != nil {
 			e.err = err
 			return err
 		}
-		e.cnt++
 	}
 	return nil
-}
-
-func (e *encode) reset() {
-	e.err = nil
-	e.cnt = 0
-	e.w.Truncate(preBytes)
-}
-
-func (e *encode) bytes() []byte {
-	b := e.w.Bytes()
-	b[preBytes-2], b[preBytes-1] = lf, nl
-	size := strconv.Itoa(e.cnt) // array size
-	pos := preBytes - (len(size) + 2)
-	copy(b[pos:], size)
-	b[pos-1] = arrayType
-	return b[pos-1:]
 }
 
 func (e *encode) Flush() error {
 	if e.err != nil {
 		return e.err
 	}
-	_, err := e.wr.Write(e.bytes())
-	e.reset()
-	return err
+	//println(e.w.Buffered())
+	return e.w.Flush()
 }
 
 func (e *encode) encode(v interface{}) error {
@@ -265,22 +255,32 @@ func (e *encode) encodeString(s string) {
 	e.w.WriteString(lineBreak)
 }
 
-// Decoder is the interface that wraps the Decode method.
-type Decoder interface {
-	Decode() (value RedisValue, err error)
+type decodeReader struct {
+	r   *bufio.Reader
+	buf []byte
 }
 
-// NewDecoder returns a Decoder for Redis results.
-func NewDecoder(r io.Reader) Decoder {
-	return &decode{r: bufio.NewReader(r)}
+func newDecodeReader(r io.Reader) *decodeReader {
+	return &decodeReader{
+		r:   bufio.NewReaderSize(r, 32768),
+		buf: make([]byte, 0, 128),
+	}
 }
 
-type decode struct {
-	r *bufio.Reader
+func (r *decodeReader) readType() (byte, error) {
+	return r.r.ReadByte()
 }
 
-func (d *decode) discardByte(db byte) error {
-	b, err := d.r.ReadByte()
+func (r *decodeReader) peek() (byte, error) {
+	b, err := r.r.Peek(1)
+	if err != nil {
+		return 0, err
+	}
+	return b[0], nil
+}
+
+func (r *decodeReader) discardByte(db byte) error {
+	b, err := r.r.ReadByte()
 	if err != nil {
 		return err
 	}
@@ -290,438 +290,421 @@ func (d *decode) discardByte(db byte) error {
 	return nil
 }
 
-func (d *decode) readLineBreak() error {
-	if err := d.discardByte(lf); err != nil {
+func (r *decodeReader) readLineBreak() error {
+	if err := r.discardByte(lf); err != nil {
 		return err
 	}
-	if err := d.discardByte(nl); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (d *decode) readByte() (byte, error) {
-	b, err := d.r.ReadByte()
-	if err != nil {
-		return 0, err
-	}
-	if err := d.readLineBreak(); err != nil {
-		return 0, err
-	}
-	return b, nil
-}
-
-func (d *decode) readBytes(b []byte) error {
-	if _, err := io.ReadFull(d.r, b); err != nil {
-		return err
-	}
-	if err := d.readLineBreak(); err != nil {
+	if err := r.discardByte(nl); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (d *decode) readString() (string, error) {
-	s, err := d.r.ReadString(lf)
+func (r *decodeReader) readByte() (byte, error) {
+	b, err := r.readBlob(1)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
-	if err := d.discardByte(nl); err != nil {
-		return "", err
-	}
-	return s[:len(s)-1], nil
+	return b[0], nil
 }
 
-func (d *decode) readSize() (int64, bool, error) {
-	s, err := d.readString()
-	if err != nil {
-		return 0, false, err
+func (r *decodeReader) resize(size64 int64) {
+	if size64 > maxInt {
+		panic("maximum integer size exceeded")
 	}
-	if len(s) == 1 && s[0] == streamedType {
-		return 0, true, nil
+	size := int(size64)
+	if cap(r.buf) < size {
+		r.buf = make([]byte, size)
 	}
-	size, err := strconv.ParseInt(s, 10, 64)
-	if err != nil {
-		return 0, false, &InvalidNumberError{Value: s}
-	}
-	return size, false, nil
+	r.buf = r.buf[:size]
 }
 
-func (d *decode) Decode() (RedisValue, error) {
-	b, err := d.r.ReadByte()
-	if err != nil {
-		return invalidValue, err
+func (r *decodeReader) readBlob(size int64) ([]byte, error) {
+	r.resize(size + 2)
+	if _, err := io.ReadFull(r.r, r.buf); err != nil {
+		return nil, err
 	}
-
-	switch b {
-
-	case blobErrorType:
-		size, err := d.decodeNumber()
-		if err != nil {
-			return invalidValue, err
-		}
-		v, err := d.decodeBlobString(size)
-		return RedisValue{RkError, newRedisError(v), nil}, err
-
-	case simpleErrorType:
-		v, err := d.decodeString()
-		return RedisValue{RkError, newRedisError(v), nil}, err
-
-	default:
-		return d.decodeValue(b)
-
+	if r.buf[size] != lf {
+		return nil, &UnexpectedCharacterError{ActChar: r.buf[size], ExpChar: lf}
 	}
+	if r.buf[size+1] != nl {
+		return nil, &UnexpectedCharacterError{ActChar: r.buf[size+1], ExpChar: nl}
+	}
+	return r.buf[:size], nil
 }
 
-func (d *decode) decodeValue(b byte) (RedisValue, error) {
-
-	var attr Map
-
-	if b == attributeType {
-		size, err := d.decodeNumber()
-		if err != nil {
-			return invalidValue, err
-		}
-		attr, err = d.decodeMap(size)
-		if err != nil {
-			return invalidValue, err
-		}
-		b, err = d.r.ReadByte()
-		if err != nil {
-			return invalidValue, err
-		}
-
-	}
-
-	switch b {
-
-	case nullType:
-		err := d.readLineBreak()
-		return RedisValue{RkNull, nil, attr}, err
-
-	case blobStringType:
-		size, streamed, err := d.readSize()
-		if err != nil {
-			return invalidValue, err
-		}
-
-		var v string
-
-		if streamed {
-			v, err = d.decodeStreamedString()
-		} else {
-			v, err = d.decodeBlobString(size)
-		}
-
-		if monitor.IsNotification(v) {
-			return RedisValue{RkPush, monitor.Parse(v), attr}, err
-		}
-		return RedisValue{RkString, v, attr}, err
-
-	case verbatimStringType:
-		size, streamed, err := d.readSize()
-		if err != nil {
-			return invalidValue, err
-		}
-
-		var v string
-
-		if streamed {
-			v, err = d.decodeStreamedString()
-		} else {
-			v, err = d.decodeBlobString(size)
-		}
-
-		if monitor.IsNotification(v) {
-			return RedisValue{RkPush, monitor.Parse(v), attr}, err
-		}
-		return RedisValue{RkVerbatimString, VerbatimString(v), attr}, err
-
-	case simpleStringType:
-		v, err := d.decodeString()
-		if monitor.IsNotification(v) {
-			return RedisValue{RkPush, monitor.Parse(v), attr}, err
-		}
-		return RedisValue{RkString, v, attr}, err
-
-	case numberType:
-		v, err := d.decodeNumber()
-		return RedisValue{RkNumber, v, attr}, err
-
-	case doubleType:
-		v, err := d.decodeDouble()
-		return RedisValue{RkDouble, v, attr}, err
-
-	case bigNumberType:
-		v, err := d.decodeBigNumber()
-		return RedisValue{RkBigNumber, v, attr}, err
-
-	case booleanType:
-		v, err := d.decodeBoolean()
-		return RedisValue{RkBoolean, v, attr}, err
-
-	case arrayType:
-		size, streamed, err := d.readSize()
-		if err != nil {
-			return invalidValue, err
-		}
-
-		var v Slice
-
-		if streamed {
-			v, err = d.decodeStreamedSlice()
-		} else {
-			v, err = d.decodeSlice(size)
-		}
-		return RedisValue{RkSlice, v, attr}, err
-
-	case pushType: // like not streamed array
-		size, err := d.decodeNumber()
-		if err != nil {
-			return invalidValue, err
-		}
-		v, err := d.decodePushSlice(size)
-		return RedisValue{RkPush, v, attr}, err
-
-	case mapType:
-		size, streamed, err := d.readSize()
-		if err != nil {
-			return invalidValue, err
-		}
-
-		var v Map
-
-		if streamed {
-			v, err = d.decodeStreamedMap()
-		} else {
-			v, err = d.decodeMap(size)
-		}
-		return RedisValue{RkMap, v, attr}, err
-
-	case setType:
-		size, streamed, err := d.readSize()
-		if err != nil {
-			return invalidValue, err
-		}
-
-		var v Set
-
-		if streamed {
-			v, err = d.decodeStreamedSet()
-		} else {
-			v, err = d.decodeSet(size)
-		}
-		return RedisValue{RkSet, v, attr}, err
-
-	default:
-		panic("unsupported redis type " + string(b))
-	}
-}
-
-func (d *decode) decodeBlobString(size int64) (string, error) {
-	p := getBuffer(size)
-	defer freeBuffer(p)
-
-	if err := d.readBytes(p); err != nil {
-		return "", err
-	}
-
-	return string(p), nil
-}
-
-func (d *decode) decodeStreamedString() (string, error) {
-	p := getBuffer(0)
-	defer freeBuffer(p)
-
-	part := getBuffer(0)
-	defer freeBuffer(part)
+// replace bufio.Reader readBytes, readString as they do allocate
+func (r *decodeReader) readDelim(delim byte) ([]byte, error) {
+	r.buf = r.buf[:0]
 
 	for {
-		b, err := d.r.ReadByte()
-		if err != nil {
-			return "", err
+		frag, err := r.r.ReadSlice(delim)
+		if err != nil && err != bufio.ErrBufferFull { // unexpected error
+			return nil, err
 		}
-		if b != streamedStringToken {
-			return "", &UnexpectedCharacterError{ActChar: b, ExpChar: streamedStringToken}
+		r.buf = append(r.buf, frag...)
+		if err == nil { // got final fragment
+			break
 		}
-		l, err := d.decodeNumber()
+	}
+	return r.buf, nil
+}
+
+func (r *decodeReader) readBytes() ([]byte, error) {
+	b, err := r.readDelim(lf)
+	if err != nil {
+		return nil, err
+	}
+	if err := r.discardByte(nl); err != nil {
+		return nil, err
+	}
+	return b[:len(b)-1], nil
+}
+
+func (r *decodeReader) readFixedSize() (int64, error) {
+	b, err := r.readBytes()
+	if err != nil {
+		return 0, err
+	}
+	i, err := conv.ParseInt(b)
+	if err != nil {
+		return 0, &InvalidNumberError{Value: string(b)}
+	}
+	return i, nil
+}
+
+func (r *decodeReader) readSize() (int64, error) {
+	b, err := r.readBytes()
+	if err != nil {
+		return 0, err
+	}
+	if len(b) == 1 && b[0] == streamedType {
+		return -1, nil
+	}
+	size, err := conv.ParseInt(b)
+	if err != nil {
+		return 0, &InvalidNumberError{Value: string(b)}
+	}
+	return size, nil
+}
+
+// Decoder is the interface that wraps the Decode method.
+type Decoder interface {
+	Decode() (interface{}, error)
+}
+
+// NewDecoder returns a Decoder for Redis results.
+func NewDecoder(r io.Reader) Decoder {
+	return &decode{
+		r:   newDecodeReader(r),
+		buf: make([]byte, 0, 128),
+	}
+}
+
+type decode struct {
+	r   *decodeReader
+	buf []byte
+}
+
+func (d *decode) Decode() (interface{}, error) {
+	t, err := d.r.peek()
+	if err != nil {
+		return nil, err
+	}
+
+	switch t {
+
+	case pushType, simpleErrorType, blobErrorType:
+		return d.decodeTopLevel()
+	case simpleStringType, blobStringType:
+		return d.decodeMonitorNotification() // can be dropped after monitor notification is send as notification
+	default:
+		return d.decode()
+	}
+}
+
+func (d *decode) decodeMonitorNotification() (interface{}, error) {
+	t, err := d.r.readType()
+	if err != nil {
+		return nil, err
+	}
+	switch t {
+	case simpleStringType:
+		return d.decodeSimpleStringOrMonitor()
+	case blobStringType:
+		return d.decodeBlobStringOrMonitor()
+	default:
+		panic("wring data type")
+	}
+}
+
+func (d *decode) decodeBlobStringOrMonitor() (interface{}, error) {
+	b, err := d.decodeBlobStringType()
+	if err != nil {
+		return nil, err
+	}
+	if n, ok := monitor.Parse(b); ok {
+		return n, nil
+	}
+	return _string(b), nil
+}
+
+func (d *decode) decodeSimpleStringOrMonitor() (interface{}, error) {
+	b, err := d.r.readBytes()
+	if err != nil {
+		return nil, err
+	}
+	if n, ok := monitor.Parse(b); ok {
+		return n, nil
+	}
+	return _string(b), nil
+}
+
+func (d *decode) decodeTopLevel() (interface{}, error) {
+	t, err := d.r.readType()
+	if err != nil {
+		return nil, err
+	}
+	switch t {
+	case pushType:
+		return d.decodePushSlice()
+	case blobErrorType:
+		return d.decodeBlobError()
+	case simpleErrorType:
+		return d.decodeSimpleError()
+	default:
+		panic("wring data type")
+	}
+}
+
+func (d *decode) decode() (RedisValue, error) {
+	t, err := d.r.peek()
+	if err != nil {
+		return nil, err
+	}
+
+	if t == attributeType {
+		return d.decodeAttr()
+	}
+	return d.decodeType()
+}
+
+func (d *decode) decodeAttr() (RedisValue, error) {
+	_, err := d.r.readType()
+	if err != nil {
+		return nil, err
+	}
+
+	attr, err := d.decodeMap()
+	if err != nil {
+		return nil, err
+	}
+
+	v, err := d.decodeType()
+	if err != nil {
+		return nil, err
+	}
+
+	return attrRedisValue{RedisValue: v.(RedisValue), attr: attr}, nil
+}
+
+func (d *decode) decodeType() (RedisValue, error) {
+
+	t, err := d.r.readType()
+	if err != nil {
+		return nil, err
+	}
+
+	switch t {
+	case nullType:
+		err := d.r.readLineBreak()
+		return _null, err
+	case blobStringType:
+		return d.decodeBlobString()
+	case verbatimStringType:
+		return d.decodeVerbatimString()
+	case simpleStringType:
+		return d.decodeSimpleString()
+	case numberType:
+		return d.decodeNumber()
+	case doubleType:
+		return d.decodeDouble()
+	case bigNumberType:
+		return d.decodeBigNumber()
+	case booleanType:
+		return d.decodeBoolean()
+	case arrayType:
+		return d.decodeSlice()
+	case mapType:
+		return d.decodeMap()
+	case setType:
+		return d.decodeSet()
+	default:
+		panic("unsupported redis type " + string(t))
+	}
+}
+
+//
+func (d *decode) decodeBlobStringType() ([]byte, error) {
+	size, err := d.r.readSize()
+	if err != nil {
+		return nil, err
+	}
+
+	var b []byte
+
+	if size == -1 {
+		b, err = d.decodeStreamedString()
+	} else {
+		b, err = d.r.readBlob(size)
+	}
+	return b, err
+}
+
+// Error
+func (d *decode) decodeSimpleError() (error, error) {
+	b, err := d.r.readBytes()
+	if err != nil {
+		return nil, err
+	}
+	return newRedisError(string(b)), nil
+}
+
+func (d *decode) decodeBlobError() (error, error) {
+	b, err := d.decodeBlobStringType()
+	if err != nil {
+		return nil, err
+	}
+	return newRedisError(string(b)), err
+}
+
+// String
+func (d *decode) decodeBlobString() (RedisValue, error) {
+	b, err := d.decodeBlobStringType()
+	if err != nil {
+		return nil, err
+	}
+	return _string(b), nil
+}
+
+func (d *decode) decodeVerbatimString() (RedisValue, error) {
+	b, err := d.decodeBlobStringType()
+	if err != nil {
+		return nil, err
+	}
+	return VerbatimString(string(b)), err
+}
+
+func (d *decode) decodeStreamedString() ([]byte, error) {
+	d.buf = d.buf[:0]
+
+	for {
+		t, err := d.r.readType()
 		if err != nil {
-			return "", err
+			return nil, err
+		}
+		if t != streamedStringToken {
+			return nil, &UnexpectedCharacterError{ActChar: t, ExpChar: streamedStringToken}
+		}
+		l, err := d.r.readFixedSize()
+		if err != nil {
+			return nil, err
 		}
 		if l == 0 {
 			break
 		}
 
-		part = resizeBuffer(part, l)
-
-		if err := d.readBytes(part); err != nil {
-			return "", err
+		part, err := d.r.readBlob(l)
+		if err != nil {
+			return nil, err
 		}
 
-		p = append(p, part...)
+		d.buf = append(d.buf, part...)
 	}
-	return string(p), nil
+	return d.buf, nil
 }
 
-func (d *decode) decodeString() (string, error) {
-	s, err := d.readString()
-	if err != nil {
-		return "", err
-	}
-	return s, nil
-}
-
-func (d *decode) decodeNumber() (int64, error) {
-	s, err := d.readString()
-	if err != nil {
-		return 0, err
-	}
-	i, err := strconv.ParseInt(s, 10, 64)
-	if err != nil {
-		return 0, &InvalidNumberError{Value: s}
-	}
-	return i, nil
-}
-
-func (d *decode) decodeDouble() (float64, error) {
-	s, err := d.readString()
-	if err != nil {
-		return 0, err
-	}
-	i, err := strconv.ParseFloat(s, 64) // supports inf, -inf
-	if err != nil {
-		return 0, &InvalidDoubleError{Value: s}
-	}
-	return i, nil
-}
-
-func (d *decode) decodeBigNumber() (*big.Int, error) {
-	s, err := d.readString()
-	if err != nil {
-		return zeroInt, err
-	}
-	i, ok := new(big.Int).SetString(s, 10)
-	if !ok {
-		return zeroInt, &InvalidBigNumberError{Value: s}
-	}
-	return i, nil
-}
-
-func (d *decode) decodeBoolean() (bool, error) {
-	b, err := d.readByte()
-	if err != nil {
-		return false, err
-	}
-	return b == booleanTrue, nil
-}
-
-func (d *decode) decodeToString() (string, error) {
-	b, err := d.r.ReadByte()
-	if err != nil {
-		return "", err
-	}
-	val, err := d.decodeValue(b)
-	if err != nil {
-		return "", err
-	}
-	return val.ToString()
-}
-
-func (d *decode) decodeToInt64() (int64, error) {
-	b, err := d.r.ReadByte()
-	if err != nil {
-		return 0, err
-	}
-	val, err := d.decodeValue(b)
-	if err != nil {
-		return 0, err
-	}
-	return val.ToInt64()
-}
-
-func (d *decode) decodePushSlice(size int64) (interface{}, error) {
-	kind, err := d.decodeToString()
+func (d *decode) decodeSimpleString() (RedisValue, error) {
+	b, err := d.r.readBytes()
 	if err != nil {
 		return nil, err
 	}
-
-	switch kind {
-	case pubSubSubscribe, pubSubPsubscribe:
-		channel, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		count, err := d.decodeToInt64()
-		if err != nil {
-			return nil, err
-		}
-		return subscribeNotification{channel: channel, count: count}, nil
-
-	case pubSubUnsubscribe, pubSubPunsubscribe:
-		channel, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		count, err := d.decodeToInt64()
-		if err != nil {
-			return nil, err
-		}
-		return unsubscribeNotification{channel: channel, count: count}, nil
-
-	case pubSubMessage:
-		channel, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		msg, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		return publishNotification{channel: channel, msg: msg}, nil
-
-	case pubSubPMessage:
-		pattern, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		channel, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		msg, err := d.decodeToString()
-		if err != nil {
-			return nil, err
-		}
-		return publishNotification{pattern: pattern, channel: channel, msg: msg}, nil
-
-	case invalidateMessage:
-		slot, err := d.decodeToInt64()
-		if err != nil {
-			return nil, err
-		}
-		return invalidateNotification(slot), nil
-
-	default:
-		values, err := d.decodeSlice(size - 1)
-		if err != nil {
-			return nil, err
-		}
-		return genericNotification{kind: kind, values: values}, nil
-
-	}
-
+	return _string(b), nil
 }
 
-func (d *decode) decodeSlice(size int64) (Slice, error) {
+// Number
+func (d *decode) decodeNumber() (RedisValue, error) {
+	i, err := d.r.readFixedSize()
+	return number(i), err
+}
+
+// Double
+func (d *decode) decodeDouble() (RedisValue, error) {
+	b, err := d.r.readBytes()
+	if err != nil {
+		return nil, err
+	}
+	f, err := strconv.ParseFloat(string(b), 64) // supports inf, -inf
+	if err != nil {
+		return nil, &InvalidDoubleError{Value: string(b)}
+	}
+	return double(f), nil
+}
+
+// Bignumber
+func (d *decode) decodeBigNumber() (RedisValue, error) {
+	b, err := d.r.readBytes()
+	if err != nil {
+		return nil, err
+	}
+	i, ok := new(big.Int).SetString(string(b), 10)
+	if !ok {
+		return nil, &InvalidBigNumberError{Value: string(b)}
+	}
+	return (*bignumber)(i), nil
+}
+
+// Boolean
+func (d *decode) decodeBoolean() (RedisValue, error) {
+	b, err := d.r.readByte()
+	if err != nil {
+		return nil, err
+	}
+	return boolean(b == booleanTrue), nil
+}
+
+// Push Notification
+func (d *decode) decodePushSlice() (interface{}, error) {
+	slice, err := d.decodeSlice()
+	if err != nil {
+		return nil, err
+	}
+	return newNotification(slice)
+}
+
+// Slice
+func (d *decode) decodeSlice() (Slice, error) {
+	var v Slice
+
+	size, err := d.r.readSize()
+	if err != nil {
+		return v, err
+	}
+
+	if size == -1 {
+		v, err = d.decodeStreamedSlice()
+	} else {
+		v, err = d.decodeFixedSlice(size)
+	}
+	return v, err
+}
+
+func (d *decode) decodeFixedSlice(size int64) (Slice, error) {
 	s := make(Slice, size)
 	for i := int64(0); i < size; i++ {
-		b, err := d.r.ReadByte()
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
-		}
-		val, err := d.decodeValue(b)
-		if err != nil {
-			return nil, err
+			return s, err
 		}
 		s[i] = val
 	}
@@ -731,43 +714,52 @@ func (d *decode) decodeSlice(size int64) (Slice, error) {
 func (d *decode) decodeStreamedSlice() (Slice, error) {
 	s := make(Slice, 0)
 	for {
-		b, err := d.r.ReadByte()
+		t, err := d.r.peek()
 		if err != nil {
-			return nil, err
+			return s, err
 		}
-		if b == streamedDataTypeTerminator {
+		if t == streamedDataTypeTerminator {
 			break
 		}
-		val, err := d.decodeValue(b)
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
+			return s, err
 		}
 		s = append(s, val)
 	}
-	if err := d.readLineBreak(); err != nil {
-		return nil, err
+	if _, err := d.r.readByte(); err != nil {
+		return s, err
 	}
 	return s, nil
 }
 
-func (d *decode) decodeMap(size int64) (Map, error) {
+// Map
+func (d *decode) decodeMap() (Map, error) {
+	var v Map
+
+	size, err := d.r.readSize()
+	if err != nil {
+		return v, err
+	}
+
+	if size == -1 {
+		v, err = d.decodeStreamedMap()
+	} else {
+		v, err = d.decodeFixedMap(size)
+	}
+	return v, err
+}
+
+func (d *decode) decodeFixedMap(size int64) (Map, error) {
 	m := make(Map, size)
 	for i := int64(0); i < size; i++ {
-		b, err := d.r.ReadByte()
+		key, err := d.decode()
 		if err != nil {
-			return nil, err
+			return m, err
 		}
-		key, err := d.decodeValue(b)
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
-		}
-		b, err = d.r.ReadByte()
-		if err != nil {
-			return nil, err
-		}
-		val, err := d.decodeValue(b)
-		if err != nil {
-			return nil, err
+			return m, err
 		}
 		m[i] = MapItem{key, val}
 	}
@@ -777,43 +769,52 @@ func (d *decode) decodeMap(size int64) (Map, error) {
 func (d *decode) decodeStreamedMap() (Map, error) {
 	m := make(Map, 0)
 	for {
-		b, err := d.r.ReadByte()
+		t, err := d.r.peek()
 		if err != nil {
-			return nil, err
+			return m, err
 		}
-		if b == streamedDataTypeTerminator {
+		if t == streamedDataTypeTerminator {
 			break
 		}
-		key, err := d.decodeValue(b)
+		key, err := d.decode()
 		if err != nil {
-			return nil, err
+			return m, err
 		}
-		b, err = d.r.ReadByte()
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
-		}
-		val, err := d.decodeValue(b)
-		if err != nil {
-			return nil, err
+			return m, err
 		}
 		m = append(m, MapItem{key, val})
 	}
-	if err := d.readLineBreak(); err != nil {
-		return nil, err
+	if _, err := d.r.readByte(); err != nil {
+		return m, err
 	}
 	return m, nil
 }
 
-func (d *decode) decodeSet(size int64) (Set, error) {
+// Set
+func (d *decode) decodeSet() (Set, error) {
+	var v Set
+
+	size, err := d.r.readSize()
+	if err != nil {
+		return v, err
+	}
+
+	if size == -1 {
+		v, err = d.decodeStreamedSet()
+	} else {
+		v, err = d.decodeFixedSet(size)
+	}
+	return v, err
+}
+
+func (d *decode) decodeFixedSet(size int64) (Set, error) {
 	s := make(Set, size)
 	for i := int64(0); i < size; i++ {
-		b, err := d.r.ReadByte()
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
-		}
-		val, err := d.decodeValue(b)
-		if err != nil {
-			return nil, err
+			return s, err
 		}
 		s[i] = val
 	}
@@ -823,21 +824,21 @@ func (d *decode) decodeSet(size int64) (Set, error) {
 func (d *decode) decodeStreamedSet() (Set, error) {
 	s := make(Set, 0)
 	for {
-		b, err := d.r.ReadByte()
+		t, err := d.r.peek()
 		if err != nil {
-			return nil, err
+			return s, err
 		}
-		if b == streamedDataTypeTerminator {
+		if t == streamedDataTypeTerminator {
 			break
 		}
-		val, err := d.decodeValue(b)
+		val, err := d.decode()
 		if err != nil {
-			return nil, err
+			return s, err
 		}
 		s = append(s, val)
 	}
-	if err := d.readLineBreak(); err != nil {
-		return nil, err
+	if _, err := d.r.readByte(); err != nil {
+		return s, err
 	}
 	return s, nil
 }

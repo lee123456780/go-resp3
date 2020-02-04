@@ -17,14 +17,12 @@ limitations under the License.
 package client
 
 import (
-	"fmt"
 	"math/big"
 	"strconv"
-	"strings"
 )
 
 // RedisKind represents the kind of type that a RedisValue represents.
-type RedisKind int
+type RedisKind byte
 
 // RedisKind constants.
 const (
@@ -43,206 +41,144 @@ const (
 	RkSet
 )
 
-// A InvalidValueError indicates an unsuccessful type conversion of a redis value.
-// - Name:  Parameter name.
-// - Value: Invalid value.
-type InvalidValueError struct {
-	Name  string
-	Value interface{}
+// RedisValue represents a Redis command reply value.
+type RedisValue interface {
+	Kind() RedisKind
+	Attr() *Map
+	Converter
 }
 
-func newInvalidValueError(name string, value interface{}) *InvalidValueError {
-	return &InvalidValueError{Name: name, Value: value}
+type baseRedisType interface {
+	_interface() interface{}
 }
 
-func (e *InvalidValueError) Error() string {
-	return fmt.Sprintf("Invalid value %v for %s", e.Value, e.Name)
+var (
+	_null           = null{}
+	_verbatimString = VerbatimString("")
+	_slice          = Slice{}
+	_map            = Map{}
+	_set            = Set{}
+)
+
+var _ baseRedisType = (*null)(nil)
+var _ baseRedisType = (*_string)(nil)
+var _ baseRedisType = (*number)(nil)
+var _ baseRedisType = (*bignumber)(nil)
+var _ baseRedisType = (*double)(nil)
+var _ baseRedisType = (*boolean)(nil)
+
+var _ RedisValue = (*null)(nil)
+var _ RedisValue = (*_string)(nil)
+var _ RedisValue = (*number)(nil)
+var _ RedisValue = (*bignumber)(nil)
+var _ RedisValue = (*double)(nil)
+var _ RedisValue = (*boolean)(nil)
+
+var _ RedisValue = (*VerbatimString)(nil)
+var _ RedisValue = (*Slice)(nil)
+var _ RedisValue = (*Map)(nil)
+var _ RedisValue = (*Set)(nil)
+
+var _ RedisValue = (*attrRedisValue)(nil)
+
+type attrRedisValue struct {
+	RedisValue
+	attr Map
 }
 
-// A RedisError represents the redis error message if a redis command was executed unsuccessfully.
-type RedisError struct {
-	Code string
-	Msg  string
-}
+func (v attrRedisValue) Attr() *Map { return &v.attr }
 
-func newRedisError(s string) *RedisError {
-	p := strings.Split(s, " ")
-	return &RedisError{
-		Code: p[0],
-		Msg:  strings.Join(p[1:], " "),
+// Caution: null need to implement all Slice, Map, Set conversion functions
+// --> null is not based on baseExtType but baseType only
+type null struct{}
+
+func (n null) _interface() interface{} { return nil }
+
+func (n null) Kind() RedisKind { return RkNull }
+
+func (n null) ToInt64Slice() ([]int64, error)                      { return _slice.ToInt64Slice() }
+func (n null) ToSlice() ([]interface{}, error)                     { return _slice.ToSlice() }
+func (n null) ToSlice2() ([][]interface{}, error)                  { return _slice.ToSlice2() }
+func (n null) ToStringMapSlice() ([]map[string]interface{}, error) { return _slice.ToStringMapSlice() }
+func (n null) ToStringSlice() ([]string, error)                    { return _slice.ToStringSlice() }
+func (n null) ToTree() ([]interface{}, error)                      { return _slice.ToTree() }
+func (n null) ToXrange() ([]IDMap, error)                          { return _slice.ToXrange() }
+func (n null) ToStringInt64Map() (map[string]int64, error)         { return _map.ToStringInt64Map() }
+func (n null) ToStringMap() (map[string]interface{}, error)        { return _map.ToStringMap() }
+func (n null) ToStringStringMap() (map[string]string, error)       { return _map.ToStringStringMap() }
+func (n null) ToXread() (map[string][]IDMap, error)                { return _map.ToXread() }
+func (n null) ToStringSet() (map[string]bool, error)               { return _set.ToStringSet() }
+
+type _string string
+
+func (s _string) _interface() interface{} { return string(s) }
+
+func (s _string) Kind() RedisKind { return RkString }
+
+func (s _string) ToString() (string, error)   { return string(s), nil }
+func (s _string) ToInt64() (int64, error)     { return strconv.ParseInt(string(s), 10, 64) }
+func (s _string) ToFloat64() (float64, error) { return strconv.ParseFloat(string(s), 64) }
+func (s _string) ToBool() (bool, error)       { return s == ReplyOK, nil }
+
+type number int64
+
+func (n number) _interface() interface{} { return int64(n) }
+
+func (n number) Kind() RedisKind { return RkNumber }
+
+func (n number) ToString() (string, error)   { return strconv.FormatInt(int64(n), 10), nil }
+func (n number) ToInt64() (int64, error)     { return int64(n), nil }
+func (n number) ToFloat64() (float64, error) { return float64(n), nil }
+func (n number) ToBool() (bool, error)       { return n != 0, nil }
+
+type double float64
+
+func (d double) _interface() interface{} { return float64(d) }
+
+func (d double) Kind() RedisKind { return RkDouble }
+
+func (d double) ToString() (string, error)   { return strconv.FormatFloat(float64(d), 'g', -1, 64), nil }
+func (d double) ToFloat64() (float64, error) { return float64(d), nil }
+func (d double) ToBool() (bool, error)       { return d != 0, nil }
+
+type bignumber big.Int
+
+func (n *bignumber) _interface() interface{} { return (*big.Int)(n) }
+
+func (n *bignumber) Kind() RedisKind { return RkBigNumber }
+
+func (n *bignumber) ToString() (string, error) { return (*big.Int)(n).String(), nil }
+func (n *bignumber) ToInt64() (int64, error) {
+	if (*big.Int)(n).IsInt64() {
+		return (*big.Int)(n).Int64(), nil
 	}
+	return 0, newConversionError("ToInt64", n)
 }
-
-func (e *RedisError) Error() string { return e.Code + " " + e.Msg }
-
-// A VerbatimString represents the redis verbatim string type.
-type VerbatimString string
-
-// FileFormat is returning the file format of a verbatim string.
-func (v VerbatimString) FileFormat() string { return string(v[:3]) }
-
-// String implements the Stringer interface.
-func (v VerbatimString) String() string { return string(v[4:]) }
-
-var zeroInt = new(big.Int)
-var invalidValue = RedisValue{RkInvalid, nil, nil}
-
-// A ConversionError indicates an unsuccessful type conversion of a redis value.
-// - To:    Name of the conversion function.
-// - Value: Value for which the conversion was not successful.
-type ConversionError struct {
-	To    string
-	Value interface{}
-}
-
-func newConversionError(to string, value interface{}) *ConversionError {
-	return &ConversionError{to, value}
-}
-
-func (e *ConversionError) Error() string {
-	return fmt.Sprintf("unsupported %s conversion type %T", e.To, e.Value)
-}
-
-// RedisValue represents a redis command result value.
-type RedisValue struct {
-	Kind  RedisKind
-	Value interface{}
-	Attr  Map
-}
-
-// IsNull returns true if RedisKind equals Redis Null Value, false otherwise.
-func (v RedisValue) IsNull() bool { return v.Kind == RkNull }
-
-// VerbatimString returns value as VerbatimString.
-// If value is not of type VerbatimString a ConversionError is returned.
-func (v RedisValue) VerbatimString() (VerbatimString, error) {
-	if v, ok := v.Value.(VerbatimString); ok {
-		return v, nil
+func (n *bignumber) ToFloat64() (float64, error) {
+	if (*big.Int)(n).IsInt64() {
+		return float64((*big.Int)(n).Int64()), nil
 	}
-	return "", newConversionError("VerbatimString", v)
+	return 0, newConversionError("ToFloat64", n)
 }
+func (n *bignumber) ToBool() (bool, error) { return (*big.Int)(n).Sign() != 0, nil }
 
-// Slice returns value as Slice or nil.
-// If value is not of type Slice or nil a ConversionError is returned.
-func (v RedisValue) Slice() (Slice, error) {
-	if v.Value == nil {
-		return nil, nil
-	}
-	if v, ok := v.Value.(Slice); ok {
-		return v, nil
-	}
-	return nil, newConversionError("Slice", v)
-}
+type boolean bool
 
-// Map returns value as Map or nil.
-// If value is not of type Map or nil a ConversionError is returned.
-func (v RedisValue) Map() (Map, error) {
-	if v.Value == nil {
-		return nil, nil
-	}
-	if v, ok := v.Value.(Map); ok {
-		return v, nil
-	}
-	return nil, newConversionError("Map", v)
-}
+func (b boolean) _interface() interface{} { return bool(b) }
 
-// Set returns value as Set or nil.
-// If value is not of type Set or nil a ConversionError is returned.
-func (v RedisValue) Set() (Set, error) {
-	if v.Value == nil {
-		return nil, nil
-	}
-	if v, ok := v.Value.(Set); ok {
-		return v, nil
-	}
-	return nil, newConversionError("Set", v)
-}
+func (b boolean) Kind() RedisKind { return RkBoolean }
 
-// ToString converts a redis value to a string.
-// In case the conversion is not supported a ConversionError is returned.
-func (v RedisValue) ToString() (string, error) {
-	switch v := v.Value.(type) {
-	case string:
-		return v, nil
-	case int64:
-		return strconv.FormatInt(v, 10), nil
-	case uint64:
-		return strconv.FormatUint(v, 10), nil
-	case float64:
-		return strconv.FormatFloat(v, 'g', -1, 64), nil
-	case *big.Int:
-		return v.String(), nil
-	case bool:
-		return strconv.FormatBool(v), nil
-	case VerbatimString:
-		return string(v)[4:], nil
-	default:
-		return "", newConversionError("string", v)
+func (b boolean) ToString() (string, error) { return strconv.FormatBool(bool(b)), nil }
+func (b boolean) ToInt64() (int64, error) {
+	if b {
+		return 1, nil
 	}
+	return 0, nil
 }
-
-// ToInt64 converts a redis value to an int64.
-// In case the conversion is not supported a ConversionError is returned.
-func (v RedisValue) ToInt64() (int64, error) {
-	switch v := v.Value.(type) {
-	case string:
-		return strconv.ParseInt(v, 10, 64)
-	case int64:
-		return v, nil
-		//	case float64:
-		//	case *big.Int:
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case VerbatimString:
-		return strconv.ParseInt(string(v)[4:], 10, 64)
-	default:
-		return 0, newConversionError("int64", v)
+func (b boolean) ToFloat64() (float64, error) {
+	if b {
+		return 1, nil
 	}
+	return 0, nil
 }
-
-// ToFloat64 converts a redis value to a float64.
-// In case the conversion is not supported a ConversionError is returned.
-func (v RedisValue) ToFloat64() (float64, error) {
-	switch v := v.Value.(type) {
-	case string:
-		return strconv.ParseFloat(v, 64)
-	case int64:
-		return float64(v), nil
-	case float64:
-		return v, nil
-		//	case *big.Int:
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case VerbatimString:
-		return strconv.ParseFloat(string(v)[4:], 64)
-	default:
-		return 0, newConversionError("float64", v)
-	}
-}
-
-// ToBool converts a redis value to a bool.
-// In case the conversion is not supported a ConversionError is returned.
-func (v RedisValue) ToBool() (bool, error) {
-	switch v := v.Value.(type) {
-	case string:
-		return v == ReplyOK, nil
-	case int64:
-		return v != 0, nil
-	case float64:
-		return v != 0, nil
-	case *big.Int:
-		return v.Sign() == 0, nil
-	case bool:
-		return v, nil
-	case VerbatimString:
-		return string(v)[4:] == "OK", nil
-	default:
-		return false, newConversionError("bool", v)
-	}
-}
+func (b boolean) ToBool() (bool, error) { return bool(b), nil }
