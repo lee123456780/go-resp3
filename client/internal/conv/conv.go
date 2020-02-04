@@ -20,8 +20,11 @@ import (
 	"errors"
 )
 
+// ErrInvalidCharacter is returned if parse functions detect an invalid character.
 var ErrInvalidCharacter = errors.New("invalid character")
 
+// ParseInt parses an integer.
+// - Like strings ParseInt but avoiding string allocation.
 func ParseInt(b []byte) (int64, error) {
 	if len(b) == 0 {
 		return 0, nil
@@ -39,6 +42,8 @@ func ParseInt(b []byte) (int64, error) {
 	}
 }
 
+// ParseUint parses an unsigned integer.
+// - Like strings ParseUint but avoiding string allocation.
 func ParseUint(b []byte) (uint64, error) {
 	var n uint64
 	for _, c := range b {

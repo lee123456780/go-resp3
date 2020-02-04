@@ -36,7 +36,7 @@ type Notification struct {
 // dirty hack - check if string is monitor push notification
 const minNotificationLen = 34
 
-// IsNotification checks if string is a monitor push notification.
+// Parse parses and checks a monitor push notification.
 func Parse(b []byte) (*Notification, bool) {
 	if len(b) < minNotificationLen {
 		return nil, false
