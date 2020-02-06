@@ -28,6 +28,17 @@ import (
 	"github.com/d024441/go-resp3/client"
 )
 
+/*
+This example is based on the TLS Support getting started of Redis 6.
+Please see https://github.com/antirez/redis/blob/unstable/TLS.md for details.
+
+The go-resp3 client TLS support is solely based on Go standard library capabilities, especially the
+- TLS configuration (https://golang.org/pkg/crypto/tls/#Config) and
+- client connection (https://golang.org/pkg/crypto/tls/#Client)
+
+Please check the Go standard library documentation for further information.
+*/
+
 const (
 	certFile   = "tls/redis.crt"
 	keyFile    = "tls/redis.key"
@@ -53,6 +64,9 @@ func Example_TLS() {
 
 	// Create TLS configuration.
 	config := &tls.Config{
+		// whether the ServerName needs to be provided or
+		// InsecureSkipVerify needs to be set to true
+		// (please see the comments to https://golang.org/pkg/crypto/tls/#Client)
 		InsecureSkipVerify: true,
 		RootCAs:            roots,
 		Certificates:       []tls.Certificate{cert},

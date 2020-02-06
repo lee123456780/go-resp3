@@ -40,8 +40,8 @@ The following environment variables can be set to use alternative host and port 
 * Redis pipeline support.
 * Redis server-assisted client side caching.
 * Support Redis RESP3 out of bound data: Pubsub, Monitor and key slot invalidations (cache).
-* Extendable via custom connection and pipeline (see <https://godoc.org/github.com/d024441/go-resp3/client#ex-package--Redefine>).
-* Redis 6 TLS (SSL) support.
+* Extendable via custom connection and pipeline (please see [example](https://godoc.org/github.com/d024441/go-resp3/client#ex-package--Redefine>)).
+* Redis 6 TLS (SSL) support (please see [example](https://github.com/d024441/go-resp3/blob/master/client/example_tls_test.go)).
 
 ## Edge cases
 
