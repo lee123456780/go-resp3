@@ -18,6 +18,7 @@ package client
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"log"
 	"net"
@@ -96,6 +97,8 @@ func DialContext(ctx context.Context, address string) (Conn, error) {
 //Dialer contains options for connecting to a redis server.
 type Dialer struct {
 	net.Dialer
+	// TLS
+	TLSConfig *tls.Config
 	// Connection logging.
 	Logger *log.Logger
 	// Channel size for asynchronous result reader and handler.
@@ -137,6 +140,9 @@ func (d *Dialer) DialContext(ctx context.Context, address string) (Conn, error) 
 	c, err := d.Dialer.DialContext(ctx, tcpNetwork, hostPort(address))
 	if err != nil {
 		return nil, err
+	}
+	if d.TLSConfig != nil {
+		c = tls.Client(c, d.TLSConfig)
 	}
 	return newConn(c, d)
 }
