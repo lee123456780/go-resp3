@@ -66,7 +66,7 @@ func hostPort(address string) string {
 // MsgCallback is the function type for Redis pubsub message callback functions.
 type MsgCallback func(pattern, channel, msg string)
 
-// InvalidationCallback is the function type for the Redis cache invalidate callback function.
+// InvalidateCallback is the function type for the Redis cache invalidate callback function.
 type InvalidateCallback func(keys []string)
 
 // MonitorCallback is the function type for the Redis monitor callback function.
