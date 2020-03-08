@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 // MyCommands defines redefined and additional commands.

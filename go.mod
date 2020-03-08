@@ -1,3 +1,3 @@
-module github.com/d024441/go-resp3
+module github.com/stfnmllr/go-resp3
 
-go 1.13
+go 1.14

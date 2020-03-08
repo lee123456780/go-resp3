@@ -20,7 +20,7 @@ import (
 	"bytes"
 	"time"
 
-	"github.com/d024441/go-resp3/client/internal/conv"
+	"github.com/stfnmllr/go-resp3/client/internal/conv"
 )
 
 // Monitor notification is currently in Redis 6 beta no push type but standard string.

@@ -20,17 +20,25 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 func Example_clientcache() {
 	mykey := client.RandomKey("mykey")
 
-	// Create cache.
-	cache := client.NewCache()
+	invalidated := make(chan struct{}, 0)
 
-	// Create connetion providing cache.
-	dialer := client.Dialer{Cache: cache}
+	// Create connetion providing key invalidation callback.
+	dialer := new(client.Dialer)
+	dialer.InvalidateCallback = func(keys []string) {
+		for _, key := range keys {
+			if key == mykey {
+				close(invalidated)
+				fmt.Println("Key invalidated")
+			}
+		}
+	}
+
 	conn, err := dialer.Dial("")
 	if err != nil {
 		log.Fatal(err)
@@ -46,26 +54,13 @@ func Example_clientcache() {
 	conn.Set(mykey, "Hello Redis")
 
 	// Get key.
-	val, err := conn.Get(mykey).Value()
+	val, err := conn.Get(mykey).ToString()
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(val)
 
-	// Save value in cache.
-	cache.Put(mykey, val)
-
-	// Read value from cache.
-	val, ok := cache.Get(mykey)
-	if !ok {
-		log.Fatal("cache miss")
-	}
-	s, err := val.ToString()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(s)
-
-	done := make(chan (struct{}), 0)
+	done := make(chan struct{}, 0)
 
 	// Change Key in different connection.
 	go func() {
@@ -83,14 +78,8 @@ func Example_clientcache() {
 
 	// Wait for go-routine.
 	<-done
-
-	// Cache miss: read until cache slot is invalidated.
-	for {
-		if _, ok := cache.Get(mykey); !ok {
-			fmt.Println("Key invalidated")
-			break
-		}
-	}
+	// Wait for invalidation of key.
+	<-invalidated
 
 	// Output:
 	// Hello Redis

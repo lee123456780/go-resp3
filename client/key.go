@@ -20,8 +20,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"io"
-
-	"github.com/d024441/go-resp3/client/internal/crc64"
 )
 
 // RandomKey returns key + base64 encoded random bytes. Used for tests to avoid key overwrites on Redis server.
@@ -31,19 +29,4 @@ func RandomKey(key string) string {
 		panic(err.Error()) // rand should never fail
 	}
 	return key + base64.URLEncoding.EncodeToString(b)
-}
-
-const slotMask uint64 = 0xffffff // less significant 24 bits
-
-// Key provides methods to calculate Redis crc64 hash and client caching slot.
-type Key string
-
-// CRC64 returns the Redis crc64 hash value of key.
-func (k Key) CRC64() uint64 {
-	return crc64.Checksum([]byte(k))
-}
-
-// Slot returns the Redis client caching slot for key.
-func (k Key) Slot() uint32 {
-	return uint32(k.CRC64() & slotMask)
 }

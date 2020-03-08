@@ -27,7 +27,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/d024441/go-resp3/client/internal/monitor"
+	"github.com/stfnmllr/go-resp3/client/internal/monitor"
 )
 
 //go:generate converter
@@ -65,6 +65,9 @@ func hostPort(address string) string {
 
 // MsgCallback is the function type for Redis pubsub message callback functions.
 type MsgCallback func(pattern, channel, msg string)
+
+// InvalidationCallback is the function type for the Redis cache invalidate callback function.
+type InvalidateCallback func(keys []string)
 
 // MonitorCallback is the function type for the Redis monitor callback function.
 type MonitorCallback func(time time.Time, db int64, addr string, cmds []string)
@@ -109,8 +112,8 @@ type Dialer struct {
 	User, Password string
 	// Redis client name.
 	ClientName string
-	// Client cache.
-	Cache *Cache
+	// Client cache invalidation callback.
+	InvalidateCallback InvalidateCallback
 	// Monitor callback.
 	MonitorCallback MonitorCallback
 	// Callback function tracing Redis commands and results on RESP3 protocol level.
@@ -171,9 +174,9 @@ type conn struct {
 
 	hello Result
 
-	asyncTimeout    time.Duration
-	cache           *Cache
-	monitorCallback MonitorCallback
+	asyncTimeout       time.Duration
+	invalidateCallback InvalidateCallback
+	monitorCallback    MonitorCallback
 
 	sendInterceptor SendInterceptor
 
@@ -190,15 +193,15 @@ const (
 
 func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 	c := &conn{
-		netConn:         netConn,
-		logger:          d.Logger,
-		readChan:        make(chan interface{}, d.channelSize()),
-		resChan:         make(chan *resultList, defResultListItems),
-		sendChan:        make(chan *result, d.channelSize()),
-		asyncTimeout:    d.AsyncTimeout,
-		cache:           d.Cache,
-		monitorCallback: d.MonitorCallback,
-		sendInterceptor: d.SendInterceptor,
+		netConn:            netConn,
+		logger:             d.Logger,
+		readChan:           make(chan interface{}, d.channelSize()),
+		resChan:            make(chan *resultList, defResultListItems),
+		sendChan:           make(chan *result, d.channelSize()),
+		asyncTimeout:       d.AsyncTimeout,
+		invalidateCallback: d.InvalidateCallback,
+		monitorCallback:    d.MonitorCallback,
+		sendInterceptor:    d.SendInterceptor,
 	}
 
 	if c.logger != nil {
@@ -374,9 +377,9 @@ func (c *conn) cmdHandler(wg *sync.WaitGroup, readChan <-chan interface{}) {
 				cb(val.pattern, val.channel, val.msg)
 			}
 
-		case invalidateNotification:
-			if c.cache != nil {
-				c.cache.invalidate(uint32(val))
+		case *invalidateNotification:
+			if c.invalidateCallback != nil {
+				c.invalidateCallback(val.keys)
 			}
 
 		case *monitor.Notification:

@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 func lpadName(name string, cnt, n int) string {
@@ -34,7 +34,9 @@ func lpadName(name string, cnt, n int) string {
 func benchmarkSetGet(conn client.Conn, cnt int, b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for j := 0; j < cnt; j++ {
-			conn.Set("foo", "bar")
+			if err := conn.Set("foo", "bar").Err(); err != nil {
+				b.Fatal(err)
+			}
 			value, err := conn.Get("foo").ToString()
 			if err != nil {
 				b.Fatal(err)
@@ -48,13 +50,16 @@ func benchmarkSetGet(conn client.Conn, cnt int, b *testing.B) {
 
 func benchmarkSetGetAsync(conn client.Conn, cnt int, b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		results := make([]client.Result, cnt)
+		results := make([]client.Result, 2*cnt)
 		for j := 0; j < cnt; j++ {
-			conn.Set("foo", "bar")
-			results[j] = conn.Get("foo")
+			results[j*2] = conn.Set("foo", "bar")
+			results[j*2+1] = conn.Get("foo")
 		}
 		for j := 0; j < cnt; j++ {
-			value, err := results[j].ToString()
+			if err := results[j*2].Err(); err != nil {
+				b.Fatal(err)
+			}
+			value, err := results[j*2+1].ToString()
 			if err != nil {
 				b.Fatal(err)
 			}
@@ -67,17 +72,20 @@ func benchmarkSetGetAsync(conn client.Conn, cnt int, b *testing.B) {
 
 func benchmarkPipelineSetGet(conn client.Conn, cnt int, b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		results := make([]client.Result, cnt)
+		results := make([]client.Result, 2*cnt)
 		p := conn.Pipeline()
 		for j := 0; j < cnt; j++ {
-			p.Set("foo", "bar")
-			results[j] = p.Get("foo")
+			results[j*2] = p.Set("foo", "bar")
+			results[j*2+1] = p.Get("foo")
 		}
 		if err := p.Flush(); err != nil {
 			b.Fatal(err)
 		}
 		for j := 0; j < cnt; j++ {
-			value, err := results[j].ToString()
+			if err := results[j*2].Err(); err != nil {
+				b.Fatal(err)
+			}
+			value, err := results[j*2+1].ToString()
 			if err != nil {
 				b.Fatal(err)
 			}

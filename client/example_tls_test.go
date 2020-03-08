@@ -25,7 +25,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 /*
@@ -64,9 +64,8 @@ func Example_TLS() {
 
 	// Create TLS configuration.
 	config := &tls.Config{
-		// whether the ServerName needs to be provided or
-		// InsecureSkipVerify needs to be set to true
-		// (please see the comments to https://golang.org/pkg/crypto/tls/#Client)
+		// whether the ServerName needs to be provided or InsecureSkipVerify needs to be set
+		// please see the comments in https://golang.org/pkg/crypto/tls/#Client
 		InsecureSkipVerify: true,
 		RootCAs:            roots,
 		Certificates:       []tls.Certificate{cert},

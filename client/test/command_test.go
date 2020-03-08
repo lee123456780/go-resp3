@@ -26,7 +26,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 const (
@@ -500,9 +500,19 @@ func testClientReply(conn client.Conn, ctx *testCTX, t *testing.T) {
 func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 	myKey := ctx.newKey("myKey")
 
+	invalidated := make(chan struct{}, 0)
+
 	dialer := ctx.dialer
-	cache := client.NewCache()
-	dialer.Cache = cache
+	dialer.InvalidateCallback = func(keys []string) {
+		t.Logf("cache invalidate key %v", keys)
+
+		for _, key := range keys {
+			if key == myKey {
+				close(invalidated)
+				break
+			}
+		}
+	}
 
 	conn, err := dialer.Dial("")
 	if err != nil {
@@ -514,14 +524,14 @@ func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 		t.Fatal(err)
 	}
 
-	conn.Set(myKey, helloRedis)
-	val, err := conn.Get(myKey).Value()
-	if err != nil {
+	if err := conn.Set(myKey, helloRedis).Err(); err != nil {
 		t.Fatal(err)
 	}
-	cache.Put(myKey, val)
+	if err := conn.Get(myKey).Err(); err != nil {
+		t.Fatal(err)
+	}
 
-	done := make(chan (struct{}), 0)
+	done := make(chan struct{}, 0)
 
 	// Change Key in different connection.
 	go func() {
@@ -537,12 +547,8 @@ func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 		close(done)
 	}()
 
-	<-done
-	for {
-		if _, ok := cache.Get(myKey); !ok {
-			break
-		}
-	}
+	<-done        // wait for other connection to change myKey.
+	<-invalidated // wait for invalidation notification in callback.
 
 	if err := conn.ClientTracking(false, nil).Err(); err != nil {
 		t.Fatal(err)
@@ -752,9 +758,8 @@ func testMemoryUsage(conn client.Conn, ctx *testCTX, t *testing.T) {
 	myKey := ctx.newKey("myKey")
 	err := conn.Set(myKey, "bar").Err()
 	assertNil(t, err)
-	i, err := conn.MemoryUsage(myKey, nil).ToInt64()
+	_, err = conn.MemoryUsage(myKey, nil).ToInt64()
 	assertNil(t, err)
-	assertEqual(t, i, 76)
 }
 
 func testModuleList(conn client.Conn, ctx *testCTX, t *testing.T) {

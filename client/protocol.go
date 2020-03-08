@@ -24,8 +24,8 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/d024441/go-resp3/client/internal/conv"
-	"github.com/d024441/go-resp3/client/internal/monitor"
+	"github.com/stfnmllr/go-resp3/client/internal/conv"
+	"github.com/stfnmllr/go-resp3/client/internal/monitor"
 )
 
 const (

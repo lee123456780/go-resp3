@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/d024441/go-resp3/client"
+	"github.com/stfnmllr/go-resp3/client"
 )
 
 func MsgCallback(pattern, channel, msg string) {
