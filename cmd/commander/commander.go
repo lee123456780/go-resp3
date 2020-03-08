@@ -31,7 +31,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/d024441/go-resp3/cmd/commander/internal/ast"
+	"github.com/stfnmllr/go-resp3/cmd/commander/internal/ast"
 )
 
 const (

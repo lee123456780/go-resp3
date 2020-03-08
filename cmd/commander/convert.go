@@ -21,8 +21,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/d024441/go-resp3/cmd/commander/internal/ast"
-	"github.com/d024441/go-resp3/cmd/commander/internal/stringutils"
+	"github.com/stfnmllr/go-resp3/cmd/commander/internal/ast"
+	"github.com/stfnmllr/go-resp3/cmd/commander/internal/stringutils"
 )
 
 var cmdNameMap = map[string]string{
