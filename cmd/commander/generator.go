@@ -263,7 +263,7 @@ func (g *generator) generatePointerType(name, cmd string, nilTest bool, fieldTyp
 	g.generateField(name, "", true, true, fieldType)
 }
 
-func (g *generator) generateSliceType(name, cmd string, allowNil bool, fieldType ast.TypeNode) {
+func (g *generator) generateSliceType(name, cmd string, allowNil bool, sliceCmd string, fieldType ast.TypeNode) {
 	if allowNil && cmd != "" {
 		g.b.startBlock("if ", name, " != nil")
 		defer g.b.endBlock()
@@ -272,6 +272,9 @@ func (g *generator) generateSliceType(name, cmd string, allowNil bool, fieldType
 		g.b.add(strconv.Quote(cmd))
 	}
 	g.b.startBlock("for _, v := range ", name)
+	if sliceCmd != "" {
+		g.b.add(strconv.Quote(sliceCmd))
+	}
 	g.generateField("v", "", true, false, fieldType)
 	g.b.endBlock()
 }
@@ -289,7 +292,7 @@ func (g *generator) generateField(name, cmd string, nilTest, ptr bool, node ast.
 	case *ast.PointerType:
 		g.generatePointerType(name, cmd, nilTest, node.Node)
 	case *ast.SliceType:
-		g.generateSliceType(name, cmd, node.AllowNil, node.Node)
+		g.generateSliceType(name, cmd, node.AllowNil, node.Cmd, node.Node)
 	case *ast.EllipsisType:
 		g.generateEllipsisType(name, cmd, node.Node)
 	case *ast.BaseType:

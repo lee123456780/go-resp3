@@ -46,7 +46,7 @@ func Example_clientcache() {
 	defer conn.Close()
 
 	// Set client tracking on.
-	if err := conn.ClientTracking(true, nil).Err(); err != nil {
+	if err := conn.ClientTracking(true, nil, nil).Err(); err != nil {
 		log.Fatal(err)
 	}
 

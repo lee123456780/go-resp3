@@ -520,7 +520,7 @@ func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 	}
 	defer conn.Close()
 
-	if err := conn.ClientTracking(true, nil).Err(); err != nil {
+	if err := conn.ClientTracking(true, nil, nil).Err(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -550,7 +550,7 @@ func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 	<-done        // wait for other connection to change myKey.
 	<-invalidated // wait for invalidation notification in callback.
 
-	if err := conn.ClientTracking(false, nil).Err(); err != nil {
+	if err := conn.ClientTracking(false, nil, nil).Err(); err != nil {
 		t.Fatal(err)
 	}
 }

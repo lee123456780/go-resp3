@@ -395,7 +395,8 @@ type PointerType struct {
 
 // SliceType represents a multi-value attribute.
 type SliceType struct {
-	AllowNil bool
+	AllowNil bool     `json:"allowNil"`
+	Cmd      string   `json:"cmd"`
 	Node     TypeNode `json:"node"`
 }
 

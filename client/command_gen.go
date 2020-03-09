@@ -278,7 +278,7 @@ type ServerCommands interface {
 	ClientPause(timeout int64) Result
 	ClientReply(replyMode ReplyMode) Result
 	ClientSetname(connectionName string) Result
-	ClientTracking(on bool, redirect *int64) Result
+	ClientTracking(on bool, redirect *int64, bcast []string) Result
 	ClientUnblock(clientId int64, timeout *bool) Result
 	Command() Result
 	CommandCount() Result
@@ -923,7 +923,7 @@ func (c *command) ClientSetname(connectionName string) Result {
 // ClientTracking - Enable client side caching.
 // Group: server
 // Since: 6.0.0
-func (c *command) ClientTracking(on bool, redirect *int64) Result {
+func (c *command) ClientTracking(on bool, redirect *int64, bcast []string) Result {
 	r := newResult()
 	r.request.cmd = append(r.request.cmd, "CLIENT", "TRACKING")
 	if on {
@@ -933,6 +933,12 @@ func (c *command) ClientTracking(on bool, redirect *int64) Result {
 	}
 	if redirect != nil {
 		r.request.cmd = append(r.request.cmd, "REDIRECT", redirect)
+	}
+	if bcast != nil {
+		r.request.cmd = append(r.request.cmd, "BCAST")
+		for _, v := range bcast {
+			r.request.cmd = append(r.request.cmd, "PREFIX", v)
+		}
 	}
 	c.send(CmdClientTracking, r)
 	return r

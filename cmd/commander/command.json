@@ -2025,7 +2025,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -2135,7 +2136,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -2312,7 +2314,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2440,7 +2443,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2504,7 +2508,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2538,7 +2543,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2615,7 +2621,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2648,7 +2655,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2719,7 +2727,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2752,7 +2761,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2972,6 +2982,20 @@
 						"name": "int64"
 					}
 				}
+			},
+			{
+				"_type": "field",
+				"name": "bcast",
+				"cmd": "BCAST",
+				"type": {
+					"_type": "sliceType",
+					"allowNil": true,
+					"cmd": "PREFIX",
+					"node": {
+						"_type": "baseType",
+						"name": "string"
+					}
+				}
 			}
 		]
 	},
@@ -3037,7 +3061,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -3115,7 +3140,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -3610,7 +3636,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3635,7 +3662,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -3823,7 +3851,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3936,7 +3965,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3949,7 +3979,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3991,7 +4022,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4004,7 +4036,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4038,7 +4071,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4197,7 +4231,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "LongitudeLatitudeMember"
@@ -4280,7 +4315,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4313,7 +4349,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4757,7 +4794,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5028,7 +5066,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5122,7 +5161,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "FieldValue"
@@ -5671,7 +5711,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5704,7 +5745,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5968,7 +6010,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6071,7 +6114,8 @@
 				"cmd": "KEYS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6125,7 +6169,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6209,7 +6254,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "KeyValue"
@@ -6233,7 +6279,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "KeyValue"
@@ -6510,7 +6557,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6534,7 +6582,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6567,7 +6616,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6622,7 +6672,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6748,7 +6799,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6772,7 +6824,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -7084,7 +7137,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7117,7 +7171,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7150,7 +7205,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7306,7 +7362,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -7373,7 +7430,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7406,7 +7464,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7919,7 +7978,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7952,7 +8012,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8158,7 +8219,8 @@
 				"cmd": "GET",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8293,7 +8355,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8447,7 +8510,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8471,7 +8535,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8504,7 +8569,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8595,7 +8661,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8739,7 +8806,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8763,7 +8831,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8850,7 +8919,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8892,7 +8962,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8934,7 +9005,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "FieldValue"
@@ -8994,7 +9066,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9085,7 +9158,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9530,7 +9604,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9543,7 +9618,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9617,7 +9693,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9630,7 +9707,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9759,7 +9837,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -9798,7 +9877,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -9837,7 +9917,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -9876,7 +9957,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -9921,7 +10003,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10059,7 +10142,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -10072,7 +10156,8 @@
 				"cmd": "WEIGHTS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -10408,7 +10493,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -10835,7 +10921,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -10848,7 +10935,8 @@
 				"cmd": "WEIGHTS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"

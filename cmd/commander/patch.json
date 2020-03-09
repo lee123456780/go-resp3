@@ -86,7 +86,8 @@
 		"token": ["CLIENT", "TRACKING"],
 		"list": [
 			{"name": "on", "type": {"_type": "enumBoolType", "values": ["ON", "OFF"]}},
-			{"name": "redirect", "cmd": "REDIRECT", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+			{"name": "redirect", "cmd": "REDIRECT", "type": {"_type": "pointerType", "node": {"name": "int64"}}},
+			{"name": "bcast", "cmd": "BCAST", "type": {"_type": "sliceType", "allowNil": true, "cmd": "PREFIX", "node": {"name": "string"}}}
 		]
 	},
 	{"_type": "enumDecl", "name": "Overflow", "values": ["WRAP", "SAT", "FAIL"]},
@@ -667,7 +668,7 @@
 		"token": ["ACL", "SETUSER"],
 		"list": [
 			{"name": "username", "type": {"name": "string"}},
-			{"name": "rules", "type": {"_type": "sliceType", "AllowNil": true, "node": {"name": "string"}}}
+			{"name": "rules", "type": {"_type": "sliceType", "allowNil": true, "node": {"name": "string"}}}
 		]
 	},
 	{

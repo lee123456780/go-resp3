@@ -448,7 +448,8 @@ func (t *PointerType) UnmarshalJSON(b []byte) error {
 
 // RawSliceType is a helper structure to unmarshal a slice.
 type RawSliceType struct {
-	AllowNil bool
+	AllowNil bool            `json:"allowNil"`
+	Cmd      string          `json:"cmd"`
 	Node     json.RawMessage `json:"node"`
 }
 
@@ -459,6 +460,7 @@ func (t *SliceType) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	t.AllowNil = rt.AllowNil
+	t.Cmd = rt.Cmd
 	node, err := unmarshalTypeNode(rt.Node)
 	if err != nil {
 		return err
