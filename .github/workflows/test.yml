@@ -8,7 +8,7 @@ jobs:
     
     services:
       redis:
-        image: redis:6.0-rc2
+        image: redis:6.0-rc4
         ports:
           - 6379/tcp
         options: --entrypoint redis-server
