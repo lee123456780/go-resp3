@@ -102,11 +102,11 @@ func (n null) ToSlice2() ([][]interface{}, error)                  { return _sli
 func (n null) ToStringMapSlice() ([]map[string]interface{}, error) { return _slice.ToStringMapSlice() }
 func (n null) ToStringSlice() ([]string, error)                    { return _slice.ToStringSlice() }
 func (n null) ToTree() ([]interface{}, error)                      { return _slice.ToTree() }
-func (n null) ToXrange() ([]IDMap, error)                          { return _slice.ToXrange() }
+func (n null) ToXrange() ([]XItem, error)                          { return _slice.ToXrange() }
 func (n null) ToStringInt64Map() (map[string]int64, error)         { return _map.ToStringInt64Map() }
 func (n null) ToStringMap() (map[string]interface{}, error)        { return _map.ToStringMap() }
 func (n null) ToStringStringMap() (map[string]string, error)       { return _map.ToStringStringMap() }
-func (n null) ToXread() (map[string][]IDMap, error)                { return _map.ToXread() }
+func (n null) ToXread() (map[string][]XItem, error)                { return _map.ToXread() }
 func (n null) ToStringSet() (map[string]bool, error)               { return _set.ToStringSet() }
 
 type _string string

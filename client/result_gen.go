@@ -127,18 +127,18 @@ func (r *result) ToTree() ([]interface{}, error) {
 	return r.value.ToTree()
 }
 
-// ToXrange returns a slice with values of type IdMap. In case the conversion is not possible
+// ToXrange returns a slice with values of type XItem. In case the conversion is not possible
 // a ConversitionError is returned.
-func (r *result) ToXrange() ([]IDMap, error) {
+func (r *result) ToXrange() ([]XItem, error) {
 	if err := r.wait(); err != nil {
 		return nil, err
 	}
 	return r.value.ToXrange()
 }
 
-// ToXread returns a map[string] with values of type IdMap. In case the conversion is not possible
+// ToXread returns a map[string] with values of type XItem. In case the conversion is not possible
 // a ConversitionError is returned.
-func (r *result) ToXread() (map[string][]IDMap, error) {
+func (r *result) ToXread() (map[string][]XItem, error) {
 	if err := r.wait(); err != nil {
 		return nil, err
 	}

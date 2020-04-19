@@ -130,9 +130,9 @@ type Treer interface {
 
 // Xranger is implemented by any redis value that has a ToXrange method.
 type Xranger interface {
-	// ToXrange returns a slice with values of type IdMap. In case the conversion is not possible
+	// ToXrange returns a slice with values of type XItem. In case the conversion is not possible
 	// a ConversitionError is returned.
-	ToXrange() ([]IDMap, error)
+	ToXrange() ([]XItem, error)
 }
 
 // StringInt64Mapper is implemented by any redis value that has a ToStringInt64Map method.
@@ -158,9 +158,9 @@ type StringStringMapper interface {
 
 // Xreader is implemented by any redis value that has a ToXread method.
 type Xreader interface {
-	// ToXread returns a map[string] with values of type IdMap. In case the conversion is not possible
+	// ToXread returns a map[string] with values of type XItem. In case the conversion is not possible
 	// a ConversitionError is returned.
-	ToXread() (map[string][]IDMap, error)
+	ToXread() (map[string][]XItem, error)
 }
 
 // StringSetter is implemented by any redis value that has a ToStringSet method.

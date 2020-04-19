@@ -83,16 +83,16 @@ func (m Map) ToStringInt64Map() (map[string]int64, error) {
 	return r, nil
 }
 
-// IDMap represents the id and the field value mapping of streams.
-type IDMap struct {
-	ID  string
-	Map map[string]string
+// XItem represents the id and the entry list of streams.
+type XItem struct {
+	ID    string
+	Items []string
 }
 
-// ToXread returns a map[string] with values of type IdMap. In case the conversion is not possible
+// ToXread returns a map[string] with values of type XItem. In case the conversion is not possible
 // a ConversitionError is returned.
-func (m Map) ToXread() (map[string][]IDMap, error) {
-	r := make(map[string][]IDMap, len(m))
+func (m Map) ToXread() (map[string][]XItem, error) {
+	r := make(map[string][]XItem, len(m))
 	for _, item := range m {
 		s, err := item.Key.ToString()
 		if err != nil {

@@ -115,10 +115,10 @@ func (s Slice) ToInt64Slice() ([]int64, error) {
 	return r, nil
 }
 
-// ToXrange returns a slice with values of type IdMap. In case the conversion is not possible
+// ToXrange returns a slice with values of type XItem. In case the conversion is not possible
 // a ConversitionError is returned.
-func (s Slice) ToXrange() ([]IDMap, error) {
-	r := make([]IDMap, len(s))
+func (s Slice) ToXrange() ([]XItem, error) {
+	r := make([]XItem, len(s))
 	for i, item := range s {
 		if item.Kind() != RkSlice {
 			return nil, newConversionError("toXrange", item)
@@ -131,11 +131,11 @@ func (s Slice) ToXrange() ([]IDMap, error) {
 		if err != nil {
 			return nil, err
 		}
-		m, err := slice[1].ToStringStringMap()
+		l, err := slice[1].ToStringSlice()
 		if err != nil {
 			return nil, err
 		}
-		r[i] = IDMap{s, m}
+		r[i] = XItem{s, l}
 	}
 	return r, nil
 }

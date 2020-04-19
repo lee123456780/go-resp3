@@ -29,8 +29,8 @@ func (s _string) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
 func (s _string) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", s) }
-func (s _string) ToXrange() ([]IDMap, error)           { return nil, newConversionError("ToXrange", s) }
-func (s _string) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", s) }
+func (s _string) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", s) }
+func (s _string) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
 
 func (n number) Attr() *Map                         { return nil }
 func (n number) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", n) }
@@ -53,8 +53,8 @@ func (n number) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", n)
 }
 func (n number) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", n) }
-func (n number) ToXrange() ([]IDMap, error)           { return nil, newConversionError("ToXrange", n) }
-func (n number) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", n) }
+func (n number) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", n) }
+func (n number) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", n) }
 
 func (d double) Attr() *Map                         { return nil }
 func (d double) ToInt64() (int64, error)            { return 0, newConversionError("ToInt64", d) }
@@ -78,8 +78,8 @@ func (d double) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", d)
 }
 func (d double) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", d) }
-func (d double) ToXrange() ([]IDMap, error)           { return nil, newConversionError("ToXrange", d) }
-func (d double) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", d) }
+func (d double) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", d) }
+func (d double) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", d) }
 
 func (n *bignumber) Attr() *Map                         { return nil }
 func (n *bignumber) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", n) }
@@ -104,8 +104,8 @@ func (n *bignumber) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", n)
 }
 func (n *bignumber) ToTree() ([]interface{}, error) { return nil, newConversionError("ToTree", n) }
-func (n *bignumber) ToXrange() ([]IDMap, error)     { return nil, newConversionError("ToXrange", n) }
-func (n *bignumber) ToXread() (map[string][]IDMap, error) {
+func (n *bignumber) ToXrange() ([]XItem, error)     { return nil, newConversionError("ToXrange", n) }
+func (n *bignumber) ToXread() (map[string][]XItem, error) {
 	return nil, newConversionError("ToXread", n)
 }
 
@@ -130,8 +130,8 @@ func (b boolean) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", b)
 }
 func (b boolean) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", b) }
-func (b boolean) ToXrange() ([]IDMap, error)           { return nil, newConversionError("ToXrange", b) }
-func (b boolean) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", b) }
+func (b boolean) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", b) }
+func (b boolean) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", b) }
 
 func (s Slice) Attr() *Map                  { return nil }
 func (s Slice) ToBool() (bool, error)       { return false, newConversionError("ToBool", s) }
@@ -150,7 +150,7 @@ func (s Slice) ToStringSet() (map[string]bool, error) {
 func (s Slice) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
-func (s Slice) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", s) }
+func (s Slice) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
 
 func (m Map) Attr() *Map                         { return nil }
 func (m Map) ToBool() (bool, error)              { return false, newConversionError("ToBool", m) }
@@ -166,7 +166,7 @@ func (m Map) ToStringMapSlice() ([]map[string]interface{}, error) {
 func (m Map) ToStringSet() (map[string]bool, error) { return nil, newConversionError("ToStringSet", m) }
 func (m Map) ToStringSlice() ([]string, error)      { return nil, newConversionError("ToStringSlice", m) }
 func (m Map) ToTree() ([]interface{}, error)        { return nil, newConversionError("ToTree", m) }
-func (m Map) ToXrange() ([]IDMap, error)            { return nil, newConversionError("ToXrange", m) }
+func (m Map) ToXrange() ([]XItem, error)            { return nil, newConversionError("ToXrange", m) }
 
 func (s Set) Attr() *Map                         { return nil }
 func (s Set) ToBool() (bool, error)              { return false, newConversionError("ToBool", s) }
@@ -190,8 +190,8 @@ func (s Set) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
 func (s Set) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", s) }
-func (s Set) ToXrange() ([]IDMap, error)           { return nil, newConversionError("ToXrange", s) }
-func (s Set) ToXread() (map[string][]IDMap, error) { return nil, newConversionError("ToXread", s) }
+func (s Set) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", s) }
+func (s Set) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
 
 func (s VerbatimString) Attr() *Map { return nil }
 func (s VerbatimString) ToInt64Slice() ([]int64, error) {
@@ -220,7 +220,7 @@ func (s VerbatimString) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
 func (s VerbatimString) ToTree() ([]interface{}, error) { return nil, newConversionError("ToTree", s) }
-func (s VerbatimString) ToXrange() ([]IDMap, error)     { return nil, newConversionError("ToXrange", s) }
-func (s VerbatimString) ToXread() (map[string][]IDMap, error) {
+func (s VerbatimString) ToXrange() ([]XItem, error)     { return nil, newConversionError("ToXrange", s) }
+func (s VerbatimString) ToXread() (map[string][]XItem, error) {
 	return nil, newConversionError("ToXread", s)
 }

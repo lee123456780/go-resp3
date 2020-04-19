@@ -937,7 +937,7 @@ func (c *command) ClientTracking(on bool, redirect *int64, bcast []string) Resul
 	if bcast != nil {
 		r.request.cmd = append(r.request.cmd, "BCAST")
 		for _, v := range bcast {
-			r.request.cmd = append(r.request.cmd, "PREFIX", v)
+			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
 	c.send(CmdClientTracking, r)

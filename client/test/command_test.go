@@ -2903,9 +2903,9 @@ func testXadd(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, i, 2)
 	slice, err := conn.Xrange(myStream, "-", "+", nil).ToXrange()
 	assertNil(t, err)
-	assertEqual(t, slice, []client.IDMap{
-		{id1, map[string]string{"name": "Sara", "surname": "OConnor"}},
-		{id2, map[string]string{"field1": "value1", "field2": "value2", "field3": "value3"}},
+	assertEqual(t, slice, []client.XItem{
+		{id1, []string{"name", "Sara", "surname", "OConnor"}},
+		{id2, []string{"field1", "value1", "field2", "value2", "field3", "value3"}},
 	})
 }
 
@@ -2922,7 +2922,7 @@ func testXdel(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, i, 1)
 	slice, err := conn.Xrange(myStream, "-", "+", nil).ToXrange()
 	assertNil(t, err)
-	assertEqual(t, slice, []client.IDMap{{id1, map[string]string{"a": "1"}}, {id3, map[string]string{"c": "3"}}})
+	assertEqual(t, slice, []client.XItem{{id1, []string{"a", "1"}}, {id3, []string{"c", "3"}}})
 }
 
 func testXgroupCreate(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -2999,8 +2999,8 @@ func testXgroupSetid(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNil(t, err)
 	m, err = conn.Xreadgroup(client.GroupConsumer{myGroup, myConsumer}, nil, nil, false, []interface{}{myStream}, []string{">"}).ToXread()
 	assertNil(t, err)
-	assertEqual(t, m, map[string][]client.IDMap{myStream: {
-		{id, map[string]string{"name": "Sara", "surname": "OConnor"}},
+	assertEqual(t, m, map[string][]client.XItem{myStream: {
+		{id, []string{"name", "Sara", "surname", "OConnor"}},
 	}})
 }
 
@@ -3063,9 +3063,9 @@ func testXrange(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, i, 5)
 	slice, err := conn.Xrange(writers, "-", "+", client.Int64Ptr(2)).ToXrange()
 	assertNil(t, err)
-	assertEqual(t, slice, []client.IDMap{
-		{id1, map[string]string{"name": "Virginia", "surname": "Woolf"}},
-		{id2, map[string]string{"name": "Jane", "surname": "Austen"}},
+	assertEqual(t, slice, []client.XItem{
+		{id1, []string{"name", "Virginia", "surname", "Woolf"}},
+		{id2, []string{"name", "Jane", "surname", "Austen"}},
 	})
 }
 
@@ -3083,9 +3083,9 @@ func testXread(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNil(t, err)
 	m, err := conn.Xread(client.Int64Ptr(2), nil, []interface{}{writers}, []string{"0-0"}).ToXread()
 	assertNil(t, err)
-	assertEqual(t, m, map[string][]client.IDMap{writers: {
-		{id1, map[string]string{"name": "Virginia", "surname": "Woolf"}},
-		{id2, map[string]string{"name": "Jane", "surname": "Austen"}},
+	assertEqual(t, m, map[string][]client.XItem{writers: {
+		{id1, []string{"name", "Virginia", "surname", "Woolf"}},
+		{id2, []string{"name", "Jane", "surname", "Austen"}},
 	}})
 }
 
@@ -3106,7 +3106,7 @@ func testXrevrange(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, i, 5)
 	slice, err := conn.Xrevrange(writers, "+", "-", client.Int64Ptr(1)).ToXrange()
 	assertNil(t, err)
-	assertEqual(t, slice, []client.IDMap{{id5, map[string]string{"name": "Ngozi", "surname": "Adichie"}}})
+	assertEqual(t, slice, []client.XItem{{id5, []string{"name", "Ngozi", "surname", "Adichie"}}})
 }
 
 func testXtrim(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -3124,9 +3124,9 @@ func testXtrim(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, i, 2)
 	slice, err := conn.Xrange(myStream, "-", "+", client.Int64Ptr(2)).ToXrange()
 	assertNil(t, err)
-	assertEqual(t, slice, []client.IDMap{
-		{id3, map[string]string{"field3": "C"}},
-		{id4, map[string]string{"field4": "D"}},
+	assertEqual(t, slice, []client.XItem{
+		{id3, []string{"field3", "C"}},
+		{id4, []string{"field4", "D"}},
 	})
 }
 
