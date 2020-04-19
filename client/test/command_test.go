@@ -260,6 +260,13 @@ var fcts = []fct{
 	{"ACL", testACL, false},
 	// Transaction
 	{"Transaction", testTransaction, false},
+	// LCS (--> move to strings when 6.0 is released)
+	{client.CmdLcsStrings, testLcsStrings, true},
+	{client.CmdLcsLenStrings, testLcsLenStrings, true},
+	{client.CmdLcsIdxStrings, testLcsIdxStrings, true},
+	{client.CmdLcsKeys, testLcsKeys, true},
+	{client.CmdLcsLenKeys, testLcsLenKeys, true},
+	{client.CmdLcsIdxKeys, testLcsIdxKeys, true},
 }
 
 type testCTX struct {
@@ -345,7 +352,7 @@ func assertEqual(t *testing.T, v1, v2 interface{}) {
 	}
 
 	if !equal {
-		t.Fatalf("caller line %d: got %v - expected %v", line, v1, v2)
+		t.Fatalf("caller line %[1]d: got %[2]T %[2]v - expected %[3]T %[3]v", line, v1, v2)
 	}
 }
 
@@ -3325,6 +3332,111 @@ func testTransaction(conn client.Conn, ctx *testCTX, t *testing.T) {
 	slice, err = conn.Exec().ToInt64Slice()
 	assertNil(t, err)
 	assertEqual(t, slice, []int64{4})
+}
+
+// Lcs
+const (
+	rna1   = "CACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTTCGTCCGGGTGTG"
+	rna2   = "ATTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
+	rnalcs = "ACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
+)
+
+func testLcsStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	s, err := conn.LcsStrings(rna1, rna2).ToString()
+	assertNil(t, err)
+	assertEqual(t, s, rnalcs)
+}
+
+func testLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	i, err := conn.LcsLenStrings(rna1, rna2).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, len(rnalcs))
+}
+
+func testLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	m, err := conn.LcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
+
+	slice, err := m["matches"].ToSlice3()
+	assertNil(t, err)
+
+	assertEqual(t, slice, [][][]interface{}{
+		{{int64(238), int64(238)}, {int64(239), int64(239)}},
+		{{int64(236), int64(236)}, {int64(238), int64(238)}},
+		{{int64(229), int64(230)}, {int64(236), int64(237)}},
+		{{int64(224), int64(224)}, {int64(235), int64(235)}},
+		{{int64(1), int64(222)}, {int64(13), int64(234)}},
+	})
+}
+
+func testLcsKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+	s, err := conn.LcsKeys(key1, key2).ToString()
+	assertNil(t, err)
+	assertEqual(t, s, rnalcs)
+}
+
+func testLcsLenKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+	i, err := conn.LcsLenKeys(key1, key2).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, len(rnalcs))
+}
+
+func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+
+	m, err := conn.LcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
+
+	slice, err := m["matches"].ToSlice3()
+	assertNil(t, err)
+
+	assertEqual(t, slice, [][][]interface{}{
+		{{int64(238), int64(238)}, {int64(239), int64(239)}},
+		{{int64(236), int64(236)}, {int64(238), int64(238)}},
+		{{int64(229), int64(230)}, {int64(236), int64(237)}},
+		{{int64(224), int64(224)}, {int64(235), int64(235)}},
+		{{int64(1), int64(222)}, {int64(13), int64(234)}},
+	})
+
+	l, err := m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
+
+	m, err = conn.LcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
+
+	tree, err := m["matches"].ToTree()
+	assertNil(t, err)
+
+	assertEqual(t, tree, []interface{}{
+		[]interface{}{[]interface{}{int64(238), int64(238)}, []interface{}{int64(239), int64(239)}, int64(1)},
+		[]interface{}{[]interface{}{int64(236), int64(236)}, []interface{}{int64(238), int64(238)}, int64(1)},
+		[]interface{}{[]interface{}{int64(229), int64(230)}, []interface{}{int64(236), int64(237)}, int64(2)},
+		[]interface{}{[]interface{}{int64(224), int64(224)}, []interface{}{int64(235), int64(235)}, int64(1)},
+		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
+	})
+
+	l, err = m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
+
+	m, err = conn.LcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
+
+	tree, err = m["matches"].ToTree()
+	assertNil(t, err)
+
+	assertEqual(t, tree, []interface{}{
+		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
+	})
+
+	l, err = m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
 }
 
 //

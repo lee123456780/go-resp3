@@ -50,6 +50,20 @@ func (s Slice) ToSlice2() ([][]interface{}, error) {
 	return r, nil
 }
 
+// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+// a ConversitionError is returned.
+func (s Slice) ToSlice3() ([][][]interface{}, error) {
+	r := make([][][]interface{}, len(s))
+	for i, item := range s {
+		l, err := item.ToSlice2()
+		if err != nil {
+			return nil, newConversionError("toSlice2", item)
+		}
+		r[i] = l
+	}
+	return r, nil
+}
+
 // ToTree returns a tree with nodes of type []interface{} and leaves of type interface{}. In case value conversion to []interface{} is not possible
 // a ConversitionError is returned.
 func (s Slice) ToTree() ([]interface{}, error) {
@@ -87,7 +101,7 @@ func (s Slice) ToStringSlice() ([]string, error) {
 	return r, nil
 }
 
-// ToStringMapSlice returns a slice with values of type map[string]interfcae{}. In case value conversion to map[string]interface{} is not possible
+// ToStringMapSlice returns a slice with values of type map[string]interface{}. In case value conversion to map[string]interface{} is not possible
 // a ConversitionError is returned.
 func (s Slice) ToStringMapSlice() ([]map[string]interface{}, error) {
 	r := make([]map[string]interface{}, len(s))

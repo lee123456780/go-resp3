@@ -99,12 +99,14 @@ func (n null) Kind() RedisKind { return RkNull }
 func (n null) ToInt64Slice() ([]int64, error)                      { return _slice.ToInt64Slice() }
 func (n null) ToSlice() ([]interface{}, error)                     { return _slice.ToSlice() }
 func (n null) ToSlice2() ([][]interface{}, error)                  { return _slice.ToSlice2() }
+func (n null) ToSlice3() ([][][]interface{}, error)                { return _slice.ToSlice3() }
 func (n null) ToStringMapSlice() ([]map[string]interface{}, error) { return _slice.ToStringMapSlice() }
 func (n null) ToStringSlice() ([]string, error)                    { return _slice.ToStringSlice() }
 func (n null) ToTree() ([]interface{}, error)                      { return _slice.ToTree() }
 func (n null) ToXrange() ([]XItem, error)                          { return _slice.ToXrange() }
 func (n null) ToStringInt64Map() (map[string]int64, error)         { return _map.ToStringInt64Map() }
 func (n null) ToStringMap() (map[string]interface{}, error)        { return _map.ToStringMap() }
+func (n null) ToStringValueMap() (map[string]RedisValue, error)    { return _map.ToStringValueMap() }
 func (n null) ToStringStringMap() (map[string]string, error)       { return _map.ToStringStringMap() }
 func (n null) ToXread() (map[string][]XItem, error)                { return _map.ToXread() }
 func (n null) ToStringSet() (map[string]bool, error)               { return _set.ToStringSet() }

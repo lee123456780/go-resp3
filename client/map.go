@@ -47,6 +47,20 @@ func (m Map) ToStringMap() (map[string]interface{}, error) {
 	return r, nil
 }
 
+// ToStringValueMap returns a map with keys of type stringand values of type RedisValue.
+// In case key conversion to string is not possible a ConvertionError is returned.
+func (m Map) ToStringValueMap() (map[string]RedisValue, error) {
+	r := make(map[string]RedisValue, len(m))
+	for _, item := range m {
+		key, err := item.Key.ToString()
+		if err != nil {
+			return nil, err
+		}
+		r[key] = item.Value
+	}
+	return r, nil
+}
+
 // ToStringStringMap returns a map with keys and values of type string. In case key or value conversion to string is not possible
 // a ConvertionError is returned.
 func (m Map) ToStringStringMap() (map[string]string, error) {

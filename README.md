@@ -51,6 +51,7 @@ Redis command | Replaced by API commands
 ------------- | ------------------------
 Acl | AclCat, AclDeluser, AclGenpass, AclGetuser, AclHelp, AclList, AclLoad, AclSave, AclSetuser, AclUsers, AclWhoami
 Bitop | BitopAnd, BitopNot, BitopOr, BitopXor
+Lcs | LcsStrings, LcsLenStrings, LcsIdxStrings, LcsKeys, LcsLenKeys, LcsIdxKeys
 Object | ObjectEncoding, ObjectFreq, ObjectHelp, ObjectIdletime, ObjectRefcount
 Pubsub | PubsubChannels, PubsubNumpat, PubsubNumsub
 Set | Set, SetEx, SetExNx, SetExXx, SetNx, SetPx, SetPxNx, SetPxXx, SetXx

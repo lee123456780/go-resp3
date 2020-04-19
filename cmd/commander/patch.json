@@ -56,6 +56,13 @@
 		"group": "server"
 	},
 	{
+		"_type": "funcAttr",
+		"name": "Lcs",
+		"summary": "Longest common subsequence.",
+		"since": "6.0.0",
+		"group": "string"
+	},
+	{
 		"name": "Do",
 		"attr": "Do",
 		"list": [
@@ -686,5 +693,69 @@
 		"list": [
 			{"name": "username", "type": {"name": "string"}}
 		]
-	}	
+	},
+	{
+		"name": "LcsStrings",
+		"attr": "Lcs",
+		"token": ["Lcs"],
+		"list": [
+			{"cmd": "strings"},
+			{"name": "string1", "type": {"name": "string"}},
+			{"name": "string2", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "LcsLenStrings",
+		"attr": "Lcs",
+		"token": ["Lcs", "len"],
+		"list": [
+			{"cmd": "strings"},
+			{"name": "string1", "type": {"name": "string"}},
+			{"name": "string2", "type": {"name": "string"}}
+		]
+	},
+	{
+		"name": "LcsIdxStrings",
+		"attr": "Lcs",
+		"token": ["Lcs", "idx"],
+		"list": [
+			{"cmd": "strings"},
+			{"name": "string1", "type": {"name": "string"}},
+			{"name": "string2", "type": {"name": "string"}},
+			{"name": "withmatchlen", "type": {"_type": "enumBoolType", "values": ["WITHMATCHLEN"]}},
+			{"name": "minmatchlen", "cmd": "MINMATCHLEN", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+		]
+	},
+	{
+		"name": "LcsKeys",
+		"attr": "Lcs",
+		"token": ["Lcs"],
+		"list": [
+			{"cmd": "keys"},
+			{"name": "key1", "type": {"name": "interface{}"}},
+			{"name": "key2", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "LcsLenKeys",
+		"attr": "Lcs",
+		"token": ["Lcs", "len"],
+		"list": [
+			{"cmd": "keys"},
+			{"name": "key1", "type": {"name": "interface{}"}},
+			{"name": "key2", "type": {"name": "interface{}"}}
+		]
+	},
+	{
+		"name": "LcsIdxKeys",
+		"attr": "Lcs",
+		"token": ["Lcs", "idx"],
+		"list": [
+			{"cmd": "keys"},
+			{"name": "key1", "type": {"name": "interface{}"}},
+			{"name": "key2", "type": {"name": "interface{}"}},
+			{"name": "withmatchlen", "type": {"_type": "enumBoolType", "values": ["WITHMATCHLEN"]}},
+			{"name": "minmatchlen", "cmd": "MINMATCHLEN", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+		]
+	}
 ]

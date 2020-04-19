@@ -46,12 +46,14 @@ type Converter interface {
 	Int64Slicer
 	Slicer
 	Slice2er
+	Slice3er
 	StringMapSlicer
 	StringSlicer
 	Treer
 	Xranger
 
 	StringMapper
+	StringValueMapper
 	StringInt64Mapper
 	StringStringMapper
 	Xreader
@@ -107,9 +109,16 @@ type Slice2er interface {
 	ToSlice2() ([][]interface{}, error)
 }
 
+// Slice3er is implemented by any redis value that has a ToSlice3 method.
+type Slice3er interface {
+	// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+	// a ConversitionError is returned.
+	ToSlice3() ([][][]interface{}, error)
+}
+
 // StringMapSlicer is implemented by any redis value that has a ToStringMapSlice method.
 type StringMapSlicer interface {
-	// ToStringMapSlice returns a slice with values of type map[string]interfcae{}. In case value conversion to map[string]interface{} is not possible
+	// ToStringMapSlice returns a slice with values of type map[string]interface{}. In case value conversion to map[string]interface{} is not possible
 	// a ConversitionError is returned.
 	ToStringMapSlice() ([]map[string]interface{}, error)
 }
@@ -147,6 +156,13 @@ type StringMapper interface {
 	// ToStringMap returns a map with keys of type string. In case key conversion to string is not possible
 	// a ConvertionError is returned.
 	ToStringMap() (map[string]interface{}, error)
+}
+
+// StringValueMapper is implemented by any redis value that has a ToStringValueMap method.
+type StringValueMapper interface {
+	// ToStringValueMap returns a map with keys of type string and values of type RedisValue.
+	// In case key conversion to string is not possible a ConvertionError is returned.
+	ToStringValueMap() (map[string]RedisValue, error)
 }
 
 // StringStringMapper is implemented by any redis value that has a ToStringStringMap method.

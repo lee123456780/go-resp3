@@ -8,10 +8,11 @@ func (n null) ToFloat64() (float64, error) { return 0, newConversionError("ToFlo
 func (n null) ToInt64() (int64, error)     { return 0, newConversionError("ToInt64", n) }
 func (n null) ToString() (string, error)   { return "", newConversionError("ToString", n) }
 
-func (s _string) Attr() *Map                         { return nil }
-func (s _string) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", s) }
-func (s _string) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", s) }
-func (s _string) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", s) }
+func (s _string) Attr() *Map                           { return nil }
+func (s _string) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", s) }
+func (s _string) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", s) }
+func (s _string) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", s) }
+func (s _string) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", s) }
 func (s _string) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", s)
 }
@@ -24,18 +25,24 @@ func (s _string) ToStringMapSlice() ([]map[string]interface{}, error) {
 func (s _string) ToStringSet() (map[string]bool, error) {
 	return nil, newConversionError("ToStringSet", s)
 }
-func (s _string) ToStringSlice() ([]string, error) { return nil, newConversionError("ToStringSlice", s) }
+func (s _string) ToStringSlice() ([]string, error) {
+	return nil, newConversionError("ToStringSlice", s)
+}
 func (s _string) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
+}
+func (s _string) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", s)
 }
 func (s _string) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", s) }
 func (s _string) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", s) }
 func (s _string) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
 
-func (n number) Attr() *Map                         { return nil }
-func (n number) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", n) }
-func (n number) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", n) }
-func (n number) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", n) }
+func (n number) Attr() *Map                           { return nil }
+func (n number) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", n) }
+func (n number) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", n) }
+func (n number) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", n) }
+func (n number) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", n) }
 func (n number) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", n)
 }
@@ -52,15 +59,19 @@ func (n number) ToStringSlice() ([]string, error) { return nil, newConversionErr
 func (n number) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", n)
 }
+func (n number) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", n)
+}
 func (n number) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", n) }
 func (n number) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", n) }
 func (n number) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", n) }
 
-func (d double) Attr() *Map                         { return nil }
-func (d double) ToInt64() (int64, error)            { return 0, newConversionError("ToInt64", d) }
-func (d double) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", d) }
-func (d double) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", d) }
-func (d double) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", d) }
+func (d double) Attr() *Map                           { return nil }
+func (d double) ToInt64() (int64, error)              { return 0, newConversionError("ToInt64", d) }
+func (d double) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", d) }
+func (d double) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", d) }
+func (d double) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", d) }
+func (d double) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", d) }
 func (d double) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", d)
 }
@@ -77,14 +88,24 @@ func (d double) ToStringSlice() ([]string, error) { return nil, newConversionErr
 func (d double) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", d)
 }
+func (d double) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", d)
+}
 func (d double) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", d) }
 func (d double) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", d) }
 func (d double) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", d) }
 
-func (n *bignumber) Attr() *Map                         { return nil }
-func (n *bignumber) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", n) }
-func (n *bignumber) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", n) }
-func (n *bignumber) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", n) }
+func (n *bignumber) Attr() *Map { return nil }
+func (n *bignumber) ToInt64Slice() ([]int64, error) {
+	return nil, newConversionError("ToInt64Slice", n)
+}
+func (n *bignumber) ToSlice() ([]interface{}, error) { return nil, newConversionError("ToSlice", n) }
+func (n *bignumber) ToSlice2() ([][]interface{}, error) {
+	return nil, newConversionError("ToSlice2", n)
+}
+func (n *bignumber) ToSlice3() ([][][]interface{}, error) {
+	return nil, newConversionError("ToSlice3", n)
+}
 func (n *bignumber) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", n)
 }
@@ -103,16 +124,20 @@ func (n *bignumber) ToStringSlice() ([]string, error) {
 func (n *bignumber) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", n)
 }
+func (n *bignumber) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", n)
+}
 func (n *bignumber) ToTree() ([]interface{}, error) { return nil, newConversionError("ToTree", n) }
 func (n *bignumber) ToXrange() ([]XItem, error)     { return nil, newConversionError("ToXrange", n) }
 func (n *bignumber) ToXread() (map[string][]XItem, error) {
 	return nil, newConversionError("ToXread", n)
 }
 
-func (b boolean) Attr() *Map                         { return nil }
-func (b boolean) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", b) }
-func (b boolean) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", b) }
-func (b boolean) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", b) }
+func (b boolean) Attr() *Map                           { return nil }
+func (b boolean) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", b) }
+func (b boolean) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", b) }
+func (b boolean) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", b) }
+func (b boolean) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", b) }
 func (b boolean) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", b)
 }
@@ -125,9 +150,14 @@ func (b boolean) ToStringMapSlice() ([]map[string]interface{}, error) {
 func (b boolean) ToStringSet() (map[string]bool, error) {
 	return nil, newConversionError("ToStringSet", b)
 }
-func (b boolean) ToStringSlice() ([]string, error) { return nil, newConversionError("ToStringSlice", b) }
+func (b boolean) ToStringSlice() ([]string, error) {
+	return nil, newConversionError("ToStringSlice", b)
+}
 func (b boolean) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", b)
+}
+func (b boolean) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", b)
 }
 func (b boolean) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", b) }
 func (b boolean) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", b) }
@@ -150,16 +180,20 @@ func (s Slice) ToStringSet() (map[string]bool, error) {
 func (s Slice) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
+func (s Slice) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", s)
+}
 func (s Slice) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
 
-func (m Map) Attr() *Map                         { return nil }
-func (m Map) ToBool() (bool, error)              { return false, newConversionError("ToBool", m) }
-func (m Map) ToFloat64() (float64, error)        { return 0, newConversionError("ToFloat64", m) }
-func (m Map) ToInt64() (int64, error)            { return 0, newConversionError("ToInt64", m) }
-func (m Map) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", m) }
-func (m Map) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", m) }
-func (m Map) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", m) }
-func (m Map) ToString() (string, error)          { return "", newConversionError("ToString", m) }
+func (m Map) Attr() *Map                           { return nil }
+func (m Map) ToBool() (bool, error)                { return false, newConversionError("ToBool", m) }
+func (m Map) ToFloat64() (float64, error)          { return 0, newConversionError("ToFloat64", m) }
+func (m Map) ToInt64() (int64, error)              { return 0, newConversionError("ToInt64", m) }
+func (m Map) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", m) }
+func (m Map) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", m) }
+func (m Map) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", m) }
+func (m Map) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", m) }
+func (m Map) ToString() (string, error)            { return "", newConversionError("ToString", m) }
 func (m Map) ToStringMapSlice() ([]map[string]interface{}, error) {
 	return nil, newConversionError("ToStringMapSlice", m)
 }
@@ -168,14 +202,15 @@ func (m Map) ToStringSlice() ([]string, error)      { return nil, newConversionE
 func (m Map) ToTree() ([]interface{}, error)        { return nil, newConversionError("ToTree", m) }
 func (m Map) ToXrange() ([]XItem, error)            { return nil, newConversionError("ToXrange", m) }
 
-func (s Set) Attr() *Map                         { return nil }
-func (s Set) ToBool() (bool, error)              { return false, newConversionError("ToBool", s) }
-func (s Set) ToFloat64() (float64, error)        { return 0, newConversionError("ToFloat64", s) }
-func (s Set) ToInt64() (int64, error)            { return 0, newConversionError("ToInt64", s) }
-func (s Set) ToInt64Slice() ([]int64, error)     { return nil, newConversionError("ToInt64Slice", s) }
-func (s Set) ToSlice() ([]interface{}, error)    { return nil, newConversionError("ToSlice", s) }
-func (s Set) ToSlice2() ([][]interface{}, error) { return nil, newConversionError("ToSlice2", s) }
-func (s Set) ToString() (string, error)          { return "", newConversionError("ToString", s) }
+func (s Set) Attr() *Map                           { return nil }
+func (s Set) ToBool() (bool, error)                { return false, newConversionError("ToBool", s) }
+func (s Set) ToFloat64() (float64, error)          { return 0, newConversionError("ToFloat64", s) }
+func (s Set) ToInt64() (int64, error)              { return 0, newConversionError("ToInt64", s) }
+func (s Set) ToInt64Slice() ([]int64, error)       { return nil, newConversionError("ToInt64Slice", s) }
+func (s Set) ToSlice() ([]interface{}, error)      { return nil, newConversionError("ToSlice", s) }
+func (s Set) ToSlice2() ([][]interface{}, error)   { return nil, newConversionError("ToSlice2", s) }
+func (s Set) ToSlice3() ([][][]interface{}, error) { return nil, newConversionError("ToSlice3", s) }
+func (s Set) ToString() (string, error)            { return "", newConversionError("ToString", s) }
 func (s Set) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", s)
 }
@@ -189,6 +224,9 @@ func (s Set) ToStringSlice() ([]string, error) { return nil, newConversionError(
 func (s Set) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
 }
+func (s Set) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", s)
+}
 func (s Set) ToTree() ([]interface{}, error)       { return nil, newConversionError("ToTree", s) }
 func (s Set) ToXrange() ([]XItem, error)           { return nil, newConversionError("ToXrange", s) }
 func (s Set) ToXread() (map[string][]XItem, error) { return nil, newConversionError("ToXread", s) }
@@ -197,9 +235,14 @@ func (s VerbatimString) Attr() *Map { return nil }
 func (s VerbatimString) ToInt64Slice() ([]int64, error) {
 	return nil, newConversionError("ToInt64Slice", s)
 }
-func (s VerbatimString) ToSlice() ([]interface{}, error) { return nil, newConversionError("ToSlice", s) }
+func (s VerbatimString) ToSlice() ([]interface{}, error) {
+	return nil, newConversionError("ToSlice", s)
+}
 func (s VerbatimString) ToSlice2() ([][]interface{}, error) {
 	return nil, newConversionError("ToSlice2", s)
+}
+func (s VerbatimString) ToSlice3() ([][][]interface{}, error) {
+	return nil, newConversionError("ToSlice3", s)
 }
 func (s VerbatimString) ToStringInt64Map() (map[string]int64, error) {
 	return nil, newConversionError("ToStringInt64Map", s)
@@ -218,6 +261,9 @@ func (s VerbatimString) ToStringSlice() ([]string, error) {
 }
 func (s VerbatimString) ToStringStringMap() (map[string]string, error) {
 	return nil, newConversionError("ToStringStringMap", s)
+}
+func (s VerbatimString) ToStringValueMap() (map[string]RedisValue, error) {
+	return nil, newConversionError("ToStringValueMap", s)
 }
 func (s VerbatimString) ToTree() ([]interface{}, error) { return nil, newConversionError("ToTree", s) }
 func (s VerbatimString) ToXrange() ([]XItem, error)     { return nil, newConversionError("ToXrange", s) }

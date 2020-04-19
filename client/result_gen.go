@@ -55,6 +55,15 @@ func (r *result) ToSlice2() ([][]interface{}, error) {
 	return r.value.ToSlice2()
 }
 
+// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+// a ConversitionError is returned.
+func (r *result) ToSlice3() ([][][]interface{}, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToSlice3()
+}
+
 // ToString converts a redis value to a string.
 // In case the conversion is not supported a ConversionError is returned.
 func (r *result) ToString() (string, error) {
@@ -82,7 +91,7 @@ func (r *result) ToStringMap() (map[string]interface{}, error) {
 	return r.value.ToStringMap()
 }
 
-// ToStringMapSlice returns a slice with values of type map[string]interfcae{}. In case value conversion to map[string]interface{} is not possible
+// ToStringMapSlice returns a slice with values of type map[string]interface{}. In case value conversion to map[string]interface{} is not possible
 // a ConversitionError is returned.
 func (r *result) ToStringMapSlice() ([]map[string]interface{}, error) {
 	if err := r.wait(); err != nil {
@@ -116,6 +125,15 @@ func (r *result) ToStringStringMap() (map[string]string, error) {
 		return nil, err
 	}
 	return r.value.ToStringStringMap()
+}
+
+// ToStringValueMap returns a map with keys of type string and values of type RedisValue.
+// In case key conversion to string is not possible a ConvertionError is returned.
+func (r *result) ToStringValueMap() (map[string]RedisValue, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToStringValueMap()
 }
 
 // ToTree returns a tree with nodes of type []interface{} and leaves of type interface{}. In case value conversion to []interface{} is not possible
