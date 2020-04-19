@@ -3355,6 +3355,7 @@ func testLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
 
 func testLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
 	m, err := conn.LcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
+	assertNil(t, err)
 
 	slice, err := m["matches"].ToSlice3()
 	assertNil(t, err)
@@ -3392,6 +3393,7 @@ func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNil(t, conn.Set(key2, rna2).Err())
 
 	m, err := conn.LcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
+	assertNil(t, err)
 
 	slice, err := m["matches"].ToSlice3()
 	assertNil(t, err)
@@ -3409,6 +3411,7 @@ func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, l, 227)
 
 	m, err = conn.LcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
+	assertNil(t, err)
 
 	tree, err := m["matches"].ToTree()
 	assertNil(t, err)
@@ -3426,6 +3429,7 @@ func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertEqual(t, l, 227)
 
 	m, err = conn.LcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
+	assertNil(t, err)
 
 	tree, err = m["matches"].ToTree()
 	assertNil(t, err)
