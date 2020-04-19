@@ -32,6 +32,9 @@ import (
 
 //go:generate converter
 
+// ClientVersion is the version number of the go-resp3 client.
+const ClientVersion = "beta-4"
+
 // Environment variables.
 const (
 	EnvHost = "REDIS_HOST"
