@@ -33,7 +33,7 @@ import (
 //go:generate converter
 
 // ClientVersion is the version number of the go-resp3 client.
-const ClientVersion = "beta-5"
+const ClientVersion = "0.9.0"
 
 // Environment variables.
 const (

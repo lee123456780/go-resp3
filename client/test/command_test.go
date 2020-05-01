@@ -260,13 +260,13 @@ var fcts = []fct{
 	{"ACL", testACL, false},
 	// Transaction
 	{"Transaction", testTransaction, false},
-	// LCS (--> move to strings when 6.0 is released)
-	{client.CmdLcsStrings, testLcsStrings, true},
-	{client.CmdLcsLenStrings, testLcsLenStrings, true},
-	{client.CmdLcsIdxStrings, testLcsIdxStrings, true},
-	{client.CmdLcsKeys, testLcsKeys, true},
-	{client.CmdLcsLenKeys, testLcsLenKeys, true},
-	{client.CmdLcsIdxKeys, testLcsIdxKeys, true},
+	// STRALGO LCS (--> move to strings when 6.0 is released)
+	{client.CmdStralgoLcsStrings, testStralgoLcsStrings, true},
+	{client.CmdStralgoLcsLenStrings, testStralgoLcsLenStrings, true},
+	{client.CmdStralgoLcsIdxStrings, testStralgoLcsIdxStrings, true},
+	{client.CmdStralgoLcsKeys, testStralgoLcsKeys, true},
+	{client.CmdStralgoLcsLenKeys, testStralgoLcsLenKeys, true},
+	{client.CmdStralgoLcsIdxKeys, testStralgoLcsIdxKeys, true},
 }
 
 type testCTX struct {
@@ -3199,9 +3199,15 @@ func testAclGetuser(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testAclGenpass(conn client.Conn, ctx *testCTX, t *testing.T) {
-	s, err := conn.AclGenpass().ToString()
+	s, err := conn.AclGenpass(nil).ToString()
 	assertNil(t, err)
-	assertEqual(t, len(s), 32)
+	assertEqual(t, len(s), 64)
+	s, err = conn.AclGenpass(client.Int64Ptr(32)).ToString()
+	assertNil(t, err)
+	assertEqual(t, len(s), 8)
+	s, err = conn.AclGenpass(client.Int64Ptr(5)).ToString()
+	assertNil(t, err)
+	assertEqual(t, len(s), 2)
 }
 
 func testAclWhoami(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -3341,20 +3347,20 @@ const (
 	rnalcs = "ACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
 )
 
-func testLcsStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	s, err := conn.LcsStrings(rna1, rna2).ToString()
+func testStralgoLcsStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	s, err := conn.StralgoLcsStrings(rna1, rna2).ToString()
 	assertNil(t, err)
 	assertEqual(t, s, rnalcs)
 }
 
-func testLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	i, err := conn.LcsLenStrings(rna1, rna2).ToInt64()
+func testStralgoLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	i, err := conn.StralgoLcsLenStrings(rna1, rna2).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, len(rnalcs))
 }
 
-func testLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	m, err := conn.LcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
+func testStralgoLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	m, err := conn.StralgoLcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
 	assertNil(t, err)
 
 	slice, err := m["matches"].ToSlice3()
@@ -3369,30 +3375,30 @@ func testLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
 	})
 }
 
-func testLcsKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+func testStralgoLcsKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
 	assertNil(t, conn.Set(key1, rna1).Err())
 	assertNil(t, conn.Set(key2, rna2).Err())
-	s, err := conn.LcsKeys(key1, key2).ToString()
+	s, err := conn.StralgoLcsKeys(key1, key2).ToString()
 	assertNil(t, err)
 	assertEqual(t, s, rnalcs)
 }
 
-func testLcsLenKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+func testStralgoLcsLenKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
 	assertNil(t, conn.Set(key1, rna1).Err())
 	assertNil(t, conn.Set(key2, rna2).Err())
-	i, err := conn.LcsLenKeys(key1, key2).ToInt64()
+	i, err := conn.StralgoLcsLenKeys(key1, key2).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, len(rnalcs))
 }
 
-func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+func testStralgoLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
 	assertNil(t, conn.Set(key1, rna1).Err())
 	assertNil(t, conn.Set(key2, rna2).Err())
 
-	m, err := conn.LcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
+	m, err := conn.StralgoLcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
 	assertNil(t, err)
 
 	slice, err := m["matches"].ToSlice3()
@@ -3410,7 +3416,7 @@ func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNil(t, err)
 	assertEqual(t, l, 227)
 
-	m, err = conn.LcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
+	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
 	assertNil(t, err)
 
 	tree, err := m["matches"].ToTree()
@@ -3428,7 +3434,7 @@ func testLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNil(t, err)
 	assertEqual(t, l, 227)
 
-	m, err = conn.LcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
+	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
 	assertNil(t, err)
 
 	tree, err = m["matches"].ToTree()

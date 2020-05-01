@@ -153,7 +153,7 @@ type ClusterCommands interface {
 type ConnectionCommands interface {
 	AclCat(category *string) Result
 	AclDeluser(username []string) Result
-	AclGenpass() Result
+	AclGenpass(bits *int64) Result
 	AclGetuser(username string) Result
 	AclHelp() Result
 	AclList() Result
@@ -410,12 +410,6 @@ type StringCommands interface {
 	Incr(key interface{}) Result
 	Incrby(key interface{}, increment int64) Result
 	Incrbyfloat(key interface{}, increment float64) Result
-	LcsIdxKeys(key1, key2 interface{}, withmatchlen bool, minmatchlen *int64) Result
-	LcsIdxStrings(string1, string2 string, withmatchlen bool, minmatchlen *int64) Result
-	LcsKeys(key1, key2 interface{}) Result
-	LcsLenKeys(key1, key2 interface{}) Result
-	LcsLenStrings(string1, string2 string) Result
-	LcsStrings(string1, string2 string) Result
 	Mget(key []interface{}) Result
 	Mset(keyValue []KeyValue) Result
 	MsetNx(keyValue []KeyValue) Result
@@ -430,6 +424,12 @@ type StringCommands interface {
 	SetXx(key, value interface{}) Result
 	Setbit(key interface{}, offset, value int64) Result
 	Setrange(key interface{}, offset int64, value interface{}) Result
+	StralgoLcsIdxKeys(key1, key2 interface{}, withmatchlen bool, minmatchlen *int64) Result
+	StralgoLcsIdxStrings(string1, string2 string, withmatchlen bool, minmatchlen *int64) Result
+	StralgoLcsKeys(key1, key2 interface{}) Result
+	StralgoLcsLenKeys(key1, key2 interface{}) Result
+	StralgoLcsLenStrings(string1, string2 string) Result
+	StralgoLcsStrings(string1, string2 string) Result
 	Strlen(key interface{}) Result
 }
 type TransactionsCommands interface {
@@ -473,9 +473,12 @@ func (c *command) AclDeluser(username []string) Result {
 // AclGenpass - Authenticate to the server
 // Group: connection
 // Since: 1.0.0
-func (c *command) AclGenpass() Result {
+func (c *command) AclGenpass(bits *int64) Result {
 	r := newResult()
 	r.request.cmd = append(r.request.cmd, "ACL", "GENPASS")
+	if bits != nil {
+		r.request.cmd = append(r.request.cmd, bits)
+	}
 	c.send(CmdAclGenpass, r)
 	return r
 }
@@ -2149,78 +2152,6 @@ func (c *command) LatencyReset(event *string) Result {
 	return r
 }
 
-// LcsIdxKeys - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsIdxKeys(key1, key2 interface{}, withmatchlen bool, minmatchlen *int64) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "idx", "keys", key1, key2)
-	if withmatchlen {
-		r.request.cmd = append(r.request.cmd, "WITHMATCHLEN")
-	}
-	if minmatchlen != nil {
-		r.request.cmd = append(r.request.cmd, "MINMATCHLEN", minmatchlen)
-	}
-	c.send(CmdLcsIdxKeys, r)
-	return r
-}
-
-// LcsIdxStrings - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsIdxStrings(string1, string2 string, withmatchlen bool, minmatchlen *int64) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "idx", "strings", string1, string2)
-	if withmatchlen {
-		r.request.cmd = append(r.request.cmd, "WITHMATCHLEN")
-	}
-	if minmatchlen != nil {
-		r.request.cmd = append(r.request.cmd, "MINMATCHLEN", minmatchlen)
-	}
-	c.send(CmdLcsIdxStrings, r)
-	return r
-}
-
-// LcsKeys - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsKeys(key1, key2 interface{}) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "keys", key1, key2)
-	c.send(CmdLcsKeys, r)
-	return r
-}
-
-// LcsLenKeys - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsLenKeys(key1, key2 interface{}) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "len", "keys", key1, key2)
-	c.send(CmdLcsLenKeys, r)
-	return r
-}
-
-// LcsLenStrings - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsLenStrings(string1, string2 string) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "len", "strings", string1, string2)
-	c.send(CmdLcsLenStrings, r)
-	return r
-}
-
-// LcsStrings - Longest common subsequence.
-// Group: string
-// Since: 6.0.0
-func (c *command) LcsStrings(string1, string2 string) Result {
-	r := newResult()
-	r.request.cmd = append(r.request.cmd, "Lcs", "strings", string1, string2)
-	c.send(CmdLcsStrings, r)
-	return r
-}
-
 // Lindex - Get an element from a list by its index
 // Group: list
 // Since: 1.0.0
@@ -3579,6 +3510,78 @@ func (c *command) Sscan(key interface{}, cursor int64, match *string, count *int
 	return r
 }
 
+// StralgoLcsIdxKeys - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsIdxKeys(key1, key2 interface{}, withmatchlen bool, minmatchlen *int64) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "IDX", "keys", key1, key2)
+	if withmatchlen {
+		r.request.cmd = append(r.request.cmd, "WITHMATCHLEN")
+	}
+	if minmatchlen != nil {
+		r.request.cmd = append(r.request.cmd, "MINMATCHLEN", minmatchlen)
+	}
+	c.send(CmdStralgoLcsIdxKeys, r)
+	return r
+}
+
+// StralgoLcsIdxStrings - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsIdxStrings(string1, string2 string, withmatchlen bool, minmatchlen *int64) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "IDX", "strings", string1, string2)
+	if withmatchlen {
+		r.request.cmd = append(r.request.cmd, "WITHMATCHLEN")
+	}
+	if minmatchlen != nil {
+		r.request.cmd = append(r.request.cmd, "MINMATCHLEN", minmatchlen)
+	}
+	c.send(CmdStralgoLcsIdxStrings, r)
+	return r
+}
+
+// StralgoLcsKeys - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsKeys(key1, key2 interface{}) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "keys", key1, key2)
+	c.send(CmdStralgoLcsKeys, r)
+	return r
+}
+
+// StralgoLcsLenKeys - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsLenKeys(key1, key2 interface{}) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "LEN", "keys", key1, key2)
+	c.send(CmdStralgoLcsLenKeys, r)
+	return r
+}
+
+// StralgoLcsLenStrings - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsLenStrings(string1, string2 string) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "LEN", "strings", string1, string2)
+	c.send(CmdStralgoLcsLenStrings, r)
+	return r
+}
+
+// StralgoLcsStrings - Longest common subsequence.
+// Group: string
+// Since: 6.0.0
+func (c *command) StralgoLcsStrings(string1, string2 string) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "STRALGO", "LCS", "strings", string1, string2)
+	c.send(CmdStralgoLcsStrings, r)
+	return r
+}
+
 // Strlen - Get the length of the value stored in a key
 // Group: string
 // Since: 2.2.0
@@ -4627,7 +4630,7 @@ const (
 	GroupTransactions = "Transactions"
 )
 
-var Groups = map[string][]string{GroupCluster: {CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlaves, CmdClusterSlots, CmdReadonly, CmdReadwrite}, GroupConnection: {CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAuth, CmdEcho, CmdHello, CmdPing, CmdQuit, CmdSelect, CmdSwapdb}, GroupGeneric: {CmdDel, CmdDo, CmdDump, CmdExists, CmdExpire, CmdExpireat, CmdKeys, CmdMigrate, CmdMove, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdRandomkey, CmdRename, CmdRenameNx, CmdRestore, CmdScan, CmdSort, CmdTTL, CmdTouch, CmdType, CmdUnlink, CmdWait}, GroupGeo: {CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember}, GroupHash: {CmdHdel, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals}, GroupHyperloglog: {CmdPfadd, CmdPfcount, CmdPfmerge}, GroupList: {CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdLindex, CmdLinsert, CmdLlen, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx}, GroupPubsub: {CmdPsubscribe, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdSubscribe, CmdUnsubscribe}, GroupScripting: {CmdEval, CmdEvalsha, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad}, GroupServer: {CmdBgrewriteaof, CmdBgsave, CmdClientGetname, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdFlushall, CmdFlushdb, CmdInfo, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLolwut, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdPsync, CmdReplicaof, CmdRole, CmdSave, CmdShutdown, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdTime}, GroupSet: {CmdSadd, CmdScard, CmdSdiff, CmdSdiffstore, CmdSinter, CmdSinterstore, CmdSismember, CmdSmembers, CmdSmove, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdSunion, CmdSunionstore}, GroupSortedSet: {CmdBzpopmax, CmdBzpopmin, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}, GroupStream: {CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim}, GroupString: {CmdAppend, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdDecr, CmdDecrby, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdLcsIdxKeys, CmdLcsIdxStrings, CmdLcsKeys, CmdLcsLenKeys, CmdLcsLenStrings, CmdLcsStrings, CmdMget, CmdMset, CmdMsetNx, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdStrlen}, GroupTransactions: {CmdDiscard, CmdExec, CmdMulti, CmdUnwatch, CmdWatch},
+var Groups = map[string][]string{GroupCluster: {CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlaves, CmdClusterSlots, CmdReadonly, CmdReadwrite}, GroupConnection: {CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAuth, CmdEcho, CmdHello, CmdPing, CmdQuit, CmdSelect, CmdSwapdb}, GroupGeneric: {CmdDel, CmdDo, CmdDump, CmdExists, CmdExpire, CmdExpireat, CmdKeys, CmdMigrate, CmdMove, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdRandomkey, CmdRename, CmdRenameNx, CmdRestore, CmdScan, CmdSort, CmdTTL, CmdTouch, CmdType, CmdUnlink, CmdWait}, GroupGeo: {CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember}, GroupHash: {CmdHdel, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals}, GroupHyperloglog: {CmdPfadd, CmdPfcount, CmdPfmerge}, GroupList: {CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdLindex, CmdLinsert, CmdLlen, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx}, GroupPubsub: {CmdPsubscribe, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdSubscribe, CmdUnsubscribe}, GroupScripting: {CmdEval, CmdEvalsha, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad}, GroupServer: {CmdBgrewriteaof, CmdBgsave, CmdClientGetname, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdFlushall, CmdFlushdb, CmdInfo, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLolwut, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdPsync, CmdReplicaof, CmdRole, CmdSave, CmdShutdown, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdTime}, GroupSet: {CmdSadd, CmdScard, CmdSdiff, CmdSdiffstore, CmdSinter, CmdSinterstore, CmdSismember, CmdSmembers, CmdSmove, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdSunion, CmdSunionstore}, GroupSortedSet: {CmdBzpopmax, CmdBzpopmin, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}, GroupStream: {CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim}, GroupString: {CmdAppend, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdDecr, CmdDecrby, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdMget, CmdMset, CmdMsetNx, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen}, GroupTransactions: {CmdDiscard, CmdExec, CmdMulti, CmdUnwatch, CmdWatch},
 }
 
 const (
@@ -4755,12 +4758,6 @@ const (
 	CmdLatencyHistory             = "LatencyHistory"
 	CmdLatencyLatest              = "LatencyLatest"
 	CmdLatencyReset               = "LatencyReset"
-	CmdLcsIdxKeys                 = "LcsIdxKeys"
-	CmdLcsIdxStrings              = "LcsIdxStrings"
-	CmdLcsKeys                    = "LcsKeys"
-	CmdLcsLenKeys                 = "LcsLenKeys"
-	CmdLcsLenStrings              = "LcsLenStrings"
-	CmdLcsStrings                 = "LcsStrings"
 	CmdLindex                     = "Lindex"
 	CmdLinsert                    = "Linsert"
 	CmdLlen                       = "Llen"
@@ -4858,6 +4855,12 @@ const (
 	CmdSrandmember                = "Srandmember"
 	CmdSrem                       = "Srem"
 	CmdSscan                      = "Sscan"
+	CmdStralgoLcsIdxKeys          = "StralgoLcsIdxKeys"
+	CmdStralgoLcsIdxStrings       = "StralgoLcsIdxStrings"
+	CmdStralgoLcsKeys             = "StralgoLcsKeys"
+	CmdStralgoLcsLenKeys          = "StralgoLcsLenKeys"
+	CmdStralgoLcsLenStrings       = "StralgoLcsLenStrings"
+	CmdStralgoLcsStrings          = "StralgoLcsStrings"
 	CmdStrlen                     = "Strlen"
 	CmdSubscribe                  = "Subscribe"
 	CmdSunion                     = "Sunion"
@@ -4921,4 +4924,4 @@ const (
 	CmdZunionstore                = "Zunionstore"
 )
 
-var CommandNames = []string{CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAppend, CmdAuth, CmdBgrewriteaof, CmdBgsave, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdBzpopmax, CmdBzpopmin, CmdClientGetname, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlaves, CmdClusterSlots, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdDecr, CmdDecrby, CmdDel, CmdDiscard, CmdDo, CmdDump, CmdEcho, CmdEval, CmdEvalsha, CmdExec, CmdExists, CmdExpire, CmdExpireat, CmdFlushall, CmdFlushdb, CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdHdel, CmdHello, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdInfo, CmdKeys, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLcsIdxKeys, CmdLcsIdxStrings, CmdLcsKeys, CmdLcsLenKeys, CmdLcsLenStrings, CmdLcsStrings, CmdLindex, CmdLinsert, CmdLlen, CmdLolwut, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdMget, CmdMigrate, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdMove, CmdMset, CmdMsetNx, CmdMulti, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdPfadd, CmdPfcount, CmdPfmerge, CmdPing, CmdPsubscribe, CmdPsync, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdQuit, CmdRandomkey, CmdReadonly, CmdReadwrite, CmdRename, CmdRenameNx, CmdReplicaof, CmdRestore, CmdRole, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx, CmdSadd, CmdSave, CmdScan, CmdScard, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad, CmdSdiff, CmdSdiffstore, CmdSelect, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdShutdown, CmdSinter, CmdSinterstore, CmdSismember, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSmembers, CmdSmove, CmdSort, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdStrlen, CmdSubscribe, CmdSunion, CmdSunionstore, CmdSwapdb, CmdTTL, CmdTime, CmdTouch, CmdType, CmdUnlink, CmdUnsubscribe, CmdUnwatch, CmdWait, CmdWatch, CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}
+var CommandNames = []string{CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAppend, CmdAuth, CmdBgrewriteaof, CmdBgsave, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdBzpopmax, CmdBzpopmin, CmdClientGetname, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlaves, CmdClusterSlots, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdDecr, CmdDecrby, CmdDel, CmdDiscard, CmdDo, CmdDump, CmdEcho, CmdEval, CmdEvalsha, CmdExec, CmdExists, CmdExpire, CmdExpireat, CmdFlushall, CmdFlushdb, CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdHdel, CmdHello, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdInfo, CmdKeys, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLindex, CmdLinsert, CmdLlen, CmdLolwut, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdMget, CmdMigrate, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdMove, CmdMset, CmdMsetNx, CmdMulti, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdPfadd, CmdPfcount, CmdPfmerge, CmdPing, CmdPsubscribe, CmdPsync, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdQuit, CmdRandomkey, CmdReadonly, CmdReadwrite, CmdRename, CmdRenameNx, CmdReplicaof, CmdRestore, CmdRole, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx, CmdSadd, CmdSave, CmdScan, CmdScard, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad, CmdSdiff, CmdSdiffstore, CmdSelect, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdShutdown, CmdSinter, CmdSinterstore, CmdSismember, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSmembers, CmdSmove, CmdSort, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen, CmdSubscribe, CmdSunion, CmdSunionstore, CmdSwapdb, CmdTTL, CmdTime, CmdTouch, CmdType, CmdUnlink, CmdUnsubscribe, CmdUnwatch, CmdWait, CmdWatch, CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}

@@ -51,7 +51,7 @@ Redis command | Replaced by API commands
 ------------- | ------------------------
 Acl | AclCat, AclDeluser, AclGenpass, AclGetuser, AclHelp, AclList, AclLoad, AclSave, AclSetuser, AclUsers, AclWhoami
 Bitop | BitopAnd, BitopNot, BitopOr, BitopXor
-Lcs | LcsStrings, LcsLenStrings, LcsIdxStrings, LcsKeys, LcsLenKeys, LcsIdxKeys
+Stralgo Lcs | StralgoLcsStrings, StralgoLcsLenStrings, StralgoLcsIdxStrings, StralgoLcsKeys, StralgoLcsLenKeys, StralgoLcsIdxKeys
 Object | ObjectEncoding, ObjectFreq, ObjectHelp, ObjectIdletime, ObjectRefcount
 Pubsub | PubsubChannels, PubsubNumpat, PubsubNumsub
 Set | Set, SetEx, SetExNx, SetExXx, SetNx, SetPx, SetPxNx, SetPxXx, SetXx
@@ -78,4 +78,4 @@ Sync | Psync
 
 ## Todo
 
-This is an early beta version. The client API may be subject to change until the first stable version is available.
+Provide full 6.0 command and command parameter set.

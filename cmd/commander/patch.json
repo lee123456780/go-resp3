@@ -642,7 +642,10 @@
 	{
 		"name": "AclGenpass",
 		"attr": "Auth",
-		"token": ["ACL", "GENPASS"]
+		"token": ["ACL", "GENPASS"],
+		"list": [
+			{"name": "bits", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
+		]
 	},
 	{
 		"name": "AclList",
@@ -695,9 +698,9 @@
 		]
 	},
 	{
-		"name": "LcsStrings",
+		"name": "StralgoLcsStrings",
 		"attr": "Lcs",
-		"token": ["Lcs"],
+		"token": ["STRALGO", "LCS"],
 		"list": [
 			{"cmd": "strings"},
 			{"name": "string1", "type": {"name": "string"}},
@@ -705,9 +708,9 @@
 		]
 	},
 	{
-		"name": "LcsLenStrings",
+		"name": "StralgoLcsLenStrings",
 		"attr": "Lcs",
-		"token": ["Lcs", "len"],
+		"token": ["STRALGO", "LCS", "LEN"],
 		"list": [
 			{"cmd": "strings"},
 			{"name": "string1", "type": {"name": "string"}},
@@ -715,9 +718,9 @@
 		]
 	},
 	{
-		"name": "LcsIdxStrings",
+		"name": "StralgoLcsIdxStrings",
 		"attr": "Lcs",
-		"token": ["Lcs", "idx"],
+		"token": ["STRALGO", "LCS", "IDX"],
 		"list": [
 			{"cmd": "strings"},
 			{"name": "string1", "type": {"name": "string"}},
@@ -727,9 +730,9 @@
 		]
 	},
 	{
-		"name": "LcsKeys",
+		"name": "StralgoLcsKeys",
 		"attr": "Lcs",
-		"token": ["Lcs"],
+		"token": ["STRALGO", "LCS"],
 		"list": [
 			{"cmd": "keys"},
 			{"name": "key1", "type": {"name": "interface{}"}},
@@ -737,9 +740,9 @@
 		]
 	},
 	{
-		"name": "LcsLenKeys",
+		"name": "StralgoLcsLenKeys",
 		"attr": "Lcs",
-		"token": ["Lcs", "len"],
+		"token": ["STRALGO", "LCS", "LEN"],
 		"list": [
 			{"cmd": "keys"},
 			{"name": "key1", "type": {"name": "interface{}"}},
@@ -747,9 +750,9 @@
 		]
 	},
 	{
-		"name": "LcsIdxKeys",
+		"name": "StralgoLcsIdxKeys",
 		"attr": "Lcs",
-		"token": ["Lcs", "idx"],
+		"token": ["STRALGO", "LCS", "IDX"],
 		"list": [
 			{"cmd": "keys"},
 			{"name": "key1", "type": {"name": "interface{}"}},

@@ -2051,7 +2051,20 @@
 			"ACL",
 			"GENPASS"
 		],
-		"list": null
+		"list": [
+			{
+				"_type": "field",
+				"name": "bits",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
 	},
 	{
 		"_type": "funcDecl",
@@ -5495,266 +5508,6 @@
 	},
 	{
 		"_type": "funcDecl",
-		"name": "LcsIdxKeys",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs",
-			"idx"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "keys",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "key1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "key2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "withmatchlen",
-				"cmd": "",
-				"type": {
-					"_type": "enumBoolType",
-					"values": [
-						"WITHMATCHLEN"
-					]
-				}
-			},
-			{
-				"_type": "field",
-				"name": "minmatchlen",
-				"cmd": "MINMATCHLEN",
-				"type": {
-					"_type": "pointerType",
-					"node": {
-						"_type": "baseType",
-						"name": "int64"
-					}
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
-		"name": "LcsIdxStrings",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs",
-			"idx"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "strings",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "string1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "string2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "withmatchlen",
-				"cmd": "",
-				"type": {
-					"_type": "enumBoolType",
-					"values": [
-						"WITHMATCHLEN"
-					]
-				}
-			},
-			{
-				"_type": "field",
-				"name": "minmatchlen",
-				"cmd": "MINMATCHLEN",
-				"type": {
-					"_type": "pointerType",
-					"node": {
-						"_type": "baseType",
-						"name": "int64"
-					}
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
-		"name": "LcsKeys",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "keys",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "key1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "key2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
-		"name": "LcsLenKeys",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs",
-			"len"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "keys",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "key1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "key2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "interface{}"
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
-		"name": "LcsLenStrings",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs",
-			"len"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "strings",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "string1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "string2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
-		"name": "LcsStrings",
-		"skip": false,
-		"attr": "Lcs",
-		"token": [
-			"Lcs"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "",
-				"cmd": "strings",
-				"type": null
-			},
-			{
-				"_type": "field",
-				"name": "string1",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			},
-			{
-				"_type": "field",
-				"name": "string2",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			}
-		]
-	},
-	{
-		"_type": "funcDecl",
 		"name": "Lindex",
 		"skip": false,
 		"attr": "Lindex",
@@ -8689,6 +8442,272 @@
 				"type": {
 					"_type": "baseType",
 					"name": "int64"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsIdxKeys",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS",
+			"IDX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "keys",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "key1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withmatchlen",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHMATCHLEN"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "minmatchlen",
+				"cmd": "MINMATCHLEN",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsIdxStrings",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS",
+			"IDX"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "strings",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "string1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "string2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "withmatchlen",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"WITHMATCHLEN"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "minmatchlen",
+				"cmd": "MINMATCHLEN",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsKeys",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "keys",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "key1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsLenKeys",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS",
+			"LEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "keys",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "key1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "key2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsLenStrings",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS",
+			"LEN"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "strings",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "string1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "string2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "StralgoLcsStrings",
+		"skip": false,
+		"attr": "Lcs",
+		"token": [
+			"STRALGO",
+			"LCS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "",
+				"cmd": "strings",
+				"type": null
+			},
+			{
+				"_type": "field",
+				"name": "string1",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "string2",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "string"
 				}
 			}
 		]
