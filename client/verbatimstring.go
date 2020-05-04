@@ -16,30 +16,26 @@ limitations under the License.
 
 package client
 
-import (
-	"strconv"
-)
-
 // A VerbatimString represents the redis verbatim string type.
 type VerbatimString string
 
 // FileFormat is returning the file format of a verbatim string.
-func (s VerbatimString) FileFormat() string { return string(s[:3]) }
+func (s VerbatimString) FileFormat() string { return _verbatimString(s).FileFormat() }
 
 // String implements the Stringer interface.
-func (s VerbatimString) String() string { return string(s[4:]) }
+func (s VerbatimString) String() string { return _verbatimString(s).String() }
 
 // Kind returns the type of a VerbatimString.
-func (s VerbatimString) Kind() RedisKind { return RkVerbatimString }
+func (s VerbatimString) Kind() RedisKind { return _verbatimString(s).Kind() }
 
 // ToString implements the Converter Stringer interface.
-func (s VerbatimString) ToString() (string, error) { return string(s[4:]), nil }
+func (s VerbatimString) ToString() (string, error) { return _verbatimString(s).ToString() }
 
 // ToInt64 implements the Converter ToInt64er interface.
-func (s VerbatimString) ToInt64() (int64, error) { return strconv.ParseInt(string(s[4:]), 10, 64) }
+func (s VerbatimString) ToInt64() (int64, error) { return _verbatimString(s).ToInt64() }
 
 // ToFloat64 implements the Converter ToFloat64er interface.
-func (s VerbatimString) ToFloat64() (float64, error) { return strconv.ParseFloat(string(s[4:]), 64) }
+func (s VerbatimString) ToFloat64() (float64, error) { return _verbatimString(s).ToFloat64() }
 
 // ToBool implements the Converter ToBooler interface.
-func (s VerbatimString) ToBool() (bool, error) { return string(s[4:]) == ReplyOK, nil }
+func (s VerbatimString) ToBool() (bool, error) { return _verbatimString(s).ToBool() }

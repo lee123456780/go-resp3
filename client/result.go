@@ -182,57 +182,58 @@ func (r *result) IsNull() (bool, error) {
 // VerbatimString returns a VerbatimString if the Redis type is a verbatim string.
 func (r *result) VerbatimString() (VerbatimString, error) {
 	if err := r.wait(); err != nil {
-		return _verbatimString, err
+		return __verbatimString, err
 	}
-	s, ok := r.value.(VerbatimString)
-	if !ok {
-		return _verbatimString, newConversionError("VerbatimString", r.value)
+	switch r.value.Kind() {
+	case RkVerbatimString:
+		return VerbatimString(r.value.(_verbatimString)), nil
+	default:
+		return __verbatimString, newConversionError("VerbatimString", r.value)
 	}
-	return s, nil
 }
 
 // Slice returns a Slice if the Redis type is an array.
 func (r *result) Slice() (Slice, error) {
 	if err := r.wait(); err != nil {
-		return _slice, err
+		return __slice, err
 	}
 	switch r.value.Kind() {
 	case RkSlice:
-		return r.value.(Slice), nil
+		return Slice(r.value.(_slice)), nil
 	case RkNull:
-		return _slice, nil
+		return __slice, nil
 	default:
-		return _slice, newConversionError("Slice", r.value)
+		return __slice, newConversionError("Slice", r.value)
 	}
 }
 
 // Map returns a Map if the Redis type is a map.
 func (r *result) Map() (Map, error) {
 	if err := r.wait(); err != nil {
-		return _map, err
+		return __map, err
 	}
 	switch r.value.Kind() {
 	case RkMap:
-		return r.value.(Map), nil
+		return Map(r.value.(_map)), nil
 	case RkNull:
-		return _map, nil
+		return __map, nil
 	default:
-		return _map, newConversionError("Map", r.value)
+		return __map, newConversionError("Map", r.value)
 	}
 }
 
 // Set returns a Set if the Redis type is a set.
 func (r *result) Set() (Set, error) {
 	if err := r.wait(); err != nil {
-		return _set, err
+		return __set, err
 	}
 	switch r.value.Kind() {
 	case RkSet:
-		return r.value.(Set), nil
+		return Set(r.value.(_set)), nil
 	case RkNull:
-		return _set, nil
+		return __set, nil
 	default:
-		return _set, newConversionError("Set", r.value)
+		return __set, newConversionError("Set", r.value)
 	}
 }
 

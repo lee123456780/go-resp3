@@ -518,7 +518,7 @@ func (d *decode) decodeType() (RedisValue, error) {
 	switch t {
 	case nullType:
 		err := d.r.readLineBreak()
-		return _null, err
+		return __null, err
 	case blobStringType:
 		return d.decodeBlobString()
 	case verbatimStringType:
@@ -592,7 +592,7 @@ func (d *decode) decodeVerbatimString() (RedisValue, error) {
 	if err != nil {
 		return nil, err
 	}
-	return VerbatimString(string(b)), err
+	return _verbatimString(string(b)), err
 }
 
 func (d *decode) decodeStreamedString() ([]byte, error) {
@@ -635,7 +635,7 @@ func (d *decode) decodeSimpleString() (RedisValue, error) {
 // Number
 func (d *decode) decodeNumber() (RedisValue, error) {
 	i, err := d.r.readFixedSize()
-	return number(i), err
+	return _number(i), err
 }
 
 // Double
@@ -648,7 +648,7 @@ func (d *decode) decodeDouble() (RedisValue, error) {
 	if err != nil {
 		return nil, &InvalidDoubleError{Value: string(b)}
 	}
-	return double(f), nil
+	return _double(f), nil
 }
 
 // Bignumber
@@ -661,7 +661,7 @@ func (d *decode) decodeBigNumber() (RedisValue, error) {
 	if !ok {
 		return nil, &InvalidBigNumberError{Value: string(b)}
 	}
-	return (*bignumber)(i), nil
+	return (*_bignumber)(i), nil
 }
 
 // Boolean
@@ -670,7 +670,7 @@ func (d *decode) decodeBoolean() (RedisValue, error) {
 	if err != nil {
 		return nil, err
 	}
-	return boolean(b == booleanTrue), nil
+	return _boolean(b == booleanTrue), nil
 }
 
 // Push Notification
@@ -683,8 +683,8 @@ func (d *decode) decodePushSlice() (interface{}, error) {
 }
 
 // Slice
-func (d *decode) decodeSlice() (Slice, error) {
-	var v Slice
+func (d *decode) decodeSlice() (_slice, error) {
+	var v _slice
 
 	size, err := d.r.readSize()
 	if err != nil {
@@ -699,8 +699,8 @@ func (d *decode) decodeSlice() (Slice, error) {
 	return v, err
 }
 
-func (d *decode) decodeFixedSlice(size int64) (Slice, error) {
-	s := make(Slice, size)
+func (d *decode) decodeFixedSlice(size int64) (_slice, error) {
+	s := make(_slice, size)
 	for i := int64(0); i < size; i++ {
 		val, err := d.decode()
 		if err != nil {
@@ -711,8 +711,8 @@ func (d *decode) decodeFixedSlice(size int64) (Slice, error) {
 	return s, nil
 }
 
-func (d *decode) decodeStreamedSlice() (Slice, error) {
-	s := make(Slice, 0)
+func (d *decode) decodeStreamedSlice() (_slice, error) {
+	s := make(_slice, 0)
 	for {
 		t, err := d.r.peek()
 		if err != nil {
@@ -734,8 +734,8 @@ func (d *decode) decodeStreamedSlice() (Slice, error) {
 }
 
 // Map
-func (d *decode) decodeMap() (Map, error) {
-	var v Map
+func (d *decode) decodeMap() (_map, error) {
+	var v _map
 
 	size, err := d.r.readSize()
 	if err != nil {
@@ -750,8 +750,8 @@ func (d *decode) decodeMap() (Map, error) {
 	return v, err
 }
 
-func (d *decode) decodeFixedMap(size int64) (Map, error) {
-	m := make(Map, size)
+func (d *decode) decodeFixedMap(size int64) (_map, error) {
+	m := make(_map, size)
 	for i := int64(0); i < size; i++ {
 		key, err := d.decode()
 		if err != nil {
@@ -766,8 +766,8 @@ func (d *decode) decodeFixedMap(size int64) (Map, error) {
 	return m, nil
 }
 
-func (d *decode) decodeStreamedMap() (Map, error) {
-	m := make(Map, 0)
+func (d *decode) decodeStreamedMap() (_map, error) {
+	m := make(_map, 0)
 	for {
 		t, err := d.r.peek()
 		if err != nil {
@@ -793,8 +793,8 @@ func (d *decode) decodeStreamedMap() (Map, error) {
 }
 
 // Set
-func (d *decode) decodeSet() (Set, error) {
-	var v Set
+func (d *decode) decodeSet() (_set, error) {
+	var v _set
 
 	size, err := d.r.readSize()
 	if err != nil {
@@ -809,8 +809,8 @@ func (d *decode) decodeSet() (Set, error) {
 	return v, err
 }
 
-func (d *decode) decodeFixedSet(size int64) (Set, error) {
-	s := make(Set, size)
+func (d *decode) decodeFixedSet(size int64) (_set, error) {
+	s := make(_set, size)
 	for i := int64(0); i < size; i++ {
 		val, err := d.decode()
 		if err != nil {
@@ -821,8 +821,8 @@ func (d *decode) decodeFixedSet(size int64) (Set, error) {
 	return s, nil
 }
 
-func (d *decode) decodeStreamedSet() (Set, error) {
-	s := make(Set, 0)
+func (d *decode) decodeStreamedSet() (_set, error) {
+	s := make(_set, 0)
 	for {
 		t, err := d.r.peek()
 		if err != nil {

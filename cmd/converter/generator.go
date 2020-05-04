@@ -138,7 +138,7 @@ func (g *generator) generateResultFcts(a *analyzer, pkg string) []byte {
 const attrTemplate = `func (%[1]s %[2]s) Attr() *Map { return nil }`
 const convertTemplate = `func (%[1]s %[2]s) %[3]s() (%[4]s) {return %[5]s, newConversionError("%[3]s", %[1]s)}`
 
-var objNames = []string{"null", "_string", "number", "double", "bignumber", "boolean", "Slice", "Map", "Set", "VerbatimString"}
+var objNames = []string{"_null", "_string", "_number", "_double", "_bignumber", "_boolean", "_verbatimString", "_slice", "_map", "_set"}
 
 func (g *generator) objVarname(objName string, objs map[string]map[string]*ast.FuncDecl) string {
 	if mths, ok := objs[objName]; ok {

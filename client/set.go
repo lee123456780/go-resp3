@@ -20,18 +20,8 @@ package client
 type Set []RedisValue
 
 // Kind returns the type of a Set.
-func (s Set) Kind() RedisKind { return RkSet }
+func (s Set) Kind() RedisKind { return _set(s).Kind() }
 
 // ToStringSet returns a map with keys of type string and boolean true values. In case key conversion to string is not possible
 // a ConvertionError is returned.
-func (s Set) ToStringSet() (map[string]bool, error) {
-	r := make(map[string]bool, len(s))
-	for _, item := range s {
-		key, err := item.ToString()
-		if err != nil {
-			return nil, err
-		}
-		r[key] = true
-	}
-	return r, nil
-}
+func (s Set) ToStringSet() (map[string]bool, error) { return _set(s).ToStringSet() }

@@ -77,11 +77,11 @@ func newNotification(v []RedisValue) (interface{}, error) {
 
 	case pubSubSubscribe, pubSubPsubscribe:
 		assertNotification(len(v) == 3 && v[1].Kind() == RkString && v[2].Kind() == RkNumber, v)
-		return &subscribeNotification{channel: string(v[1].(_string)), count: int64(v[2].(number))}, nil
+		return &subscribeNotification{channel: string(v[1].(_string)), count: int64(v[2].(_number))}, nil
 
 	case pubSubUnsubscribe, pubSubPunsubscribe:
 		assertNotification(len(v) == 3 && v[1].Kind() == RkString && v[2].Kind() == RkNumber, v)
-		return &unsubscribeNotification{channel: string(v[1].(_string)), count: int64(v[2].(number))}, nil
+		return &unsubscribeNotification{channel: string(v[1].(_string)), count: int64(v[2].(_number))}, nil
 
 	case pubSubMessage:
 		assertNotification(len(v) == 3 && v[1].Kind() == RkString && v[2].Kind() == RkString, v)
