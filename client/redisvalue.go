@@ -53,11 +53,11 @@ type baseRedisType interface {
 }
 
 var (
-	__null           = _null{}
-	__verbatimString = VerbatimString("")
-	__slice          = Slice{}
-	__map            = Map{}
-	__set            = Set{}
+	_Null           = _null{}
+	_VerbatimString = _verbatimString("")
+	_Slice          = _slice{}
+	_Map            = _map{}
+	_Set            = _set{}
 )
 
 var _ baseRedisType = (*_null)(nil)
@@ -88,26 +88,29 @@ type attrRedisValue struct {
 
 func (v attrRedisValue) Attr() *Map { return (*Map)(&v.attr) }
 
-// Caution: _null need to implement all Slice, Map, Set conversion functions
-// --> _null is not based on baseExtType but baseType only
+// Caution: _null need to implement all Slice, Map, Set conversion functions (support method chaining)
 type _null struct{}
 
-func (n _null) _interface() interface{}                             { return nil }
-func (n _null) Kind() RedisKind                                     { return RkNull }
-func (n _null) ToInt64Slice() ([]int64, error)                      { return __slice.ToInt64Slice() }
-func (n _null) ToSlice() ([]interface{}, error)                     { return __slice.ToSlice() }
-func (n _null) ToSlice2() ([][]interface{}, error)                  { return __slice.ToSlice2() }
-func (n _null) ToSlice3() ([][][]interface{}, error)                { return __slice.ToSlice3() }
-func (n _null) ToStringMapSlice() ([]map[string]interface{}, error) { return __slice.ToStringMapSlice() }
-func (n _null) ToStringSlice() ([]string, error)                    { return __slice.ToStringSlice() }
-func (n _null) ToTree() ([]interface{}, error)                      { return __slice.ToTree() }
-func (n _null) ToXrange() ([]XItem, error)                          { return __slice.ToXrange() }
-func (n _null) ToStringInt64Map() (map[string]int64, error)         { return __map.ToStringInt64Map() }
-func (n _null) ToStringMap() (map[string]interface{}, error)        { return __map.ToStringMap() }
-func (n _null) ToStringValueMap() (map[string]RedisValue, error)    { return __map.ToStringValueMap() }
-func (n _null) ToStringStringMap() (map[string]string, error)       { return __map.ToStringStringMap() }
-func (n _null) ToXread() (map[string][]XItem, error)                { return __map.ToXread() }
-func (n _null) ToStringSet() (map[string]bool, error)               { return __set.ToStringSet() }
+func (n _null) _interface() interface{} { return nil }
+func (n _null) Kind() RedisKind         { return RkNull }
+
+func (n _null) ToSlice() (Slice, error)                             { return _Slice.ToSlice() }
+func (n _null) ToInt64Slice() ([]int64, error)                      { return _Slice.ToInt64Slice() }
+func (n _null) ToIntfSlice() ([]interface{}, error)                 { return _Slice.ToIntfSlice() }
+func (n _null) ToIntfSlice2() ([][]interface{}, error)              { return _Slice.ToIntfSlice2() }
+func (n _null) ToIntfSlice3() ([][][]interface{}, error)            { return _Slice.ToIntfSlice3() }
+func (n _null) ToStringMapSlice() ([]map[string]interface{}, error) { return _Slice.ToStringMapSlice() }
+func (n _null) ToStringSlice() ([]string, error)                    { return _Slice.ToStringSlice() }
+func (n _null) ToTree() ([]interface{}, error)                      { return _Slice.ToTree() }
+func (n _null) ToXrange() ([]XItem, error)                          { return _Slice.ToXrange() }
+func (n _null) ToMap() (Map, error)                                 { return _Map.ToMap() }
+func (n _null) ToStringInt64Map() (map[string]int64, error)         { return _Map.ToStringInt64Map() }
+func (n _null) ToStringMap() (map[string]interface{}, error)        { return _Map.ToStringMap() }
+func (n _null) ToStringValueMap() (map[string]RedisValue, error)    { return _Map.ToStringValueMap() }
+func (n _null) ToStringStringMap() (map[string]string, error)       { return _Map.ToStringStringMap() }
+func (n _null) ToXread() (map[string][]XItem, error)                { return _Map.ToXread() }
+func (n _null) ToSet() (Set, error)                                 { return _Set.ToSet() }
+func (n _null) ToStringSet() (map[string]bool, error)               { return _Set.ToStringSet() }
 
 type _string string
 
@@ -175,18 +178,20 @@ func (b _boolean) ToBool() (bool, error) { return bool(b), nil }
 
 type _verbatimString string
 
-func (s _verbatimString) Kind() RedisKind             { return RkVerbatimString }
-func (s _verbatimString) FileFormat() string          { return string(s[:3]) }
-func (s _verbatimString) String() string              { return string(s[4:]) }
-func (s _verbatimString) ToString() (string, error)   { return string(s[4:]), nil }
-func (s _verbatimString) ToInt64() (int64, error)     { return strconv.ParseInt(string(s[4:]), 10, 64) }
-func (s _verbatimString) ToFloat64() (float64, error) { return strconv.ParseFloat(string(s[4:]), 64) }
-func (s _verbatimString) ToBool() (bool, error)       { return string(s[4:]) == ReplyOK, nil }
+func (s _verbatimString) Kind() RedisKind                           { return RkVerbatimString }
+func (s _verbatimString) ToVerbatimString() (VerbatimString, error) { return VerbatimString(s), nil }
+func (s _verbatimString) FileFormat() string                        { return string(s[:3]) }
+func (s _verbatimString) String() string                            { return string(s[4:]) }
+func (s _verbatimString) ToString() (string, error)                 { return string(s[4:]), nil }
+func (s _verbatimString) ToInt64() (int64, error)                   { return strconv.ParseInt(string(s[4:]), 10, 64) }
+func (s _verbatimString) ToFloat64() (float64, error)               { return strconv.ParseFloat(string(s[4:]), 64) }
+func (s _verbatimString) ToBool() (bool, error)                     { return string(s[4:]) == ReplyOK, nil }
 
 type _slice []RedisValue
 
-func (s _slice) Kind() RedisKind { return RkSlice }
-func (s _slice) ToSlice() ([]interface{}, error) {
+func (s _slice) Kind() RedisKind         { return RkSlice }
+func (s _slice) ToSlice() (Slice, error) { return Slice(s), nil }
+func (s _slice) ToIntfSlice() ([]interface{}, error) {
 	r := make([]interface{}, len(s))
 	for i, item := range s {
 		switch value := item.(type) {
@@ -198,10 +203,10 @@ func (s _slice) ToSlice() ([]interface{}, error) {
 	}
 	return r, nil
 }
-func (s _slice) ToSlice2() ([][]interface{}, error) {
+func (s _slice) ToIntfSlice2() ([][]interface{}, error) {
 	r := make([][]interface{}, len(s))
 	for i, item := range s {
-		l, err := item.ToSlice()
+		l, err := item.ToIntfSlice()
 		if err != nil {
 			return nil, newConversionError("toSlice", item)
 		}
@@ -209,10 +214,10 @@ func (s _slice) ToSlice2() ([][]interface{}, error) {
 	}
 	return r, nil
 }
-func (s _slice) ToSlice3() ([][][]interface{}, error) {
+func (s _slice) ToIntfSlice3() ([][][]interface{}, error) {
 	r := make([][][]interface{}, len(s))
 	for i, item := range s {
-		l, err := item.ToSlice2()
+		l, err := item.ToIntfSlice2()
 		if err != nil {
 			return nil, newConversionError("toSlice2", item)
 		}
@@ -298,7 +303,8 @@ func (s _slice) ToXrange() ([]XItem, error) {
 
 type _map []MapItem
 
-func (m _map) Kind() RedisKind { return RkMap }
+func (m _map) Kind() RedisKind     { return RkMap }
+func (m _map) ToMap() (Map, error) { return Map(m), nil }
 func (m _map) ToStringMap() (map[string]interface{}, error) {
 	r := make(map[string]interface{}, len(m))
 	for _, item := range m {
@@ -374,7 +380,8 @@ func (m _map) ToXread() (map[string][]XItem, error) {
 
 type _set []RedisValue
 
-func (s _set) Kind() RedisKind { return RkSet }
+func (s _set) Kind() RedisKind     { return RkSet }
+func (s _set) ToSet() (Set, error) { return Set(s), nil }
 func (s _set) ToStringSet() (map[string]bool, error) {
 	r := make(map[string]bool, len(s))
 	for _, item := range s {

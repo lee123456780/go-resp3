@@ -39,14 +39,18 @@ func (e *ConversionError) Error() string {
 // Converter is the interface that groups Redis value conversion interfaces.
 type Converter interface {
 	Stringer
+	VerbatimStringer
 	Int64er
 	Float64er
 	Booler
+	Slicer
+	Mapper
+	Setter
 
 	Int64Slicer
-	Slicer
-	Slice2er
-	Slice3er
+	IntfSlicer
+	IntfSlice2er
+	IntfSlice3er
 	StringMapSlicer
 	StringSlicer
 	Treer
@@ -66,6 +70,13 @@ type Stringer interface {
 	// ToString converts a redis value to a string.
 	// In case the conversion is not supported a ConversionError is returned.
 	ToString() (string, error)
+}
+
+// VerbatimStringer is implemented by any redis value that has a ToVerbatimString method.
+type VerbatimStringer interface {
+	// ToVerbatimString converts a redis value to a VerbatimString.
+	// In case the conversion is not supported a ConversionError is returned.
+	ToVerbatimString() (VerbatimString, error)
 }
 
 // Int64er is implemented by any redis value that has a ToInt64 method.
@@ -89,31 +100,52 @@ type Booler interface {
 	ToBool() (bool, error)
 }
 
+// Slicer is implemented by any redis value that has a ToSlice method.
+type Slicer interface {
+	// ToSlice converts a redis value to a Slice.
+	// In case value conversion is not possible a ConversitionError is returned.
+	ToSlice() (Slice, error)
+}
+
+// Mapper is implemented by any redis value that has a ToMap method.
+type Mapper interface {
+	// ToMap converts a redis value to a Map.
+	// In case value conversion is not possible a ConversitionError is returned.
+	ToMap() (Map, error)
+}
+
+// Setter is implemented by any redis value that has a ToSet method.
+type Setter interface {
+	// ToSet converts a redis value to a Set.
+	// In case value conversion is not possible a ConversitionError is returned.
+	ToSet() (Set, error)
+}
+
 // Int64Slicer is implemented by any redis value that has a ToInt64Slice method.
 type Int64Slicer interface {
-	// ToInt64Slice returns a slice with values of type int64. In case value conversion to string is not possible
+	// ToInt64Slice returns a slice with values of type int64. In case value conversion to []int64 is not possible
 	// a ConversitionError is returned.
 	ToInt64Slice() ([]int64, error)
 }
 
-// Slicer is implemented by any redis value that has a ToSlice method.
-type Slicer interface {
-	// ToSlice returns a slice with values of type interface{}.
-	ToSlice() ([]interface{}, error)
+// IntfSlicer is implemented by any redis value that has a ToIntfSlice method.
+type IntfSlicer interface {
+	// ToIntfSlice returns a slice with values of type interface{}.
+	ToIntfSlice() ([]interface{}, error)
 }
 
-// Slice2er is implemented by any redis value that has a ToSlice2 method.
-type Slice2er interface {
-	// ToSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
+// IntfSlice2er is implemented by any redis value that has a ToIntfSlice2 method.
+type IntfSlice2er interface {
+	// ToInttSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
 	// a ConversitionError is returned.
-	ToSlice2() ([][]interface{}, error)
+	ToIntfSlice2() ([][]interface{}, error)
 }
 
-// Slice3er is implemented by any redis value that has a ToSlice3 method.
-type Slice3er interface {
-	// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+// IntfSlice3er is implemented by any redis value that has a ToIntfSlice3 method.
+type IntfSlice3er interface {
+	// ToIntSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
 	// a ConversitionError is returned.
-	ToSlice3() ([][][]interface{}, error)
+	ToIntfSlice3() ([][][]interface{}, error)
 }
 
 // StringMapSlicer is implemented by any redis value that has a ToStringMapSlice method.
@@ -125,7 +157,7 @@ type StringMapSlicer interface {
 
 // StringSlicer is implemented by any redis value that has a ToStringSlice method.
 type StringSlicer interface {
-	// ToStringSlice returns a slice with values of type string. In case value conversion to string is not possible
+	// ToStringSlice returns a slice with values of type string. In case value conversion to []string is not possible
 	// a ConversitionError is returned.
 	ToStringSlice() ([]string, error)
 }

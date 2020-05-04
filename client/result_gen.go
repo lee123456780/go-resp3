@@ -29,7 +29,7 @@ func (r *result) ToInt64() (int64, error) {
 	return r.value.ToInt64()
 }
 
-// ToInt64Slice returns a slice with values of type int64. In case value conversion to string is not possible
+// ToInt64Slice returns a slice with values of type int64. In case value conversion to []int64 is not possible
 // a ConversitionError is returned.
 func (r *result) ToInt64Slice() ([]int64, error) {
 	if err := r.wait(); err != nil {
@@ -38,30 +38,57 @@ func (r *result) ToInt64Slice() ([]int64, error) {
 	return r.value.ToInt64Slice()
 }
 
-// ToSlice returns a slice with values of type interface{}.
-func (r *result) ToSlice() ([]interface{}, error) {
+// ToIntfSlice returns a slice with values of type interface{}.
+func (r *result) ToIntfSlice() ([]interface{}, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToIntfSlice()
+}
+
+// ToInttSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
+// a ConversitionError is returned.
+func (r *result) ToIntfSlice2() ([][]interface{}, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToIntfSlice2()
+}
+
+// ToIntSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+// a ConversitionError is returned.
+func (r *result) ToIntfSlice3() ([][][]interface{}, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToIntfSlice3()
+}
+
+// ToMap converts a redis value to a Map.
+// In case value conversion is not possible a ConversitionError is returned.
+func (r *result) ToMap() (Map, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToMap()
+}
+
+// ToSet converts a redis value to a Set.
+// In case value conversion is not possible a ConversitionError is returned.
+func (r *result) ToSet() (Set, error) {
+	if err := r.wait(); err != nil {
+		return nil, err
+	}
+	return r.value.ToSet()
+}
+
+// ToSlice converts a redis value to a Slice.
+// In case value conversion is not possible a ConversitionError is returned.
+func (r *result) ToSlice() (Slice, error) {
 	if err := r.wait(); err != nil {
 		return nil, err
 	}
 	return r.value.ToSlice()
-}
-
-// ToSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
-// a ConversitionError is returned.
-func (r *result) ToSlice2() ([][]interface{}, error) {
-	if err := r.wait(); err != nil {
-		return nil, err
-	}
-	return r.value.ToSlice2()
-}
-
-// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
-// a ConversitionError is returned.
-func (r *result) ToSlice3() ([][][]interface{}, error) {
-	if err := r.wait(); err != nil {
-		return nil, err
-	}
-	return r.value.ToSlice3()
 }
 
 // ToString converts a redis value to a string.
@@ -109,7 +136,7 @@ func (r *result) ToStringSet() (map[string]bool, error) {
 	return r.value.ToStringSet()
 }
 
-// ToStringSlice returns a slice with values of type string. In case value conversion to string is not possible
+// ToStringSlice returns a slice with values of type string. In case value conversion to []string is not possible
 // a ConversitionError is returned.
 func (r *result) ToStringSlice() ([]string, error) {
 	if err := r.wait(); err != nil {
@@ -143,6 +170,15 @@ func (r *result) ToTree() ([]interface{}, error) {
 		return nil, err
 	}
 	return r.value.ToTree()
+}
+
+// ToVerbatimString converts a redis value to a VerbatimString.
+// In case the conversion is not supported a ConversionError is returned.
+func (r *result) ToVerbatimString() (VerbatimString, error) {
+	if err := r.wait(); err != nil {
+		return "", err
+	}
+	return r.value.ToVerbatimString()
 }
 
 // ToXrange returns a slice with values of type XItem. In case the conversion is not possible

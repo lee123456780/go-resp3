@@ -77,10 +77,11 @@ func (g *generator) writeDoc(doc *ast.CommentGroup) {
 }
 
 var initialValue = map[string]string{
-	"string":  "\"\"",
-	"int64":   "0",
-	"float64": "0",
-	"bool":    "false",
+	"string":         "\"\"",
+	"VerbatimString": "\"\"",
+	"int64":          "0",
+	"float64":        "0",
+	"bool":           "false",
 }
 
 func typeInitialValue(typ string) string {

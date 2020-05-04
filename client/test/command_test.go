@@ -603,12 +603,12 @@ func testClientUnblock(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testCommand(conn client.Conn, ctx *testCTX, t *testing.T) {
-	_, err := conn.Command().ToSlice()
+	_, err := conn.Command().ToIntfSlice()
 	assertNil(t, err)
 }
 
 func testCommandCount(conn client.Conn, ctx *testCTX, t *testing.T) {
-	slice, err := conn.Command().ToSlice()
+	slice, err := conn.Command().ToIntfSlice()
 	assertNil(t, err)
 	i, err := conn.CommandCount().ToInt64()
 	assertNil(t, err)
@@ -628,10 +628,10 @@ func testCommandGetkeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testCommandInfo(conn client.Conn, ctx *testCTX, t *testing.T) {
-	slice, err := conn.CommandInfo([]string{"get", "set", "eval"}).ToSlice()
+	slice, err := conn.CommandInfo([]string{"get", "set", "eval"}).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, len(slice), 3)
-	slice, err = conn.CommandInfo([]string{"foo", "evalsha", "config", "bar"}).ToSlice()
+	slice, err = conn.CommandInfo([]string{"foo", "evalsha", "config", "bar"}).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, len(slice), 4)
 	assertNil(t, slice[0])
@@ -718,11 +718,11 @@ func testLatency(conn client.Conn, ctx *testCTX, t *testing.T) {
 	assertNotNil(t, s)
 	//t.Logf("\nLatency Doctor:\n%s", s)
 
-	slice, err := conn.LatencyLatest().ToSlice()
+	slice, err := conn.LatencyLatest().ToIntfSlice()
 	assertNil(t, err)
 	assertNotNil(t, slice)
 
-	slice2, err := conn.LatencyHistory("command").ToSlice2()
+	slice2, err := conn.LatencyHistory("command").ToIntfSlice2()
 	assertNil(t, err)
 	assertNotNil(t, slice2)
 }
@@ -756,7 +756,7 @@ func testMemoryPurge(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testMemoryStats(conn client.Conn, ctx *testCTX, t *testing.T) {
-	m, err := conn.MemoryStats().Map()
+	m, err := conn.MemoryStats().ToMap()
 	assertNil(t, err)
 	assertNotNil(t, m)
 }
@@ -775,7 +775,7 @@ func testModuleList(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testRole(conn client.Conn, ctx *testCTX, t *testing.T) {
-	slice, err := conn.Role().ToSlice()
+	slice, err := conn.Role().ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice[0], "master")
 }
@@ -790,7 +790,7 @@ func testSlowlog(conn client.Conn, ctx *testCTX, t *testing.T) {
 	l, err := conn.SlowlogLen().ToInt64()
 	assertNil(t, err)
 	//slice, err := conn.SlowlogGet(nil).ToSlice() // Redis 6 beta: slowlog get without number of entries returns max. 10 entries
-	slice, err := conn.SlowlogGet(client.Int64Ptr(l)).ToSlice()
+	slice, err := conn.SlowlogGet(client.Int64Ptr(l)).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, l, len(slice))
 	ok, err := conn.SlowlogReset().ToBool()
@@ -1095,7 +1095,7 @@ func testMget(conn client.Conn, ctx *testCTX, t *testing.T) {
 	ok, err = conn.Set(key2, "World").ToBool()
 	assertNil(t, err)
 	assertEqual(t, ok, true)
-	slice, err := conn.Mget([]interface{}{key1, key2, nonExisting}).ToSlice()
+	slice, err := conn.Mget([]interface{}{key1, key2, nonExisting}).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{"Hello", "World", nil})
 }
@@ -1121,7 +1121,7 @@ func testMsetNx(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.MsetNx([]client.KeyValue{{key2, "new"}, {key3, "World"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 0)
-	slice, err := conn.Mget([]interface{}{key1, key2, key3}).ToSlice()
+	slice, err := conn.Mget([]interface{}{key1, key2, key3}).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{"Hello", "there", nil})
 }
@@ -1564,12 +1564,12 @@ func testRestore(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testScan(conn client.Conn, ctx *testCTX, t *testing.T) {
-	slice, err := conn.Scan(0, nil, nil, nil).Slice()
+	slice, err := conn.Scan(0, nil, nil, nil).ToSlice()
 	assertNil(t, err)
 	cursor, err := slice[0].ToInt64()
 	assertNil(t, err)
 	for cursor != 0 {
-		slice, err = conn.Scan(cursor, nil, nil, nil).Slice()
+		slice, err = conn.Scan(cursor, nil, nil, nil).ToSlice()
 		assertNil(t, err)
 		cursor, err = slice[0].ToInt64()
 		assertNil(t, err)
@@ -1971,7 +1971,7 @@ func testHlen(conn client.Conn, ctx *testCTX, t *testing.T) {
 func testHmget(conn client.Conn, ctx *testCTX, t *testing.T) {
 	key := ctx.newKey("myHash")
 	assertNil(t, conn.Hset(key, []client.FieldValue{{"field1", "Hello"}, {"field2", "World"}}).Err())
-	a2, err := conn.Hmget(key, []interface{}{"field1", "field2", "nofield"}).ToSlice()
+	a2, err := conn.Hmget(key, []interface{}{"field1", "field2", "nofield"}).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, a2, []interface{}{"Hello", "World", nil})
 }
@@ -2026,12 +2026,12 @@ func testHscan(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Hset(key, []client.FieldValue{{"field1", "Hello"}, {"field2", "World"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Hscan(key, 0, nil, nil).Slice()
+	slice, err := conn.Hscan(key, 0, nil, nil).ToSlice()
 	assertNil(t, err)
 	cursor, err := slice[0].ToInt64()
 	assertNil(t, err)
 	for cursor != 0 {
-		slice, err = conn.Hscan(key, cursor, nil, nil).Slice()
+		slice, err = conn.Hscan(key, cursor, nil, nil).ToSlice()
 		assertNil(t, err)
 		cursor, err = slice[0].ToInt64()
 		assertNil(t, err)
@@ -2301,12 +2301,12 @@ func testSscan(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Sadd(key, []interface{}{"Hello", "World"}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Sscan(key, 0, nil, nil).Slice()
+	slice, err := conn.Sscan(key, 0, nil, nil).ToSlice()
 	assertNil(t, err)
 	cursor, err := slice[0].ToInt64()
 	assertNil(t, err)
 	for cursor != 0 {
-		slice, err = conn.Sscan(key, cursor, nil, nil).Slice()
+		slice, err = conn.Sscan(key, cursor, nil, nil).ToSlice()
 		assertNil(t, err)
 		cursor, err = slice[0].ToInt64()
 		assertNil(t, err)
@@ -2319,7 +2319,7 @@ func testBzpopmax(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Zadd(key1, []client.ScoreMember{{0, "a"}, {1, "b"}, {2, "c"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Bzpopmax([]interface{}{key1, key2}, 0).ToSlice()
+	slice, err := conn.Bzpopmax([]interface{}{key1, key2}, 0).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{key1, "c", float64(2)})
 }
@@ -2329,7 +2329,7 @@ func testBzpopmin(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Zadd(key1, []client.ScoreMember{{0, "a"}, {1, "b"}, {2, "c"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Bzpopmin([]interface{}{key1, key2}, 0).ToSlice()
+	slice, err := conn.Bzpopmin([]interface{}{key1, key2}, 0).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{key1, "a", float64(0)})
 }
@@ -2349,7 +2349,7 @@ func testZadd(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zadd(key, []client.ScoreMember{{2, "two"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(1)}, {"uno", float64(1)}, {"two", float64(2)}, {"three", float64(3)}})
 
@@ -2372,7 +2372,7 @@ func testZadd(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.ZaddNx(key, []client.ScoreMember{{1.1, "one"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 1)
-	slice, err = conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err = conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(1)}, {"two", float64(2)}, {"three", float64(3)}})
 
@@ -2385,7 +2385,7 @@ func testZadd(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.ZaddXx(key, []client.ScoreMember{{1.1, "one"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 0)
-	slice, err = conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err = conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(1.1)}, {"two", float64(2)}})
 
@@ -2398,7 +2398,7 @@ func testZadd(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.ZaddXxCh(key, []client.ScoreMember{{1.1, "one"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 1)
-	slice, err = conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err = conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(1.1)}, {"two", float64(2)}})
 }
@@ -2434,7 +2434,7 @@ func testZincrby(conn client.Conn, ctx *testCTX, t *testing.T) {
 	f, err := conn.Zincrby(key, 2, "one").ToFloat64()
 	assertNil(t, err)
 	assertEqual(t, f, 3.0)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"two", float64(2)}, {"one", float64(3)}})
 }
@@ -2451,7 +2451,7 @@ func testZinterstore(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zinterstore(key, 2, []interface{}{key1, key2}, []int64{2, 3}, nil).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(5)}, {"two", float64(10)}})
 }
@@ -2477,7 +2477,7 @@ func testZpopmax(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Zadd(key, []client.ScoreMember{{1, "one"}, {2, "two"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Zpopmax(key, nil).ToSlice()
+	slice, err := conn.Zpopmax(key, nil).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{"three", float64(3)})
 }
@@ -2487,7 +2487,7 @@ func testZpopmin(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Zadd(key, []client.ScoreMember{{1, "one"}, {2, "two"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Zpopmin(key, nil).ToSlice()
+	slice, err := conn.Zpopmin(key, nil).ToIntfSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []interface{}{"one", float64(1)})
 }
@@ -2506,7 +2506,7 @@ func testZrange(conn client.Conn, ctx *testCTX, t *testing.T) {
 	slice, err = conn.Zrange(key, -2, -1, false).ToStringSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []string{"two", "three"})
-	slice2, err := conn.Zrange(key, 0, 1, true).ToSlice2()
+	slice2, err := conn.Zrange(key, 0, 1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice2, [][]interface{}{{"one", float64(1)}, {"two", float64(2)}})
 }
@@ -2567,7 +2567,7 @@ func testZrem(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zrem(key, []interface{}{"two"}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 1)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(1)}, {"three", float64(3)}})
 }
@@ -2599,7 +2599,7 @@ func testZremrangebyrank(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zremrangebyrank(key, 0, 1).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"three", float64(3)}})
 }
@@ -2612,7 +2612,7 @@ func testZremrangebyscore(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zremrangebyscore(key, client.InfNeg, client.Zopen(2)).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 1)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"two", float64(2)}, {"three", float64(3)}})
 }
@@ -2686,12 +2686,12 @@ func testZscan(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Zadd(key, []client.ScoreMember{{1, "one"}, {2, "two"}, {3, "three"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Zscan(key, 0, nil, nil).Slice()
+	slice, err := conn.Zscan(key, 0, nil, nil).ToSlice()
 	assertNil(t, err)
 	cursor, err := slice[0].ToInt64()
 	assertNil(t, err)
 	for cursor != 0 {
-		slice, err = conn.Zscan(key, cursor, nil, nil).Slice()
+		slice, err = conn.Zscan(key, cursor, nil, nil).ToSlice()
 		assertNil(t, err)
 		cursor, err = slice[0].ToInt64()
 		assertNil(t, err)
@@ -2720,7 +2720,7 @@ func testZunionstore(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err = conn.Zunionstore(key, 2, []interface{}{key1, key2}, []int64{2, 3}, nil).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 3)
-	slice, err := conn.Zrange(key, 0, -1, true).ToSlice2()
+	slice, err := conn.Zrange(key, 0, -1, true).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"one", float64(5)}, {"three", float64(9)}, {"two", float64(10)}})
 }
@@ -2777,7 +2777,7 @@ func testGeopos(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Geoadd(sicily, []client.LongitudeLatitudeMember{{13.361389, 38.115556, "Palermo"}, {15.087269, 37.502669, "Catania"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Geopos(sicily, []interface{}{"Palermo", "Catania", "NonExisting"}).ToSlice2()
+	slice, err := conn.Geopos(sicily, []interface{}{"Palermo", "Catania", "NonExisting"}).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{13.36138933897018433, 38.11555639549629859}, {15.08726745843887329, 37.50266842333162032}, {}})
 }
@@ -2787,7 +2787,7 @@ func testGeoradius(conn client.Conn, ctx *testCTX, t *testing.T) {
 	i, err := conn.Geoadd(sicily, []client.LongitudeLatitudeMember{{13.361389, 38.115556, "Palermo"}, {15.087269, 37.502669, "Catania"}}).ToInt64()
 	assertNil(t, err)
 	assertEqual(t, i, 2)
-	slice, err := conn.Georadius(sicily, 15, 37, 200, client.UnitKm, false, true, false, nil, nil, nil, nil).ToSlice2()
+	slice, err := conn.Georadius(sicily, 15, 37, 200, client.UnitKm, false, true, false, nil, nil, nil, nil).ToIntfSlice2()
 	assertNil(t, err)
 	assertEqual(t, slice, [][]interface{}{{"Palermo", "190.4424"}, {"Catania", "56.4413"}})
 	tree, err := conn.Georadius(sicily, 15, 37, 200, client.UnitKm, true, false, false, nil, nil, nil, nil).ToTree()
@@ -3363,7 +3363,7 @@ func testStralgoLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
 	m, err := conn.StralgoLcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
 	assertNil(t, err)
 
-	slice, err := m["matches"].ToSlice3()
+	slice, err := m["matches"].ToIntfSlice3()
 	assertNil(t, err)
 
 	assertEqual(t, slice, [][][]interface{}{
@@ -3401,7 +3401,7 @@ func testStralgoLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
 	m, err := conn.StralgoLcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
 	assertNil(t, err)
 
-	slice, err := m["matches"].ToSlice3()
+	slice, err := m["matches"].ToIntfSlice3()
 	assertNil(t, err)
 
 	assertEqual(t, slice, [][][]interface{}{

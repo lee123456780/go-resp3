@@ -19,19 +19,16 @@ package client
 // A Slice represents the redis slice type.
 type Slice []RedisValue
 
-// Kind returns the type of a Slice.
-func (s Slice) Kind() RedisKind { return _slice(s).Kind() }
+// ToIntfSlice returns a slice with values of type interface{}.
+func (s Slice) ToIntfSlice() ([]interface{}, error) { return _slice(s).ToIntfSlice() }
 
-// ToSlice returns a slice with values of type interface{}.
-func (s Slice) ToSlice() ([]interface{}, error) { return _slice(s).ToSlice() }
-
-// ToSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
+// ToIntfSlice2 returns a slice with values of type []interface{}. In case value conversion to []interface{} is not possible
 // a ConversitionError is returned.
-func (s Slice) ToSlice2() ([][]interface{}, error) { return _slice(s).ToSlice2() }
+func (s Slice) ToIntfSlice2() ([][]interface{}, error) { return _slice(s).ToIntfSlice2() }
 
-// ToSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
+// ToIntfSlice3 returns a slice with values of type [][]interface{}. In case value conversion to [][]interface{} is not possible
 // a ConversitionError is returned.
-func (s Slice) ToSlice3() ([][][]interface{}, error) { return _slice(s).ToSlice3() }
+func (s Slice) ToIntfSlice3() ([][][]interface{}, error) { return _slice(s).ToIntfSlice3() }
 
 // ToTree returns a tree with nodes of type []interface{} and leaves of type interface{}. In case value conversion to []interface{} is not possible
 // a ConversitionError is returned.

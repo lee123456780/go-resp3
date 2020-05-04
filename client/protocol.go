@@ -518,7 +518,7 @@ func (d *decode) decodeType() (RedisValue, error) {
 	switch t {
 	case nullType:
 		err := d.r.readLineBreak()
-		return __null, err
+		return _Null, err
 	case blobStringType:
 		return d.decodeBlobString()
 	case verbatimStringType:

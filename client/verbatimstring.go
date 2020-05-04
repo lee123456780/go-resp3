@@ -25,9 +25,6 @@ func (s VerbatimString) FileFormat() string { return _verbatimString(s).FileForm
 // String implements the Stringer interface.
 func (s VerbatimString) String() string { return _verbatimString(s).String() }
 
-// Kind returns the type of a VerbatimString.
-func (s VerbatimString) Kind() RedisKind { return _verbatimString(s).Kind() }
-
 // ToString implements the Converter Stringer interface.
 func (s VerbatimString) ToString() (string, error) { return _verbatimString(s).ToString() }
 

@@ -45,15 +45,6 @@ type Result interface {
 	Kind() (RedisKind, error)
 	// Value returns a Redis value.
 	Value() (RedisValue, error)
-	// VerbatimString returns a VerbatimString if the Redis type is a verbatim string.
-	VerbatimString() (VerbatimString, error)
-	// Map returns a Map if the Redis type is a map.
-	Map() (Map, error)
-	// Set returns a Set if the Redis type is a set.
-	Set() (Set, error)
-	// Slice returns a Slice if the Redis type is an array.
-	Slice() (Slice, error)
-
 	// Conversion methods.
 	Converter
 }
@@ -177,64 +168,6 @@ func (r *result) IsNull() (bool, error) {
 		return false, err
 	}
 	return r.value.Kind() == RkNull, nil
-}
-
-// VerbatimString returns a VerbatimString if the Redis type is a verbatim string.
-func (r *result) VerbatimString() (VerbatimString, error) {
-	if err := r.wait(); err != nil {
-		return __verbatimString, err
-	}
-	switch r.value.Kind() {
-	case RkVerbatimString:
-		return VerbatimString(r.value.(_verbatimString)), nil
-	default:
-		return __verbatimString, newConversionError("VerbatimString", r.value)
-	}
-}
-
-// Slice returns a Slice if the Redis type is an array.
-func (r *result) Slice() (Slice, error) {
-	if err := r.wait(); err != nil {
-		return __slice, err
-	}
-	switch r.value.Kind() {
-	case RkSlice:
-		return Slice(r.value.(_slice)), nil
-	case RkNull:
-		return __slice, nil
-	default:
-		return __slice, newConversionError("Slice", r.value)
-	}
-}
-
-// Map returns a Map if the Redis type is a map.
-func (r *result) Map() (Map, error) {
-	if err := r.wait(); err != nil {
-		return __map, err
-	}
-	switch r.value.Kind() {
-	case RkMap:
-		return Map(r.value.(_map)), nil
-	case RkNull:
-		return __map, nil
-	default:
-		return __map, newConversionError("Map", r.value)
-	}
-}
-
-// Set returns a Set if the Redis type is a set.
-func (r *result) Set() (Set, error) {
-	if err := r.wait(); err != nil {
-		return __set, err
-	}
-	switch r.value.Kind() {
-	case RkSet:
-		return Set(r.value.(_set)), nil
-	case RkNull:
-		return __set, nil
-	default:
-		return __set, newConversionError("Set", r.value)
-	}
 }
 
 // test on Result interface implementation
