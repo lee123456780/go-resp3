@@ -35,6 +35,7 @@ func Example_clientcache() {
 			if key == mykey {
 				close(invalidated)
 				fmt.Println("Key invalidated")
+				break
 			}
 		}
 	}
@@ -46,7 +47,7 @@ func Example_clientcache() {
 	defer conn.Close()
 
 	// Set client tracking on.
-	if err := conn.ClientTracking(true, nil, nil).Err(); err != nil {
+	if err := conn.ClientTracking(true, nil, nil, false, false, false, false).Err(); err != nil {
 		log.Fatal(err)
 	}
 

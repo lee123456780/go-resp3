@@ -12,7 +12,9 @@
 	{"name": "Sync","skip": true},
 	{"name": "Xgroup","skip": true},	
 	{"name": "Xinfo","skip": true},
-	
+	{"name": "Stralgo","skip": true},
+	{"name": "AclLog","skip": true},
+			
 	{
 		"_type": "funcConfig",
 		"name": "Subscribe",
@@ -42,27 +44,6 @@
 		"group": "generic"
 	},
 	{
-		"_type": "funcAttr",
-		"name": "Hello",
-		"summary": "Connection handshake.",
-		"since": "6.0.0",
-		"group": "connection"
-	},
-	{
-		"_type": "funcAttr",
-		"name": "ClientTracking",
-		"summary": "Enable client side caching.",
-		"since": "6.0.0",
-		"group": "server"
-	},
-	{
-		"_type": "funcAttr",
-		"name": "Lcs",
-		"summary": "Longest common subsequence.",
-		"since": "6.0.0",
-		"group": "string"
-	},
-	{
 		"name": "Do",
 		"attr": "Do",
 		"list": [
@@ -70,31 +51,25 @@
 		]
 	},
 	{
-		"_type": "structDecl",
-		"name": "UserPassword",
+		"name": "AclLogCount",
+		"attr": "AclLog",
+		"token": ["ACL", "LOG"],
 		"list": [
-			{"name": "User", "type": {"name": "string"}},
-			{"name": "Password", "type": {"name": "string"}}
+			{"name": "count", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
 		]
 	},
 	{
-		"name": "Hello",
-		"attr": "Hello",
-		"token": ["HELLO"],
-		"list": [
-			{"name": "version", "type": {"name": "string"}},
-			{"name": "userPassword", "cmd": "AUTH", "type": {"_type": "pointerType", "node": {"_type": "dataType", "name": "UserPassword"}}},
-			{"name": "clientName", "cmd": "SETNAME", "type": {"_type": "pointerType", "node": {"name": "string"}}}
-		]
+		"name": "AclLogReset",
+		"attr": "AclLog",
+		"token": ["ACL", "LOG", "RESET"]
 	},
 	{
-		"name": "ClientTracking",
-		"attr": "ClientTracking",
-		"token": ["CLIENT", "TRACKING"],
+		"name": "Auth",
+		"attr": "Auth",
+		"token": ["AUTH"],
 		"list": [
-			{"name": "on", "type": {"_type": "enumBoolType", "values": ["ON", "OFF"]}},
-			{"name": "redirect", "cmd": "REDIRECT", "type": {"_type": "pointerType", "node": {"name": "int64"}}},
-			{"name": "bcast", "cmd": "BCAST", "type": {"_type": "sliceType", "allowNil": true, "cmd": "PREFIX", "node": {"name": "string"}}}
+			{"name": "username", "type": {"_type": "pointerType", "node": {"name": "string"}}},
+			{"name": "password", "type": {"name": "string"}}
 		]
 	},
 	{"_type": "enumDecl", "name": "Overflow", "values": ["WRAP", "SAT", "FAIL"]},
@@ -618,88 +593,8 @@
 		]
 	},
 	{
-		"name": "Auth",
-		"attr": "Auth",
-		"token": ["AUTH"],
-		"list": [
-			{"name": "username", "type": {"_type": "pointerType", "node": {"name": "string"}}},
-			{"name": "password", "type": {"name": "string"}}
-		]
-	},
-	{
-		"name": "AclCat",
-		"attr": "Auth",
-		"token": ["ACL", "CAT"],
-		"list": [
-			{"name": "category", "type": {"_type": "pointerType", "node": {"name": "string"}}}
-		]
-	},
-	{
-		"name": "AclHelp",
-		"attr": "Auth",
-		"token": ["ACL", "HELP"]
-	},
-	{
-		"name": "AclGenpass",
-		"attr": "Auth",
-		"token": ["ACL", "GENPASS"],
-		"list": [
-			{"name": "bits", "type": {"_type": "pointerType", "node": {"name": "int64"}}}
-		]
-	},
-	{
-		"name": "AclList",
-		"attr": "Auth",
-		"token": ["ACL", "LIST"]
-	},
-	{
-		"name": "AclUsers",
-		"attr": "Auth",
-		"token": ["ACL", "USERS"]
-	},
-	{
-		"name": "AclWhoami",
-		"attr": "Auth",
-		"token": ["ACL", "WHOAMI"]
-	},
-	{
-		"name": "AclLoad",
-		"attr": "Auth",
-		"token": ["ACL", "LOAD"]
-	},
-	{
-		"name": "AclSave",
-		"attr": "Auth",
-		"token": ["ACL", "SAVE"]
-	},
-	{
-		"name": "AclSetuser",
-		"attr": "Auth",
-		"token": ["ACL", "SETUSER"],
-		"list": [
-			{"name": "username", "type": {"name": "string"}},
-			{"name": "rules", "type": {"_type": "sliceType", "allowNil": true, "node": {"name": "string"}}}
-		]
-	},
-	{
-		"name": "AclDeluser",
-		"attr": "Auth",
-		"token": ["ACL", "DELUSER"],
-		"list": [
-			{"name": "username", "type": {"_type": "sliceType", "node": {"name": "string"}}}
-		]
-	},
-	{
-		"name": "AclGetuser",
-		"attr": "Auth",
-		"token": ["ACL", "GETUSER"],
-		"list": [
-			{"name": "username", "type": {"name": "string"}}
-		]
-	},
-	{
 		"name": "StralgoLcsStrings",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS"],
 		"list": [
 			{"cmd": "strings"},
@@ -709,7 +604,7 @@
 	},
 	{
 		"name": "StralgoLcsLenStrings",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS", "LEN"],
 		"list": [
 			{"cmd": "strings"},
@@ -719,7 +614,7 @@
 	},
 	{
 		"name": "StralgoLcsIdxStrings",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS", "IDX"],
 		"list": [
 			{"cmd": "strings"},
@@ -731,7 +626,7 @@
 	},
 	{
 		"name": "StralgoLcsKeys",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS"],
 		"list": [
 			{"cmd": "keys"},
@@ -741,7 +636,7 @@
 	},
 	{
 		"name": "StralgoLcsLenKeys",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS", "LEN"],
 		"list": [
 			{"cmd": "keys"},
@@ -751,7 +646,7 @@
 	},
 	{
 		"name": "StralgoLcsIdxKeys",
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": ["STRALGO", "LCS", "IDX"],
 		"list": [
 			{"cmd": "keys"},

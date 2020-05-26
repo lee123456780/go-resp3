@@ -55,6 +55,18 @@ var fcts = []fct{
 	{client.CmdPing, testPing, true},
 	{client.CmdSwapdb, testSwapdb, false},
 	// Server
+	{client.CmdAclCat, testAclCat, true},
+	{client.CmdAclDeluser, testAclDeluser, true},
+	{client.CmdAclGenpass, testAclGenpass, true},
+	{client.CmdAclGetuser, testAclGetuser, true},
+	{client.CmdAclHelp, testAclHelp, true},
+	{client.CmdAclList, testAclList, true},
+	{client.CmdAclLogCount, testAclLogCount, false},
+	{client.CmdAclLogReset, testAclLogReset, false},
+	{client.CmdAclUsers, testAclUsers, true},
+	{client.CmdAclSetuser, testAclSetuser, true},
+	{client.CmdAclWhoami, testAclWhoami, true},
+	{"ACL", testACL, false},
 	{client.CmdBgrewriteaof, testBgrewriteaof, true},
 	{client.CmdBgsave, testBgsave, true},
 	{client.CmdClientGetname, testClientGetname, true},
@@ -113,6 +125,12 @@ var fcts = []fct{
 	{client.CmdSet, testSet, true},
 	{client.CmdSetbit, testSetbit, true},
 	{client.CmdSetrange, testSetrange, true},
+	{client.CmdStralgoLcsStrings, testStralgoLcsStrings, true},
+	{client.CmdStralgoLcsLenStrings, testStralgoLcsLenStrings, true},
+	{client.CmdStralgoLcsIdxStrings, testStralgoLcsIdxStrings, true},
+	{client.CmdStralgoLcsKeys, testStralgoLcsKeys, true},
+	{client.CmdStralgoLcsLenKeys, testStralgoLcsLenKeys, true},
+	{client.CmdStralgoLcsIdxKeys, testStralgoLcsIdxKeys, true},
 	{client.CmdStrlen, testStrlen, true},
 	// Keys
 	{client.CmdDel, testDel, true},
@@ -247,26 +265,8 @@ var fcts = []fct{
 	{client.CmdXread, testXread, true},
 	{client.CmdXrevrange, testXrevrange, true},
 	{client.CmdXtrim, testXtrim, true},
-	// ACL
-	{client.CmdAclHelp, testAclHelp, true},
-	{client.CmdAclList, testAclList, true},
-	{client.CmdAclUsers, testAclUsers, true},
-	{client.CmdAclCat, testAclCat, true},
-	{client.CmdAclSetuser, testAclSetuser, true},
-	{client.CmdAclDeluser, testAclDeluser, true},
-	{client.CmdAclGetuser, testAclGetuser, true},
-	{client.CmdAclGenpass, testAclGenpass, true},
-	{client.CmdAclWhoami, testAclWhoami, true},
-	{"ACL", testACL, false},
 	// Transaction
 	{"Transaction", testTransaction, false},
-	// STRALGO LCS (--> move to strings when 6.0 is released)
-	{client.CmdStralgoLcsStrings, testStralgoLcsStrings, true},
-	{client.CmdStralgoLcsLenStrings, testStralgoLcsLenStrings, true},
-	{client.CmdStralgoLcsIdxStrings, testStralgoLcsIdxStrings, true},
-	{client.CmdStralgoLcsKeys, testStralgoLcsKeys, true},
-	{client.CmdStralgoLcsLenKeys, testStralgoLcsLenKeys, true},
-	{client.CmdStralgoLcsIdxKeys, testStralgoLcsIdxKeys, true},
 }
 
 type testCTX struct {
@@ -424,6 +424,136 @@ func testSwapdb(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 // Server
+
+func testAclCat(conn client.Conn, ctx *testCTX, t *testing.T) {
+	cats, err := conn.AclCat(nil).ToStringSlice()
+	assertNil(t, err)
+	for _, cat := range cats {
+		err := conn.AclCat(&cat).Err()
+		assertNil(t, err)
+	}
+}
+
+func testAclDeluser(conn client.Conn, ctx *testCTX, t *testing.T) {
+	u1, u2, u3 := ctx.newUser("u1"), ctx.newUser("u2"), ctx.newUser("u3")
+	err := conn.AclSetuser(u1, nil).Err()
+	assertNil(t, err)
+	err = conn.AclSetuser(u2, nil).Err()
+	assertNil(t, err)
+	i, err := conn.AclDeluser([]string{u1, u2, u3}).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, 2)
+}
+
+func testAclGenpass(conn client.Conn, ctx *testCTX, t *testing.T) {
+	s, err := conn.AclGenpass(nil).ToString()
+	assertNil(t, err)
+	assertEqual(t, len(s), 64)
+	s, err = conn.AclGenpass(client.Int64Ptr(32)).ToString()
+	assertNil(t, err)
+	assertEqual(t, len(s), 8)
+	s, err = conn.AclGenpass(client.Int64Ptr(5)).ToString()
+	assertNil(t, err)
+	assertEqual(t, len(s), 2)
+}
+
+func testAclGetuser(conn client.Conn, ctx *testCTX, t *testing.T) {
+	myuser := ctx.newUser("myuser")
+	b, err := conn.AclSetuser(myuser, nil).ToBool()
+	assertNil(t, err)
+	assertTrue(t, b)
+	_, err = conn.AclGetuser(myuser).ToStringMap()
+	assertNil(t, err)
+	i, err := conn.AclDeluser([]string{myuser}).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, 1)
+}
+
+func testAclHelp(conn client.Conn, ctx *testCTX, t *testing.T) {
+	_, err := conn.AclHelp().ToStringSlice()
+	assertNil(t, err)
+}
+
+func testAclList(conn client.Conn, ctx *testCTX, t *testing.T) {
+	_, err := conn.AclList().ToStringSlice()
+	assertNil(t, err)
+}
+
+func testAclLogCount(conn client.Conn, ctx *testCTX, t *testing.T) {
+	user := ctx.newKey("user")
+	password := ctx.newKey("password")
+
+	err := conn.Auth(&user, password).Err() // set invalid user / password
+	assertNotNil(t, err)
+	s, err := conn.AclLogCount(client.Int64Ptr(1)).ToIntfSlice()
+	assertNil(t, err)
+	assertEqual(t, len(s), 1)
+}
+
+func testAclLogReset(conn client.Conn, ctx *testCTX, t *testing.T) {
+	user := ctx.newKey("user")
+	password := ctx.newKey("password")
+
+	err := conn.Auth(&user, password).Err() // set invalid user / password
+	assertNotNil(t, err)
+	err = conn.AclLogReset().Err()
+	assertNil(t, err)
+	s, err := conn.AclLogCount(nil).ToIntfSlice()
+	assertNil(t, err)
+	assertEqual(t, len(s), 0)
+}
+
+func testAclSetuser(conn client.Conn, ctx *testCTX, t *testing.T) {
+	myuser := ctx.newUser("myuser")
+	b, err := conn.AclSetuser(myuser, nil).ToBool()
+	assertNil(t, err)
+	assertTrue(t, b)
+	b, err = conn.AclSetuser(myuser, []string{"on", ">p1pp0", "~cached:*", "+get"}).ToBool()
+	assertNil(t, err)
+	assertTrue(t, b)
+	i, err := conn.AclDeluser([]string{myuser}).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, 1)
+}
+
+func testAclUsers(conn client.Conn, ctx *testCTX, t *testing.T) {
+	err := conn.AclUsers().Err()
+	assertNil(t, err)
+}
+
+func testAclWhoami(conn client.Conn, ctx *testCTX, t *testing.T) {
+	s, err := conn.AclWhoami().ToString()
+	assertNil(t, err)
+	assertEqual(t, s, "default")
+}
+
+// ACL test (cannot be executed in parallel - change user with restrictions - needs exclusive connection
+func testACL(conn client.Conn, ctx *testCTX, t *testing.T) {
+	conn, err := ctx.dialer.Dial("")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	myuser := ctx.newUser("myuser")
+
+	b, err := conn.AclSetuser(myuser, []string{"on", ">p1pp0", "~cached:*", "+get"}).ToBool()
+	assertNil(t, err)
+	assertTrue(t, b)
+
+	b, err = conn.Auth(&myuser, "p1pp0").ToBool()
+	assertNil(t, err)
+	assertTrue(t, b)
+
+	err = conn.Get("foo").Err()
+	assertNotNil(t, err)
+
+	err = conn.Get("cached:1234").Err()
+	assertNil(t, err)
+
+	err = conn.Set("cached:1234", "zap").Err()
+	assertNotNil(t, err)
+}
+
 func testBgrewriteaof(conn client.Conn, ctx *testCTX, t *testing.T) {
 	conn.Bgrewriteaof().ToString()
 	// might return with error when rewrite was started already
@@ -431,9 +561,11 @@ func testBgrewriteaof(conn client.Conn, ctx *testCTX, t *testing.T) {
 }
 
 func testBgsave(conn client.Conn, ctx *testCTX, t *testing.T) {
-	conn.Bgsave().ToString()
+	conn.Bgsave(false).ToString()
+	conn.Bgsave(true).ToString()
 	// might return with error when save is executed in parallel
-	//assertNil(t, err)
+	// assertNil(t, err)
+	// so, just fire the two options
 }
 
 func testClientGetname(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -522,44 +654,40 @@ func testClientTracking(conn client.Conn, ctx *testCTX, t *testing.T) {
 	}
 
 	conn, err := dialer.Dial("")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assertNil(t, err)
 	defer conn.Close()
 
-	if err := conn.ClientTracking(true, nil, nil).Err(); err != nil {
-		t.Fatal(err)
-	}
+	redir, err := conn.ClientGetredir().ToInt64()
+	assertNil(t, err)
+	assertEqual(t, redir, -1) // client tracking not active.
 
-	if err := conn.Set(myKey, helloRedis).Err(); err != nil {
-		t.Fatal(err)
-	}
-	if err := conn.Get(myKey).Err(); err != nil {
-		t.Fatal(err)
-	}
+	assertNil(t, conn.ClientTracking(true, nil, nil, false, true, false, false).Err()) // client tracking optin.
+
+	redir, err = conn.ClientGetredir().ToInt64()
+	assertNil(t, err)
+	assertEqual(t, redir, 0) // client caching active but no redirection.
+
+	assertNil(t, conn.Set(myKey, helloRedis).Err())
+	// optin -> set caching on for myKey.
+	assertNil(t, conn.ClientCaching(true).Err())
+	assertNil(t, conn.Get(myKey).Err())
 
 	done := make(chan struct{}, 0)
 
 	// Change Key in different connection.
 	go func() {
 		conn, err := client.Dial("")
-		if err != nil {
-			t.Fatal(err)
-		}
+		assertNil(t, err)
 		defer conn.Close()
 		// Update key.
-		if err = conn.Set(myKey, "Update myKey").Err(); err != nil {
-			t.Fatal(err)
-		}
+		assertNil(t, conn.Set(myKey, "Update myKey").Err())
 		close(done)
 	}()
 
 	<-done        // wait for other connection to change myKey.
 	<-invalidated // wait for invalidation notification in callback.
 
-	if err := conn.ClientTracking(false, nil, nil).Err(); err != nil {
-		t.Fatal(err)
-	}
+	assertNil(t, conn.ClientTracking(false, nil, nil, false, false, false, false).Err())
 }
 
 func testClientUnblock(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -1286,6 +1414,115 @@ func testSetrange(conn client.Conn, ctx *testCTX, t *testing.T) {
 	s, err = conn.Get(key2).ToString()
 	assertNil(t, err)
 	assertEqual(t, s, string([]byte{'\x00', '\x00', '\x00', '\x00', '\x00', '\x00', 'R', 'e', 'd', 'i', 's'}))
+}
+
+// Lcs
+const (
+	rna1   = "CACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTTCGTCCGGGTGTG"
+	rna2   = "ATTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
+	rnalcs = "ACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
+)
+
+func testStralgoLcsStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	s, err := conn.StralgoLcsStrings(rna1, rna2).ToString()
+	assertNil(t, err)
+	assertEqual(t, s, rnalcs)
+}
+
+func testStralgoLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	i, err := conn.StralgoLcsLenStrings(rna1, rna2).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, len(rnalcs))
+}
+
+func testStralgoLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
+	m, err := conn.StralgoLcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
+	assertNil(t, err)
+
+	slice, err := m["matches"].ToIntfSlice3()
+	assertNil(t, err)
+
+	assertEqual(t, slice, [][][]interface{}{
+		{{int64(238), int64(238)}, {int64(239), int64(239)}},
+		{{int64(236), int64(236)}, {int64(238), int64(238)}},
+		{{int64(229), int64(230)}, {int64(236), int64(237)}},
+		{{int64(224), int64(224)}, {int64(235), int64(235)}},
+		{{int64(1), int64(222)}, {int64(13), int64(234)}},
+	})
+}
+
+func testStralgoLcsKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+	s, err := conn.StralgoLcsKeys(key1, key2).ToString()
+	assertNil(t, err)
+	assertEqual(t, s, rnalcs)
+}
+
+func testStralgoLcsLenKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+	i, err := conn.StralgoLcsLenKeys(key1, key2).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, len(rnalcs))
+}
+
+func testStralgoLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
+	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
+	assertNil(t, conn.Set(key1, rna1).Err())
+	assertNil(t, conn.Set(key2, rna2).Err())
+
+	m, err := conn.StralgoLcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
+	assertNil(t, err)
+
+	slice, err := m["matches"].ToIntfSlice3()
+	assertNil(t, err)
+
+	assertEqual(t, slice, [][][]interface{}{
+		{{int64(238), int64(238)}, {int64(239), int64(239)}},
+		{{int64(236), int64(236)}, {int64(238), int64(238)}},
+		{{int64(229), int64(230)}, {int64(236), int64(237)}},
+		{{int64(224), int64(224)}, {int64(235), int64(235)}},
+		{{int64(1), int64(222)}, {int64(13), int64(234)}},
+	})
+
+	l, err := m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
+
+	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
+	assertNil(t, err)
+
+	tree, err := m["matches"].ToTree()
+	assertNil(t, err)
+
+	assertEqual(t, tree, []interface{}{
+		[]interface{}{[]interface{}{int64(238), int64(238)}, []interface{}{int64(239), int64(239)}, int64(1)},
+		[]interface{}{[]interface{}{int64(236), int64(236)}, []interface{}{int64(238), int64(238)}, int64(1)},
+		[]interface{}{[]interface{}{int64(229), int64(230)}, []interface{}{int64(236), int64(237)}, int64(2)},
+		[]interface{}{[]interface{}{int64(224), int64(224)}, []interface{}{int64(235), int64(235)}, int64(1)},
+		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
+	})
+
+	l, err = m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
+
+	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
+	assertNil(t, err)
+
+	tree, err = m["matches"].ToTree()
+	assertNil(t, err)
+
+	assertEqual(t, tree, []interface{}{
+		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
+	})
+
+	l, err = m["len"].ToInt64()
+	assertNil(t, err)
+	assertEqual(t, l, 227)
 }
 
 func testStrlen(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -3137,112 +3374,6 @@ func testXtrim(conn client.Conn, ctx *testCTX, t *testing.T) {
 	})
 }
 
-// ACL
-func testAclHelp(conn client.Conn, ctx *testCTX, t *testing.T) {
-	_, err := conn.AclHelp().ToStringSlice()
-	assertNil(t, err)
-}
-
-func testAclList(conn client.Conn, ctx *testCTX, t *testing.T) {
-	_, err := conn.AclList().ToStringSlice()
-	assertNil(t, err)
-}
-
-func testAclUsers(conn client.Conn, ctx *testCTX, t *testing.T) {
-	err := conn.AclUsers().Err()
-	assertNil(t, err)
-}
-
-func testAclCat(conn client.Conn, ctx *testCTX, t *testing.T) {
-	cats, err := conn.AclCat(nil).ToStringSlice()
-	assertNil(t, err)
-	for _, cat := range cats {
-		err := conn.AclCat(&cat).Err()
-		assertNil(t, err)
-	}
-}
-
-func testAclSetuser(conn client.Conn, ctx *testCTX, t *testing.T) {
-	myuser := ctx.newUser("myuser")
-	b, err := conn.AclSetuser(myuser, nil).ToBool()
-	assertNil(t, err)
-	assertTrue(t, b)
-	b, err = conn.AclSetuser(myuser, []string{"on", ">p1pp0", "~cached:*", "+get"}).ToBool()
-	assertNil(t, err)
-	assertTrue(t, b)
-	i, err := conn.AclDeluser([]string{myuser}).ToInt64()
-	assertNil(t, err)
-	assertEqual(t, i, 1)
-}
-
-func testAclDeluser(conn client.Conn, ctx *testCTX, t *testing.T) {
-	u1, u2, u3 := ctx.newUser("u1"), ctx.newUser("u2"), ctx.newUser("u3")
-	err := conn.AclSetuser(u1, nil).Err()
-	assertNil(t, err)
-	err = conn.AclSetuser(u2, nil).Err()
-	assertNil(t, err)
-	i, err := conn.AclDeluser([]string{u1, u2, u3}).ToInt64()
-	assertNil(t, err)
-	assertEqual(t, i, 2)
-}
-
-func testAclGetuser(conn client.Conn, ctx *testCTX, t *testing.T) {
-	myuser := ctx.newUser("myuser")
-	b, err := conn.AclSetuser(myuser, nil).ToBool()
-	assertNil(t, err)
-	assertTrue(t, b)
-	_, err = conn.AclGetuser(myuser).ToStringMap()
-	assertNil(t, err)
-	i, err := conn.AclDeluser([]string{myuser}).ToInt64()
-	assertNil(t, err)
-	assertEqual(t, i, 1)
-}
-
-func testAclGenpass(conn client.Conn, ctx *testCTX, t *testing.T) {
-	s, err := conn.AclGenpass(nil).ToString()
-	assertNil(t, err)
-	assertEqual(t, len(s), 64)
-	s, err = conn.AclGenpass(client.Int64Ptr(32)).ToString()
-	assertNil(t, err)
-	assertEqual(t, len(s), 8)
-	s, err = conn.AclGenpass(client.Int64Ptr(5)).ToString()
-	assertNil(t, err)
-	assertEqual(t, len(s), 2)
-}
-
-func testAclWhoami(conn client.Conn, ctx *testCTX, t *testing.T) {
-	s, err := conn.AclWhoami().ToString()
-	assertNil(t, err)
-	assertEqual(t, s, "default")
-}
-
-// ACL test (cannot be executed in parallel - change user with restrictions - needs exclusive connection
-func testACL(conn client.Conn, ctx *testCTX, t *testing.T) {
-	conn, err := ctx.dialer.Dial("")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	myuser := ctx.newUser("myuser")
-
-	b, err := conn.AclSetuser(myuser, []string{"on", ">p1pp0", "~cached:*", "+get"}).ToBool()
-	assertNil(t, err)
-	assertTrue(t, b)
-
-	b, err = conn.Auth(&myuser, "p1pp0").ToBool()
-	assertNil(t, err)
-	assertTrue(t, b)
-
-	err = conn.Get("foo").Err()
-	assertNotNil(t, err)
-
-	err = conn.Get("cached:1234").Err()
-	assertNil(t, err)
-
-	err = conn.Set("cached:1234", "zap").Err()
-	assertNotNil(t, err)
-}
-
 // Transaction
 // Transaction (cannot be executed in parallel - needs exclusive connection(s))
 func testTransaction(conn client.Conn, ctx *testCTX, t *testing.T) {
@@ -3338,115 +3469,6 @@ func testTransaction(conn client.Conn, ctx *testCTX, t *testing.T) {
 	slice, err = conn.Exec().ToInt64Slice()
 	assertNil(t, err)
 	assertEqual(t, slice, []int64{4})
-}
-
-// Lcs
-const (
-	rna1   = "CACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTTCGTCCGGGTGTG"
-	rna2   = "ATTAAAGGTTTATACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
-	rnalcs = "ACCTTCCCAGGTAACAAACCAACCAACTTTCGATCTCTTGTAGATCTGTTCTCTAAACGAACTTTAAAATCTGTGTGGCTGTCACTCGGCTGCATGCTTAGTGCACTCACGCAGTATAATTAATAACTAATTACTGTCGTTGACAGGACACGAGTAACTCGTCTATCTTCTGCAGGCTGCTTACGGTTTCGTCCGTGTTGCAGCCGATCATCAGCACATCTAGGTTT"
-)
-
-func testStralgoLcsStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	s, err := conn.StralgoLcsStrings(rna1, rna2).ToString()
-	assertNil(t, err)
-	assertEqual(t, s, rnalcs)
-}
-
-func testStralgoLcsLenStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	i, err := conn.StralgoLcsLenStrings(rna1, rna2).ToInt64()
-	assertNil(t, err)
-	assertEqual(t, i, len(rnalcs))
-}
-
-func testStralgoLcsIdxStrings(conn client.Conn, ctx *testCTX, t *testing.T) {
-	m, err := conn.StralgoLcsIdxStrings(rna1, rna2, false, nil).ToStringValueMap()
-	assertNil(t, err)
-
-	slice, err := m["matches"].ToIntfSlice3()
-	assertNil(t, err)
-
-	assertEqual(t, slice, [][][]interface{}{
-		{{int64(238), int64(238)}, {int64(239), int64(239)}},
-		{{int64(236), int64(236)}, {int64(238), int64(238)}},
-		{{int64(229), int64(230)}, {int64(236), int64(237)}},
-		{{int64(224), int64(224)}, {int64(235), int64(235)}},
-		{{int64(1), int64(222)}, {int64(13), int64(234)}},
-	})
-}
-
-func testStralgoLcsKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
-	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
-	assertNil(t, conn.Set(key1, rna1).Err())
-	assertNil(t, conn.Set(key2, rna2).Err())
-	s, err := conn.StralgoLcsKeys(key1, key2).ToString()
-	assertNil(t, err)
-	assertEqual(t, s, rnalcs)
-}
-
-func testStralgoLcsLenKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
-	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
-	assertNil(t, conn.Set(key1, rna1).Err())
-	assertNil(t, conn.Set(key2, rna2).Err())
-	i, err := conn.StralgoLcsLenKeys(key1, key2).ToInt64()
-	assertNil(t, err)
-	assertEqual(t, i, len(rnalcs))
-}
-
-func testStralgoLcsIdxKeys(conn client.Conn, ctx *testCTX, t *testing.T) {
-	key1, key2 := ctx.newKey("key1"), ctx.newKey("key2")
-	assertNil(t, conn.Set(key1, rna1).Err())
-	assertNil(t, conn.Set(key2, rna2).Err())
-
-	m, err := conn.StralgoLcsIdxKeys(key1, key2, false, nil).ToStringValueMap()
-	assertNil(t, err)
-
-	slice, err := m["matches"].ToIntfSlice3()
-	assertNil(t, err)
-
-	assertEqual(t, slice, [][][]interface{}{
-		{{int64(238), int64(238)}, {int64(239), int64(239)}},
-		{{int64(236), int64(236)}, {int64(238), int64(238)}},
-		{{int64(229), int64(230)}, {int64(236), int64(237)}},
-		{{int64(224), int64(224)}, {int64(235), int64(235)}},
-		{{int64(1), int64(222)}, {int64(13), int64(234)}},
-	})
-
-	l, err := m["len"].ToInt64()
-	assertNil(t, err)
-	assertEqual(t, l, 227)
-
-	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, nil).ToStringValueMap()
-	assertNil(t, err)
-
-	tree, err := m["matches"].ToTree()
-	assertNil(t, err)
-
-	assertEqual(t, tree, []interface{}{
-		[]interface{}{[]interface{}{int64(238), int64(238)}, []interface{}{int64(239), int64(239)}, int64(1)},
-		[]interface{}{[]interface{}{int64(236), int64(236)}, []interface{}{int64(238), int64(238)}, int64(1)},
-		[]interface{}{[]interface{}{int64(229), int64(230)}, []interface{}{int64(236), int64(237)}, int64(2)},
-		[]interface{}{[]interface{}{int64(224), int64(224)}, []interface{}{int64(235), int64(235)}, int64(1)},
-		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
-	})
-
-	l, err = m["len"].ToInt64()
-	assertNil(t, err)
-	assertEqual(t, l, 227)
-
-	m, err = conn.StralgoLcsIdxKeys(key1, key2, true, client.Int64Ptr(5)).ToStringValueMap()
-	assertNil(t, err)
-
-	tree, err = m["matches"].ToTree()
-	assertNil(t, err)
-
-	assertEqual(t, tree, []interface{}{
-		[]interface{}{[]interface{}{int64(1), int64(222)}, []interface{}{int64(13), int64(234)}, int64(222)},
-	})
-
-	l, err = m["len"].ToInt64()
-	assertNil(t, err)
-	assertEqual(t, l, 227)
 }
 
 //

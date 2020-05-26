@@ -33,7 +33,7 @@ import (
 //go:generate converter
 
 // ClientVersion is the version number of the go-resp3 client.
-const ClientVersion = "0.10.0"
+const ClientVersion = "0.11.0"
 
 // Environment variables.
 const (
@@ -112,7 +112,7 @@ type Dialer struct {
 	// Duration to wait for async results before timeout.
 	AsyncTimeout time.Duration
 	// Redis authentication.
-	User, Password string
+	Username, Password string
 	// Redis client name.
 	ClientName string
 	// Client cache invalidation callback.
@@ -224,16 +224,16 @@ func newConn(netConn net.Conn, d *Dialer) (*conn, error) {
 
 	c.shutdown = c.watch()
 
-	var userPassword *UserPassword
-	if d.User != "" || d.Password != "" {
-		userPassword = &UserPassword{User: d.User, Password: d.Password}
+	var auth *UsernamePassword
+	if d.Username != "" || d.Password != "" {
+		auth = &UsernamePassword{Username: d.Username, Password: d.Password}
 	}
 	var clientName *string
 	if d.ClientName != "" {
 		clientName = &d.ClientName
 	}
 
-	c.hello = c.Hello(redisVersion, userPassword, clientName)
+	c.hello = c.Hello(redisVersion, auth, clientName)
 	if err := c.hello.Err(); err != nil {
 		//c.cancel() //TODO how to shutdown gracefully
 		return nil, err

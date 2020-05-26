@@ -49,13 +49,13 @@ The following environment variables can be set to use alternative host and port 
 
 Redis command | Replaced by API commands
 ------------- | ------------------------
-Acl | AclCat, AclDeluser, AclGenpass, AclGetuser, AclHelp, AclList, AclLoad, AclSave, AclSetuser, AclUsers, AclWhoami
+Acl Log | AclLogCount, AclLogReset
 Bitop | BitopAnd, BitopNot, BitopOr, BitopXor
-Stralgo Lcs | StralgoLcsStrings, StralgoLcsLenStrings, StralgoLcsIdxStrings, StralgoLcsKeys, StralgoLcsLenKeys, StralgoLcsIdxKeys
 Object | ObjectEncoding, ObjectFreq, ObjectHelp, ObjectIdletime, ObjectRefcount
 Pubsub | PubsubChannels, PubsubNumpat, PubsubNumsub
 Set | Set, SetEx, SetExNx, SetExXx, SetNx, SetPx, SetPxNx, SetPxXx, SetXx
 Slowlog | SlowlogGet, SlowlogLen, SlowlogReset
+Stralgo Lcs | StralgoLcsStrings, StralgoLcsLenStrings, StralgoLcsIdxStrings, StralgoLcsKeys, StralgoLcsLenKeys, StralgoLcsIdxKeys
 Xgroup | XgroupCreate, XgroupSetid, XgroupDestroy, XgroupDelconsumer, XgroupHelp
 Xinfo | XinfoConsumers, XinfoGroups, XinfoStream, XinfoHelp
 Zadd | Zadd, ZaddCh, ZaddNx, ZaddXx, ZaddXxCh
@@ -75,7 +75,3 @@ Sync | Psync
 ## Dependencies
 
 * n/a
-
-## Todo
-
-Provide full 6.0 command and command parameter set.

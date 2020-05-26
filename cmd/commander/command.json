@@ -1,6 +1,102 @@
 [
 	{
 		"_type": "funcAttr",
+		"name": "AclCat",
+		"summary": "List the ACL categories or the commands inside a category",
+		"complexity": "O(1) since the categories and commands are a fixed set.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclDeluser",
+		"summary": "Remove the specified ACL users and the associated rules",
+		"complexity": "O(1) amortized time considering the typical user.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclGenpass",
+		"summary": "Generate a pseudorandom secure password to use for ACL users",
+		"complexity": "O(1)",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclGetuser",
+		"summary": "Get the rules for a specific ACL user",
+		"complexity": "O(N). Where N is the number of password, command and pattern rules that the user has.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclHelp",
+		"summary": "Show helpful text about the different subcommands",
+		"complexity": "O(1)",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclList",
+		"summary": "List the current ACL rules in ACL config file format",
+		"complexity": "O(N). Where N is the number of configured users.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclLoad",
+		"summary": "Reload the ACLs from the configured ACL file",
+		"complexity": "O(N). Where N is the number of configured users.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclLog",
+		"summary": "List latest events denied because of ACLs in place",
+		"complexity": "O(N) with N being the number of entries shown.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclSave",
+		"summary": "Save the current ACL rules in the configured ACL file",
+		"complexity": "O(N). Where N is the number of configured users.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclSetuser",
+		"summary": "Modify or create the rules for a specific ACL user",
+		"complexity": "O(N). Where N is the number of rules provided.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclUsers",
+		"summary": "List the username of all the configured ACL rules",
+		"complexity": "O(N). Where N is the number of configured users.",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "AclWhoami",
+		"summary": "Return the name of the user associated to the current connection",
+		"complexity": "O(1)",
+		"since": "6.0.0",
+		"group": "server"
+	},
+	{
+		"_type": "funcAttr",
 		"name": "Append",
 		"summary": "Append a value to a key",
 		"complexity": "O(1). The amortized time complexity is O(1) assuming the appended value is small and the already present value is of any size, since the dynamic string library used by Redis will double the free space available on every reallocation.",
@@ -105,11 +201,27 @@
 	},
 	{
 		"_type": "funcAttr",
+		"name": "ClientCaching",
+		"summary": "Instruct the server about tracking or not keys in the next request",
+		"complexity": "O(1)",
+		"since": "6.0.0",
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
 		"name": "ClientGetname",
 		"summary": "Get the current connection name",
 		"complexity": "O(1)",
 		"since": "2.6.9",
-		"group": "server"
+		"group": "connection"
+	},
+	{
+		"_type": "funcAttr",
+		"name": "ClientGetredir",
+		"summary": "Get tracking notifications redirection client ID if any",
+		"complexity": "O(1)",
+		"since": "6.0.0",
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -117,7 +229,7 @@
 		"summary": "Returns the client ID for the current connection",
 		"complexity": "O(1)",
 		"since": "5.0.0",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -125,7 +237,7 @@
 		"summary": "Kill the connection of a client",
 		"complexity": "O(N) where N is the number of client connections",
 		"since": "2.4.0",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -133,7 +245,7 @@
 		"summary": "Get the list of client connections",
 		"complexity": "O(N) where N is the number of client connections",
 		"since": "2.4.0",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -141,15 +253,15 @@
 		"summary": "Stop processing commands from clients for some time",
 		"complexity": "O(1)",
 		"since": "2.9.50",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
 		"name": "ClientReply",
 		"summary": "Instruct the server whether to reply to commands",
 		"complexity": "O(1)",
-		"since": "3.2",
-		"group": "server"
+		"since": "3.2.0",
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -157,15 +269,15 @@
 		"summary": "Set the current connection name",
 		"complexity": "O(1)",
 		"since": "2.6.9",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
 		"name": "ClientTracking",
-		"summary": "Enable client side caching.",
-		"complexity": "",
+		"summary": "Enable or disable server assisted client side caching support",
+		"complexity": "O(1)",
 		"since": "6.0.0",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -173,7 +285,7 @@
 		"summary": "Unblock a client blocked in a blocking command from a different connection",
 		"complexity": "O(log N) where N is the number of client connections",
 		"since": "5.0.0",
-		"group": "server"
+		"group": "connection"
 	},
 	{
 		"_type": "funcAttr",
@@ -650,8 +762,8 @@
 	{
 		"_type": "funcAttr",
 		"name": "Hello",
-		"summary": "Connection handshake.",
-		"complexity": "",
+		"summary": "switch Redis protocol",
+		"complexity": "O(1)",
 		"since": "6.0.0",
 		"group": "connection"
 	},
@@ -862,14 +974,6 @@
 		"complexity": "",
 		"since": "2.8.13",
 		"group": "server"
-	},
-	{
-		"_type": "funcAttr",
-		"name": "Lcs",
-		"summary": "Longest common subsequence.",
-		"complexity": "",
-		"since": "6.0.0",
-		"group": "string"
 	},
 	{
 		"_type": "funcAttr",
@@ -1553,6 +1657,14 @@
 	},
 	{
 		"_type": "funcAttr",
+		"name": "Stralgo",
+		"summary": "Run algorithms (currently LCS) against strings",
+		"complexity": "For LCS O(strlen(s1)*strlen(s2))",
+		"since": "6.0.0",
+		"group": "string"
+	},
+	{
+		"_type": "funcAttr",
 		"name": "Strlen",
 		"summary": "Get the length of the value stored in a key",
 		"complexity": "O(1)",
@@ -1589,7 +1701,7 @@
 		"summary": "Swaps two Redis databases",
 		"complexity": "",
 		"since": "4.0.0",
-		"group": "connection"
+		"group": "server"
 	},
 	{
 		"_type": "funcAttr",
@@ -1997,7 +2109,7 @@
 		"_type": "funcDecl",
 		"name": "AclCat",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclCat",
 		"token": [
 			"ACL",
 			"CAT"
@@ -2005,7 +2117,7 @@
 		"list": [
 			{
 				"_type": "field",
-				"name": "category",
+				"name": "categoryname",
 				"cmd": "",
 				"type": {
 					"_type": "pointerType",
@@ -2021,7 +2133,7 @@
 		"_type": "funcDecl",
 		"name": "AclDeluser",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclDeluser",
 		"token": [
 			"ACL",
 			"DELUSER"
@@ -2033,7 +2145,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -2046,7 +2159,7 @@
 		"_type": "funcDecl",
 		"name": "AclGenpass",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclGenpass",
 		"token": [
 			"ACL",
 			"GENPASS"
@@ -2070,7 +2183,7 @@
 		"_type": "funcDecl",
 		"name": "AclGetuser",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclGetuser",
 		"token": [
 			"ACL",
 			"GETUSER"
@@ -2091,32 +2204,76 @@
 		"_type": "funcDecl",
 		"name": "AclHelp",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclHelp",
 		"token": [
 			"ACL",
 			"HELP"
 		],
-		"list": null
+		"list": []
 	},
 	{
 		"_type": "funcDecl",
 		"name": "AclList",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclList",
 		"token": [
 			"ACL",
 			"LIST"
 		],
-		"list": null
+		"list": []
 	},
 	{
 		"_type": "funcDecl",
 		"name": "AclLoad",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclLoad",
 		"token": [
 			"ACL",
 			"LOAD"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclLog",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclLogCount",
+		"skip": false,
+		"attr": "AclLog",
+		"token": [
+			"ACL",
+			"LOG"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "AclLogReset",
+		"skip": false,
+		"attr": "AclLog",
+		"token": [
+			"ACL",
+			"LOG",
+			"RESET"
 		],
 		"list": null
 	},
@@ -2124,18 +2281,18 @@
 		"_type": "funcDecl",
 		"name": "AclSave",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclSave",
 		"token": [
 			"ACL",
 			"SAVE"
 		],
-		"list": null
+		"list": []
 	},
 	{
 		"_type": "funcDecl",
 		"name": "AclSetuser",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclSetuser",
 		"token": [
 			"ACL",
 			"SETUSER"
@@ -2152,11 +2309,12 @@
 			},
 			{
 				"_type": "field",
-				"name": "rules",
+				"name": "rule",
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -2169,23 +2327,23 @@
 		"_type": "funcDecl",
 		"name": "AclUsers",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclUsers",
 		"token": [
 			"ACL",
 			"USERS"
 		],
-		"list": null
+		"list": []
 	},
 	{
 		"_type": "funcDecl",
 		"name": "AclWhoami",
 		"skip": false,
-		"attr": "Auth",
+		"attr": "AclWhoami",
 		"token": [
 			"ACL",
 			"WHOAMI"
 		],
-		"list": null
+		"list": []
 	},
 	{
 		"_type": "enumDecl",
@@ -2275,7 +2433,19 @@
 		"token": [
 			"BGSAVE"
 		],
-		"list": []
+		"list": [
+			{
+				"_type": "field",
+				"name": "schedule",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"SCHEDULE"
+					]
+				}
+			}
+		]
 	},
 	{
 		"_type": "funcDecl",
@@ -2333,7 +2503,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2461,7 +2632,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2525,7 +2697,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2559,7 +2732,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2636,7 +2810,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2669,7 +2844,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2740,7 +2916,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2773,7 +2950,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -2793,12 +2971,47 @@
 	},
 	{
 		"_type": "funcDecl",
+		"name": "ClientCaching",
+		"skip": false,
+		"attr": "ClientCaching",
+		"token": [
+			"CLIENT",
+			"CACHING"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "yes",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"YES",
+						"NO"
+					]
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
 		"name": "ClientGetname",
 		"skip": false,
 		"attr": "ClientGetname",
 		"token": [
 			"CLIENT",
 			"GETNAME"
+		],
+		"list": []
+	},
+	{
+		"_type": "funcDecl",
+		"name": "ClientGetredir",
+		"skip": false,
+		"attr": "ClientGetredir",
+		"token": [
+			"CLIENT",
+			"GETREDIR"
 		],
 		"list": []
 	},
@@ -2996,15 +3209,60 @@
 			},
 			{
 				"_type": "field",
-				"name": "bcast",
-				"cmd": "BCAST",
+				"name": "prefix",
+				"cmd": "PREFIX",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
 					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "bcast",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"BCAST"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "optin",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"OPTIN"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "optout",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"OPTOUT"
+					]
+				}
+			},
+			{
+				"_type": "field",
+				"name": "noloop",
+				"cmd": "",
+				"type": {
+					"_type": "enumBoolType",
+					"values": [
+						"NOLOOP"
+					]
 				}
 			}
 		]
@@ -3071,7 +3329,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -3149,7 +3408,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -3644,7 +3904,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3669,7 +3930,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -3857,7 +4119,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3970,7 +4233,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -3983,7 +4247,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4025,7 +4290,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4038,7 +4304,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4072,7 +4339,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4231,7 +4499,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "LongitudeLatitudeMember"
@@ -4314,7 +4583,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4347,7 +4617,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4791,7 +5062,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -4811,28 +5083,28 @@
 		"list": [
 			{
 				"_type": "field",
-				"name": "version",
+				"name": "protover",
 				"cmd": "",
 				"type": {
 					"_type": "baseType",
-					"name": "string"
+					"name": "int64"
 				}
 			},
 			{
 				"_type": "field",
-				"name": "userPassword",
+				"name": "auth",
 				"cmd": "AUTH",
 				"type": {
 					"_type": "pointerType",
 					"node": {
 						"_type": "dataType",
-						"name": "UserPassword"
+						"name": "UsernamePassword"
 					}
 				}
 			},
 			{
 				"_type": "field",
-				"name": "clientName",
+				"name": "setname",
 				"cmd": "SETNAME",
 				"type": {
 					"_type": "pointerType",
@@ -5062,7 +5334,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5156,7 +5429,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "FieldValue"
@@ -5705,7 +5979,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -5738,7 +6013,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6002,7 +6278,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6105,7 +6382,8 @@
 				"cmd": "KEYS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6159,7 +6437,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6243,7 +6522,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "KeyValue"
@@ -6267,7 +6547,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "KeyValue"
@@ -6544,7 +6825,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6568,7 +6850,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6601,7 +6884,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -6656,7 +6940,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6782,7 +7067,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -6806,7 +7092,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -7118,7 +7405,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7151,7 +7439,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7184,7 +7473,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7340,7 +7630,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -7407,7 +7698,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7440,7 +7732,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7953,7 +8246,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -7986,7 +8280,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8192,7 +8487,8 @@
 				"cmd": "GET",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8327,7 +8623,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8448,9 +8745,17 @@
 	},
 	{
 		"_type": "funcDecl",
+		"name": "Stralgo",
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
+	},
+	{
+		"_type": "funcDecl",
 		"name": "StralgoLcsIdxKeys",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS",
@@ -8510,7 +8815,7 @@
 		"_type": "funcDecl",
 		"name": "StralgoLcsIdxStrings",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS",
@@ -8570,7 +8875,7 @@
 		"_type": "funcDecl",
 		"name": "StralgoLcsKeys",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS"
@@ -8606,7 +8911,7 @@
 		"_type": "funcDecl",
 		"name": "StralgoLcsLenKeys",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS",
@@ -8643,7 +8948,7 @@
 		"_type": "funcDecl",
 		"name": "StralgoLcsLenStrings",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS",
@@ -8680,7 +8985,7 @@
 		"_type": "funcDecl",
 		"name": "StralgoLcsStrings",
 		"skip": false,
-		"attr": "Lcs",
+		"attr": "Stralgo",
 		"token": [
 			"STRALGO",
 			"LCS"
@@ -8747,7 +9052,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -8771,7 +9077,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8804,7 +9111,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -8895,7 +9203,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9039,7 +9348,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9063,7 +9373,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9084,11 +9395,11 @@
 	},
 	{
 		"_type": "structDecl",
-		"name": "UserPassword",
+		"name": "UsernamePassword",
 		"list": [
 			{
 				"_type": "field",
-				"name": "User",
+				"name": "Username",
 				"cmd": "",
 				"type": {
 					"_type": "baseType",
@@ -9150,7 +9461,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9192,7 +9504,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9234,7 +9547,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "FieldValue"
@@ -9294,7 +9608,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9385,7 +9700,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9830,7 +10146,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9843,7 +10160,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -9917,7 +10235,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -9930,7 +10249,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -10059,7 +10379,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10098,7 +10419,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10137,7 +10459,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10176,7 +10499,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10221,7 +10545,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "dataType",
 						"name": "ScoreMember"
@@ -10359,7 +10684,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -10372,7 +10698,8 @@
 				"cmd": "WEIGHTS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
@@ -10708,7 +11035,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -11135,7 +11463,8 @@
 				"cmd": "",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": false,
+					"allowNil": false,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "interface{}"
@@ -11148,7 +11477,8 @@
 				"cmd": "WEIGHTS",
 				"type": {
 					"_type": "sliceType",
-					"AllowNil": true,
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "int64"
