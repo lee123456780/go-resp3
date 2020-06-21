@@ -1,6 +1,7 @@
 [
 	{"name": "Bitop", "skip": true},
 	{"name": "ClusterSetslot", "skip": true},
+	{"name": "ClusterSlaves", "skip": true},
 	{"name": "Object", "skip": true},
 	{"name": "Pubsub", "skip": true},
 	{"name": "Setnx", "skip": true},

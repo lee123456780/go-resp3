@@ -64,6 +64,7 @@ Zadd | Zadd, ZaddCh, ZaddNx, ZaddXx, ZaddXxCh
 
 Redis command | Replaced by API command
 ------------- | -----------------------
+Cluster Slaves | Cluster Replicas
 Hmset | Hset
 Setex | SetEx
 Setnx | SetNx
