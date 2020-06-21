@@ -197,7 +197,7 @@ func normNames(names []string) []string {
 func normType(group, name, typ string) ast.TypeNode {
 	r, ok := argTypeMap[typ]
 	if !ok {
-		log.Fatalf("cannot convert type %s", name)
+		log.Fatalf("cannot convert name %s type %s", name, typ)
 	}
 	// special type conversions
 	if r == ast.StringType {

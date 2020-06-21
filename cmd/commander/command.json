@@ -3838,23 +3838,10 @@
 	{
 		"_type": "funcDecl",
 		"name": "ClusterSlaves",
-		"skip": false,
-		"attr": "ClusterSlaves",
-		"token": [
-			"CLUSTER",
-			"SLAVES"
-		],
-		"list": [
-			{
-				"_type": "field",
-				"name": "nodeId",
-				"cmd": "",
-				"type": {
-					"_type": "baseType",
-					"name": "string"
-				}
-			}
-		]
+		"skip": true,
+		"attr": "",
+		"token": null,
+		"list": null
 	},
 	{
 		"_type": "funcDecl",
