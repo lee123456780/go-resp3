@@ -29,7 +29,7 @@ import (
 )
 
 const (
-	redisVersion = 3
+	protocolVersion = 3
 )
 
 // Redis reply constants.

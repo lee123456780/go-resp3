@@ -1017,6 +1017,14 @@
 	},
 	{
 		"_type": "funcAttr",
+		"name": "Lpos",
+		"summary": "Return the index of matching elements on a list",
+		"complexity": "O(N) where N is the number of elements in the list, for the average case. When searching for elements near the head or the tail of the list, or when the MAXLEN option is provided, the command may run in constant time.",
+		"since": "6.0.6",
+		"group": "list"
+	},
+	{
+		"_type": "funcAttr",
 		"name": "Lpush",
 		"summary": "Prepend one or multiple elements to a list",
 		"complexity": "O(1) for each element added, so O(N) to add N elements when the command is called with multiple arguments.",
@@ -5758,7 +5766,9 @@
 				"name": "event",
 				"cmd": "",
 				"type": {
-					"_type": "pointerType",
+					"_type": "sliceType",
+					"allowNil": true,
+					"cmd": "",
 					"node": {
 						"_type": "baseType",
 						"name": "string"
@@ -5938,6 +5948,71 @@
 				"type": {
 					"_type": "baseType",
 					"name": "interface{}"
+				}
+			}
+		]
+	},
+	{
+		"_type": "funcDecl",
+		"name": "Lpos",
+		"skip": false,
+		"attr": "Lpos",
+		"token": [
+			"LPOS"
+		],
+		"list": [
+			{
+				"_type": "field",
+				"name": "key",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "element",
+				"cmd": "",
+				"type": {
+					"_type": "baseType",
+					"name": "interface{}"
+				}
+			},
+			{
+				"_type": "field",
+				"name": "rank",
+				"cmd": "RANK",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "count",
+				"cmd": "COUNT",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
+				}
+			},
+			{
+				"_type": "field",
+				"name": "maxlen",
+				"cmd": "MAXLEN",
+				"type": {
+					"_type": "pointerType",
+					"node": {
+						"_type": "baseType",
+						"name": "int64"
+					}
 				}
 			}
 		]

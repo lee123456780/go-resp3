@@ -429,6 +429,16 @@ func (g *generator) generateMethodConsts() {
 	})
 	g.b.endDef()
 
+	g.b.startDef("const")
+	g.s.LoopFunc(func(decl *ast.FuncDecl) {
+		attr := g.s.LookupFuncAttr(decl.Attr)
+		if attr == nil {
+			panic("function attributes (group) not found: " + decl.Attr) // should never happen
+		}
+		g.b.writeln("Cmd", decl.Name, "Version = ", strconv.Quote(attr.Since))
+	})
+	g.b.endDef()
+
 	g.b.startInit("var CommandNames = []string")
 	g.s.LoopFunc(func(decl *ast.FuncDecl) {
 		g.b.writeln("Cmd", decl.Name, ",")

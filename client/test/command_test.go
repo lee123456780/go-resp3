@@ -166,6 +166,7 @@ var fcts = []fct{
 	{client.CmdLinsert, testLinsert, true},
 	{client.CmdLlen, testLlen, true},
 	{client.CmdLpop, testLpop, true},
+	{client.CmdLpos, testLpos, true},
 	{client.CmdLpush, testLpush, true},
 	{client.CmdLpushx, testLpushx, true},
 	{client.CmdLrange, testLrange, true},
@@ -1962,6 +1963,24 @@ func testLpop(conn client.Conn, ctx *testCTX, t *testing.T) {
 	slice, err := conn.Lrange(myList, 0, -1).ToStringSlice()
 	assertNil(t, err)
 	assertEqual(t, slice, []string{"two", "three"})
+}
+
+func testLpos(conn client.Conn, ctx *testCTX, t *testing.T) {
+	version := conn.ConnInfo().RedisVersion
+	if version.Compare(client.ParseVersion(client.CmdLposVersion)) == -1 {
+		t.Logf("lpos not available in redis version %s - expected %s", version, client.CmdLposVersion)
+		return
+	}
+	myList := ctx.newKey("myList")
+	i, err := conn.Rpush(myList, []interface{}{"a", "b", "c", "d", 1, 2, 3, 4, 3, 3, 3}).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, 11)
+	i, err = conn.Lpos(myList, 3, nil, nil, nil).ToInt64()
+	assertNil(t, err)
+	assertEqual(t, i, 6)
+	slice, err := conn.Lpos(myList, 3, client.Int64Ptr(2), client.Int64Ptr(0), nil).ToInt64Slice()
+	assertNil(t, err)
+	assertEqual(t, slice, []int64{8, 9, 10})
 }
 
 func testLpush(conn client.Conn, ctx *testCTX, t *testing.T) {

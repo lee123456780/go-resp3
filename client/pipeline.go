@@ -31,32 +31,32 @@ type Pipeline interface {
 var _ Pipeline = (*pipeline)(nil)
 
 type pipeline struct {
-	c    *conn
-	err  error
-	list *resultList
+	c       *conn
+	err     error
+	results []*result
 	*command
 }
 
 func newPipeline(c *conn) *pipeline {
-	p := &pipeline{c: c, list: freeResultlist.get()}
+	p := &pipeline{c: c, results: freeResults.get()}
 	p.command = newCommand(p.send, c.sendInterceptor)
 	return p
 }
 
 func (p *pipeline) send(name string, r *result) {
-	if atomic.LoadUint32(&p.c.inShutdown) != 0 {
+	if atomic.LoadInt32(&p.c.inShutdown) != 0 {
 		r.setErr(ErrInShutdown)
 		return
 	}
-	p.list.items = append(p.list.items, r)
+	p.results = append(p.results, r)
 }
 
 func (p *pipeline) Reset() {
-	p.list.items = p.list.items[:0]
+	p.results = p.results[:0]
 }
 
 func (p *pipeline) Flush() error {
-	err := p.c.flush(true, p.list)
-	p.list = freeResultlist.get()
+	err := p.c.flush(true, p.results)
+	p.results = freeResults.get()
 	return err
 }

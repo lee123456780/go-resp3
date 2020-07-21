@@ -236,6 +236,7 @@ type ListCommands interface {
 	Linsert(key interface{}, before bool, pivot, element interface{}) Result
 	Llen(key interface{}) Result
 	Lpop(key interface{}) Result
+	Lpos(key, element interface{}, rank, count, maxlen *int64) Result
 	Lpush(key interface{}, element []interface{}) Result
 	Lpushx(key interface{}, element []interface{}) Result
 	Lrange(key interface{}, start, stop int64) Result
@@ -302,7 +303,7 @@ type ServerCommands interface {
 	LatencyHelp() Result
 	LatencyHistory(event string) Result
 	LatencyLatest() Result
-	LatencyReset(event *string) Result
+	LatencyReset(event []string) Result
 	Lolwut(version *int64) Result
 	MemoryDoctor() Result
 	MemoryHelp() Result
@@ -2216,11 +2217,11 @@ func (c *command) LatencyLatest() Result {
 // LatencyReset - Reset latency data for one or more events.
 // Group: server
 // Since: 2.8.13
-func (c *command) LatencyReset(event *string) Result {
+func (c *command) LatencyReset(event []string) Result {
 	r := newResult()
 	r.request.cmd = append(r.request.cmd, "LATENCY", "RESET")
-	if event != nil {
-		r.request.cmd = append(r.request.cmd, event)
+	for _, v := range event {
+		r.request.cmd = append(r.request.cmd, v)
 	}
 	c.send(CmdLatencyReset, r)
 	return r
@@ -2291,6 +2292,29 @@ func (c *command) Lpop(key interface{}) Result {
 	r := newResult()
 	r.request.cmd = append(r.request.cmd, "LPOP", key)
 	c.send(CmdLpop, r)
+	return r
+}
+
+// Lpos - Return the index of matching elements on a list
+// Group: list
+// Since: 6.0.6
+// Complexity:
+// O(N) where N is the number of elements in the list, for the average case. When
+// searching for elements near the head or the tail of the list, or when the MAXLEN option
+// is provided, the command may run in constant time.
+func (c *command) Lpos(key, element interface{}, rank, count, maxlen *int64) Result {
+	r := newResult()
+	r.request.cmd = append(r.request.cmd, "LPOS", key, element)
+	if rank != nil {
+		r.request.cmd = append(r.request.cmd, "RANK", rank)
+	}
+	if count != nil {
+		r.request.cmd = append(r.request.cmd, "COUNT", count)
+	}
+	if maxlen != nil {
+		r.request.cmd = append(r.request.cmd, "MAXLEN", maxlen)
+	}
+	c.send(CmdLpos, r)
 	return r
 }
 
@@ -4710,7 +4734,7 @@ const (
 	GroupTransactions = "Transactions"
 )
 
-var Groups = map[string][]string{GroupCluster: {CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlots, CmdReadonly, CmdReadwrite}, GroupConnection: {CmdAuth, CmdClientCaching, CmdClientGetname, CmdClientGetredir, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdEcho, CmdHello, CmdPing, CmdQuit, CmdSelect}, GroupGeneric: {CmdDel, CmdDo, CmdDump, CmdExists, CmdExpire, CmdExpireat, CmdKeys, CmdMigrate, CmdMove, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdRandomkey, CmdRename, CmdRenameNx, CmdRestore, CmdScan, CmdSort, CmdTTL, CmdTouch, CmdType, CmdUnlink, CmdWait}, GroupGeo: {CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember}, GroupHash: {CmdHdel, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals}, GroupHyperloglog: {CmdPfadd, CmdPfcount, CmdPfmerge}, GroupList: {CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdLindex, CmdLinsert, CmdLlen, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx}, GroupPubsub: {CmdPsubscribe, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdSubscribe, CmdUnsubscribe}, GroupScripting: {CmdEval, CmdEvalsha, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad}, GroupServer: {CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclLogCount, CmdAclLogReset, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdBgrewriteaof, CmdBgsave, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdFlushall, CmdFlushdb, CmdInfo, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLolwut, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdPsync, CmdReplicaof, CmdRole, CmdSave, CmdShutdown, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSwapdb, CmdTime}, GroupSet: {CmdSadd, CmdScard, CmdSdiff, CmdSdiffstore, CmdSinter, CmdSinterstore, CmdSismember, CmdSmembers, CmdSmove, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdSunion, CmdSunionstore}, GroupSortedSet: {CmdBzpopmax, CmdBzpopmin, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}, GroupStream: {CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim}, GroupString: {CmdAppend, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdDecr, CmdDecrby, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdMget, CmdMset, CmdMsetNx, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen}, GroupTransactions: {CmdDiscard, CmdExec, CmdMulti, CmdUnwatch, CmdWatch},
+var Groups = map[string][]string{GroupCluster: {CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlots, CmdReadonly, CmdReadwrite}, GroupConnection: {CmdAuth, CmdClientCaching, CmdClientGetname, CmdClientGetredir, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdEcho, CmdHello, CmdPing, CmdQuit, CmdSelect}, GroupGeneric: {CmdDel, CmdDo, CmdDump, CmdExists, CmdExpire, CmdExpireat, CmdKeys, CmdMigrate, CmdMove, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdRandomkey, CmdRename, CmdRenameNx, CmdRestore, CmdScan, CmdSort, CmdTTL, CmdTouch, CmdType, CmdUnlink, CmdWait}, GroupGeo: {CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember}, GroupHash: {CmdHdel, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals}, GroupHyperloglog: {CmdPfadd, CmdPfcount, CmdPfmerge}, GroupList: {CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdLindex, CmdLinsert, CmdLlen, CmdLpop, CmdLpos, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx}, GroupPubsub: {CmdPsubscribe, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdSubscribe, CmdUnsubscribe}, GroupScripting: {CmdEval, CmdEvalsha, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad}, GroupServer: {CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclLogCount, CmdAclLogReset, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdBgrewriteaof, CmdBgsave, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdFlushall, CmdFlushdb, CmdInfo, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLolwut, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdPsync, CmdReplicaof, CmdRole, CmdSave, CmdShutdown, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSwapdb, CmdTime}, GroupSet: {CmdSadd, CmdScard, CmdSdiff, CmdSdiffstore, CmdSinter, CmdSinterstore, CmdSismember, CmdSmembers, CmdSmove, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdSunion, CmdSunionstore}, GroupSortedSet: {CmdBzpopmax, CmdBzpopmin, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}, GroupStream: {CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim}, GroupString: {CmdAppend, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdDecr, CmdDecrby, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdMget, CmdMset, CmdMsetNx, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen}, GroupTransactions: {CmdDiscard, CmdExec, CmdMulti, CmdUnwatch, CmdWatch},
 }
 
 const (
@@ -4846,6 +4870,7 @@ const (
 	CmdLlen                       = "Llen"
 	CmdLolwut                     = "Lolwut"
 	CmdLpop                       = "Lpop"
+	CmdLpos                       = "Lpos"
 	CmdLpush                      = "Lpush"
 	CmdLpushx                     = "Lpushx"
 	CmdLrange                     = "Lrange"
@@ -5006,5 +5031,299 @@ const (
 	CmdZscore                     = "Zscore"
 	CmdZunionstore                = "Zunionstore"
 )
+const (
+	CmdAclCatVersion                     = "6.0.0"
+	CmdAclDeluserVersion                 = "6.0.0"
+	CmdAclGenpassVersion                 = "6.0.0"
+	CmdAclGetuserVersion                 = "6.0.0"
+	CmdAclHelpVersion                    = "6.0.0"
+	CmdAclListVersion                    = "6.0.0"
+	CmdAclLoadVersion                    = "6.0.0"
+	CmdAclLogCountVersion                = "6.0.0"
+	CmdAclLogResetVersion                = "6.0.0"
+	CmdAclSaveVersion                    = "6.0.0"
+	CmdAclSetuserVersion                 = "6.0.0"
+	CmdAclUsersVersion                   = "6.0.0"
+	CmdAclWhoamiVersion                  = "6.0.0"
+	CmdAppendVersion                     = "2.0.0"
+	CmdAuthVersion                       = "1.0.0"
+	CmdBgrewriteaofVersion               = "1.0.0"
+	CmdBgsaveVersion                     = "1.0.0"
+	CmdBitcountVersion                   = "2.6.0"
+	CmdBitfieldVersion                   = "3.2.0"
+	CmdBitopAndVersion                   = "2.6.0"
+	CmdBitopNotVersion                   = "2.6.0"
+	CmdBitopOrVersion                    = "2.6.0"
+	CmdBitopXorVersion                   = "2.6.0"
+	CmdBitposVersion                     = "2.8.7"
+	CmdBlpopVersion                      = "2.0.0"
+	CmdBrpopVersion                      = "2.0.0"
+	CmdBrpoplpushVersion                 = "2.2.0"
+	CmdBzpopmaxVersion                   = "5.0.0"
+	CmdBzpopminVersion                   = "5.0.0"
+	CmdClientCachingVersion              = "6.0.0"
+	CmdClientGetnameVersion              = "2.6.9"
+	CmdClientGetredirVersion             = "6.0.0"
+	CmdClientIdVersion                   = "5.0.0"
+	CmdClientKillVersion                 = "2.4.0"
+	CmdClientListVersion                 = "2.4.0"
+	CmdClientPauseVersion                = "2.9.50"
+	CmdClientReplyVersion                = "3.2.0"
+	CmdClientSetnameVersion              = "2.6.9"
+	CmdClientTrackingVersion             = "6.0.0"
+	CmdClientUnblockVersion              = "5.0.0"
+	CmdClusterAddslotsVersion            = "3.0.0"
+	CmdClusterBumpepochVersion           = "3.0.0"
+	CmdClusterCountFailureReportsVersion = "3.0.0"
+	CmdClusterCountkeysinslotVersion     = "3.0.0"
+	CmdClusterDelslotsVersion            = "3.0.0"
+	CmdClusterFailoverVersion            = "3.0.0"
+	CmdClusterFlushslotsVersion          = "3.0.0"
+	CmdClusterForgetVersion              = "3.0.0"
+	CmdClusterGetkeysinslotVersion       = "3.0.0"
+	CmdClusterInfoVersion                = "3.0.0"
+	CmdClusterKeyslotVersion             = "3.0.0"
+	CmdClusterMeetVersion                = "3.0.0"
+	CmdClusterMyidVersion                = "3.0.0"
+	CmdClusterNodesVersion               = "3.0.0"
+	CmdClusterReplicasVersion            = "5.0.0"
+	CmdClusterReplicateVersion           = "3.0.0"
+	CmdClusterResetVersion               = "3.0.0"
+	CmdClusterSaveconfigVersion          = "3.0.0"
+	CmdClusterSetConfigEpochVersion      = "3.0.0"
+	CmdClusterSetslotImportingVersion    = "3.0.0"
+	CmdClusterSetslotMigratingVersion    = "3.0.0"
+	CmdClusterSetslotNodeVersion         = "3.0.0"
+	CmdClusterSetslotStableVersion       = "3.0.0"
+	CmdClusterSlotsVersion               = "3.0.0"
+	CmdCommandVersion                    = "2.8.13"
+	CmdCommandCountVersion               = "2.8.13"
+	CmdCommandGetkeysVersion             = "2.8.13"
+	CmdCommandInfoVersion                = "2.8.13"
+	CmdConfigGetVersion                  = "2.0.0"
+	CmdConfigResetstatVersion            = "2.0.0"
+	CmdConfigRewriteVersion              = "2.8.0"
+	CmdConfigSetVersion                  = "2.0.0"
+	CmdDbsizeVersion                     = "1.0.0"
+	CmdDebugObjectVersion                = "1.0.0"
+	CmdDebugSegfaultVersion              = "1.0.0"
+	CmdDecrVersion                       = "1.0.0"
+	CmdDecrbyVersion                     = "1.0.0"
+	CmdDelVersion                        = "1.0.0"
+	CmdDiscardVersion                    = "2.0.0"
+	CmdDoVersion                         = "-"
+	CmdDumpVersion                       = "2.6.0"
+	CmdEchoVersion                       = "1.0.0"
+	CmdEvalVersion                       = "2.6.0"
+	CmdEvalshaVersion                    = "2.6.0"
+	CmdExecVersion                       = "1.2.0"
+	CmdExistsVersion                     = "1.0.0"
+	CmdExpireVersion                     = "1.0.0"
+	CmdExpireatVersion                   = "1.2.0"
+	CmdFlushallVersion                   = "1.0.0"
+	CmdFlushdbVersion                    = "1.0.0"
+	CmdGeoaddVersion                     = "3.2.0"
+	CmdGeodistVersion                    = "3.2.0"
+	CmdGeohashVersion                    = "3.2.0"
+	CmdGeoposVersion                     = "3.2.0"
+	CmdGeoradiusVersion                  = "3.2.0"
+	CmdGeoradiusbymemberVersion          = "3.2.0"
+	CmdGetVersion                        = "1.0.0"
+	CmdGetbitVersion                     = "2.2.0"
+	CmdGetrangeVersion                   = "2.4.0"
+	CmdGetsetVersion                     = "1.0.0"
+	CmdHdelVersion                       = "2.0.0"
+	CmdHelloVersion                      = "6.0.0"
+	CmdHexistsVersion                    = "2.0.0"
+	CmdHgetVersion                       = "2.0.0"
+	CmdHgetallVersion                    = "2.0.0"
+	CmdHincrbyVersion                    = "2.0.0"
+	CmdHincrbyfloatVersion               = "2.6.0"
+	CmdHkeysVersion                      = "2.0.0"
+	CmdHlenVersion                       = "2.0.0"
+	CmdHmgetVersion                      = "2.0.0"
+	CmdHscanVersion                      = "2.8.0"
+	CmdHsetVersion                       = "2.0.0"
+	CmdHsetNxVersion                     = "2.0.0"
+	CmdHstrlenVersion                    = "3.2.0"
+	CmdHvalsVersion                      = "2.0.0"
+	CmdIncrVersion                       = "1.0.0"
+	CmdIncrbyVersion                     = "1.0.0"
+	CmdIncrbyfloatVersion                = "2.6.0"
+	CmdInfoVersion                       = "1.0.0"
+	CmdKeysVersion                       = "1.0.0"
+	CmdLastsaveVersion                   = "1.0.0"
+	CmdLatencyDoctorVersion              = "2.8.13"
+	CmdLatencyGraphVersion               = "2.8.13"
+	CmdLatencyHelpVersion                = "2.8.13"
+	CmdLatencyHistoryVersion             = "2.8.13"
+	CmdLatencyLatestVersion              = "2.8.13"
+	CmdLatencyResetVersion               = "2.8.13"
+	CmdLindexVersion                     = "1.0.0"
+	CmdLinsertVersion                    = "2.2.0"
+	CmdLlenVersion                       = "1.0.0"
+	CmdLolwutVersion                     = "5.0.0"
+	CmdLpopVersion                       = "1.0.0"
+	CmdLposVersion                       = "6.0.6"
+	CmdLpushVersion                      = "1.0.0"
+	CmdLpushxVersion                     = "2.2.0"
+	CmdLrangeVersion                     = "1.0.0"
+	CmdLremVersion                       = "1.0.0"
+	CmdLsetVersion                       = "1.0.0"
+	CmdLtrimVersion                      = "1.0.0"
+	CmdMemoryDoctorVersion               = "4.0.0"
+	CmdMemoryHelpVersion                 = "4.0.0"
+	CmdMemoryMallocStatsVersion          = "4.0.0"
+	CmdMemoryPurgeVersion                = "4.0.0"
+	CmdMemoryStatsVersion                = "4.0.0"
+	CmdMemoryUsageVersion                = "4.0.0"
+	CmdMgetVersion                       = "1.0.0"
+	CmdMigrateVersion                    = "2.6.0"
+	CmdModuleListVersion                 = "4.0.0"
+	CmdModuleLoadVersion                 = "4.0.0"
+	CmdModuleUnloadVersion               = "4.0.0"
+	CmdMonitorVersion                    = "1.0.0"
+	CmdMoveVersion                       = "1.0.0"
+	CmdMsetVersion                       = "1.0.1"
+	CmdMsetNxVersion                     = "1.0.1"
+	CmdMultiVersion                      = "1.2.0"
+	CmdObjectEncodingVersion             = "2.2.3"
+	CmdObjectFreqVersion                 = "2.2.3"
+	CmdObjectHelpVersion                 = "2.2.3"
+	CmdObjectIdletimeVersion             = "2.2.3"
+	CmdObjectRefcountVersion             = "2.2.3"
+	CmdPTTLVersion                       = "2.6.0"
+	CmdPersistVersion                    = "2.2.0"
+	CmdPexpireVersion                    = "2.6.0"
+	CmdPexpireatVersion                  = "2.6.0"
+	CmdPfaddVersion                      = "2.8.9"
+	CmdPfcountVersion                    = "2.8.9"
+	CmdPfmergeVersion                    = "2.8.9"
+	CmdPingVersion                       = "1.0.0"
+	CmdPsubscribeVersion                 = "2.0.0"
+	CmdPsyncVersion                      = "2.8.0"
+	CmdPublishVersion                    = "2.0.0"
+	CmdPubsubChannelsVersion             = "2.8.0"
+	CmdPubsubNumpatVersion               = "2.8.0"
+	CmdPubsubNumsubVersion               = "2.8.0"
+	CmdPunsubscribeVersion               = "2.0.0"
+	CmdQuitVersion                       = "1.0.0"
+	CmdRandomkeyVersion                  = "1.0.0"
+	CmdReadonlyVersion                   = "3.0.0"
+	CmdReadwriteVersion                  = "3.0.0"
+	CmdRenameVersion                     = "1.0.0"
+	CmdRenameNxVersion                   = "1.0.0"
+	CmdReplicaofVersion                  = "5.0.0"
+	CmdRestoreVersion                    = "2.6.0"
+	CmdRoleVersion                       = "2.8.12"
+	CmdRpopVersion                       = "1.0.0"
+	CmdRpoplpushVersion                  = "1.2.0"
+	CmdRpushVersion                      = "1.0.0"
+	CmdRpushxVersion                     = "2.2.0"
+	CmdSaddVersion                       = "1.0.0"
+	CmdSaveVersion                       = "1.0.0"
+	CmdScanVersion                       = "2.8.0"
+	CmdScardVersion                      = "1.0.0"
+	CmdScriptDebugVersion                = "3.2.0"
+	CmdScriptExistsVersion               = "2.6.0"
+	CmdScriptFlushVersion                = "2.6.0"
+	CmdScriptKillVersion                 = "2.6.0"
+	CmdScriptLoadVersion                 = "2.6.0"
+	CmdSdiffVersion                      = "1.0.0"
+	CmdSdiffstoreVersion                 = "1.0.0"
+	CmdSelectVersion                     = "1.0.0"
+	CmdSetVersion                        = "1.0.0"
+	CmdSetExVersion                      = "1.0.0"
+	CmdSetExNxVersion                    = "1.0.0"
+	CmdSetExXxVersion                    = "1.0.0"
+	CmdSetNxVersion                      = "1.0.0"
+	CmdSetPxVersion                      = "1.0.0"
+	CmdSetPxNxVersion                    = "1.0.0"
+	CmdSetPxXxVersion                    = "1.0.0"
+	CmdSetXxVersion                      = "1.0.0"
+	CmdSetbitVersion                     = "2.2.0"
+	CmdSetrangeVersion                   = "2.2.0"
+	CmdShutdownVersion                   = "1.0.0"
+	CmdSinterVersion                     = "1.0.0"
+	CmdSinterstoreVersion                = "1.0.0"
+	CmdSismemberVersion                  = "1.0.0"
+	CmdSlowlogGetVersion                 = "2.2.12"
+	CmdSlowlogLenVersion                 = "2.2.12"
+	CmdSlowlogResetVersion               = "2.2.12"
+	CmdSmembersVersion                   = "1.0.0"
+	CmdSmoveVersion                      = "1.0.0"
+	CmdSortVersion                       = "1.0.0"
+	CmdSpopVersion                       = "1.0.0"
+	CmdSrandmemberVersion                = "1.0.0"
+	CmdSremVersion                       = "1.0.0"
+	CmdSscanVersion                      = "2.8.0"
+	CmdStralgoLcsIdxKeysVersion          = "6.0.0"
+	CmdStralgoLcsIdxStringsVersion       = "6.0.0"
+	CmdStralgoLcsKeysVersion             = "6.0.0"
+	CmdStralgoLcsLenKeysVersion          = "6.0.0"
+	CmdStralgoLcsLenStringsVersion       = "6.0.0"
+	CmdStralgoLcsStringsVersion          = "6.0.0"
+	CmdStrlenVersion                     = "2.2.0"
+	CmdSubscribeVersion                  = "2.0.0"
+	CmdSunionVersion                     = "1.0.0"
+	CmdSunionstoreVersion                = "1.0.0"
+	CmdSwapdbVersion                     = "4.0.0"
+	CmdTTLVersion                        = "1.0.0"
+	CmdTimeVersion                       = "2.6.0"
+	CmdTouchVersion                      = "3.2.1"
+	CmdTypeVersion                       = "1.0.0"
+	CmdUnlinkVersion                     = "4.0.0"
+	CmdUnsubscribeVersion                = "2.0.0"
+	CmdUnwatchVersion                    = "2.2.0"
+	CmdWaitVersion                       = "3.0.0"
+	CmdWatchVersion                      = "2.2.0"
+	CmdXackVersion                       = "5.0.0"
+	CmdXaddVersion                       = "5.0.0"
+	CmdXclaimVersion                     = "5.0.0"
+	CmdXdelVersion                       = "5.0.0"
+	CmdXgroupCreateVersion               = "5.0.0"
+	CmdXgroupDelconsumerVersion          = "5.0.0"
+	CmdXgroupDestroyVersion              = "5.0.0"
+	CmdXgroupHelpVersion                 = "5.0.0"
+	CmdXgroupSetidVersion                = "5.0.0"
+	CmdXinfoConsumersVersion             = "5.0.0"
+	CmdXinfoGroupsVersion                = "5.0.0"
+	CmdXinfoHelpVersion                  = "5.0.0"
+	CmdXinfoStreamVersion                = "5.0.0"
+	CmdXlenVersion                       = "5.0.0"
+	CmdXpendingVersion                   = "5.0.0"
+	CmdXrangeVersion                     = "5.0.0"
+	CmdXreadVersion                      = "5.0.0"
+	CmdXreadgroupVersion                 = "5.0.0"
+	CmdXrevrangeVersion                  = "5.0.0"
+	CmdXtrimVersion                      = "5.0.0"
+	CmdZaddVersion                       = "1.2.0"
+	CmdZaddChVersion                     = "1.2.0"
+	CmdZaddNxVersion                     = "1.2.0"
+	CmdZaddXxVersion                     = "1.2.0"
+	CmdZaddXxChVersion                   = "1.2.0"
+	CmdZcardVersion                      = "1.2.0"
+	CmdZcountVersion                     = "2.0.0"
+	CmdZincrbyVersion                    = "1.2.0"
+	CmdZinterstoreVersion                = "2.0.0"
+	CmdZlexcountVersion                  = "2.8.9"
+	CmdZpopmaxVersion                    = "5.0.0"
+	CmdZpopminVersion                    = "5.0.0"
+	CmdZrangeVersion                     = "1.2.0"
+	CmdZrangebylexVersion                = "2.8.9"
+	CmdZrangebyscoreVersion              = "1.0.5"
+	CmdZrankVersion                      = "2.0.0"
+	CmdZremVersion                       = "1.2.0"
+	CmdZremrangebylexVersion             = "2.8.9"
+	CmdZremrangebyrankVersion            = "2.0.0"
+	CmdZremrangebyscoreVersion           = "1.2.0"
+	CmdZrevrangeVersion                  = "1.2.0"
+	CmdZrevrangebylexVersion             = "2.8.9"
+	CmdZrevrangebyscoreVersion           = "2.2.0"
+	CmdZrevrankVersion                   = "2.0.0"
+	CmdZscanVersion                      = "2.8.0"
+	CmdZscoreVersion                     = "1.2.0"
+	CmdZunionstoreVersion                = "2.0.0"
+)
 
-var CommandNames = []string{CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclLogCount, CmdAclLogReset, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAppend, CmdAuth, CmdBgrewriteaof, CmdBgsave, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdBzpopmax, CmdBzpopmin, CmdClientCaching, CmdClientGetname, CmdClientGetredir, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlots, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdDecr, CmdDecrby, CmdDel, CmdDiscard, CmdDo, CmdDump, CmdEcho, CmdEval, CmdEvalsha, CmdExec, CmdExists, CmdExpire, CmdExpireat, CmdFlushall, CmdFlushdb, CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdHdel, CmdHello, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdInfo, CmdKeys, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLindex, CmdLinsert, CmdLlen, CmdLolwut, CmdLpop, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdMget, CmdMigrate, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdMove, CmdMset, CmdMsetNx, CmdMulti, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdPfadd, CmdPfcount, CmdPfmerge, CmdPing, CmdPsubscribe, CmdPsync, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdQuit, CmdRandomkey, CmdReadonly, CmdReadwrite, CmdRename, CmdRenameNx, CmdReplicaof, CmdRestore, CmdRole, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx, CmdSadd, CmdSave, CmdScan, CmdScard, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad, CmdSdiff, CmdSdiffstore, CmdSelect, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdShutdown, CmdSinter, CmdSinterstore, CmdSismember, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSmembers, CmdSmove, CmdSort, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen, CmdSubscribe, CmdSunion, CmdSunionstore, CmdSwapdb, CmdTTL, CmdTime, CmdTouch, CmdType, CmdUnlink, CmdUnsubscribe, CmdUnwatch, CmdWait, CmdWatch, CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}
+var CommandNames = []string{CmdAclCat, CmdAclDeluser, CmdAclGenpass, CmdAclGetuser, CmdAclHelp, CmdAclList, CmdAclLoad, CmdAclLogCount, CmdAclLogReset, CmdAclSave, CmdAclSetuser, CmdAclUsers, CmdAclWhoami, CmdAppend, CmdAuth, CmdBgrewriteaof, CmdBgsave, CmdBitcount, CmdBitfield, CmdBitopAnd, CmdBitopNot, CmdBitopOr, CmdBitopXor, CmdBitpos, CmdBlpop, CmdBrpop, CmdBrpoplpush, CmdBzpopmax, CmdBzpopmin, CmdClientCaching, CmdClientGetname, CmdClientGetredir, CmdClientId, CmdClientKill, CmdClientList, CmdClientPause, CmdClientReply, CmdClientSetname, CmdClientTracking, CmdClientUnblock, CmdClusterAddslots, CmdClusterBumpepoch, CmdClusterCountFailureReports, CmdClusterCountkeysinslot, CmdClusterDelslots, CmdClusterFailover, CmdClusterFlushslots, CmdClusterForget, CmdClusterGetkeysinslot, CmdClusterInfo, CmdClusterKeyslot, CmdClusterMeet, CmdClusterMyid, CmdClusterNodes, CmdClusterReplicas, CmdClusterReplicate, CmdClusterReset, CmdClusterSaveconfig, CmdClusterSetConfigEpoch, CmdClusterSetslotImporting, CmdClusterSetslotMigrating, CmdClusterSetslotNode, CmdClusterSetslotStable, CmdClusterSlots, CmdCommand, CmdCommandCount, CmdCommandGetkeys, CmdCommandInfo, CmdConfigGet, CmdConfigResetstat, CmdConfigRewrite, CmdConfigSet, CmdDbsize, CmdDebugObject, CmdDebugSegfault, CmdDecr, CmdDecrby, CmdDel, CmdDiscard, CmdDo, CmdDump, CmdEcho, CmdEval, CmdEvalsha, CmdExec, CmdExists, CmdExpire, CmdExpireat, CmdFlushall, CmdFlushdb, CmdGeoadd, CmdGeodist, CmdGeohash, CmdGeopos, CmdGeoradius, CmdGeoradiusbymember, CmdGet, CmdGetbit, CmdGetrange, CmdGetset, CmdHdel, CmdHello, CmdHexists, CmdHget, CmdHgetall, CmdHincrby, CmdHincrbyfloat, CmdHkeys, CmdHlen, CmdHmget, CmdHscan, CmdHset, CmdHsetNx, CmdHstrlen, CmdHvals, CmdIncr, CmdIncrby, CmdIncrbyfloat, CmdInfo, CmdKeys, CmdLastsave, CmdLatencyDoctor, CmdLatencyGraph, CmdLatencyHelp, CmdLatencyHistory, CmdLatencyLatest, CmdLatencyReset, CmdLindex, CmdLinsert, CmdLlen, CmdLolwut, CmdLpop, CmdLpos, CmdLpush, CmdLpushx, CmdLrange, CmdLrem, CmdLset, CmdLtrim, CmdMemoryDoctor, CmdMemoryHelp, CmdMemoryMallocStats, CmdMemoryPurge, CmdMemoryStats, CmdMemoryUsage, CmdMget, CmdMigrate, CmdModuleList, CmdModuleLoad, CmdModuleUnload, CmdMonitor, CmdMove, CmdMset, CmdMsetNx, CmdMulti, CmdObjectEncoding, CmdObjectFreq, CmdObjectHelp, CmdObjectIdletime, CmdObjectRefcount, CmdPTTL, CmdPersist, CmdPexpire, CmdPexpireat, CmdPfadd, CmdPfcount, CmdPfmerge, CmdPing, CmdPsubscribe, CmdPsync, CmdPublish, CmdPubsubChannels, CmdPubsubNumpat, CmdPubsubNumsub, CmdPunsubscribe, CmdQuit, CmdRandomkey, CmdReadonly, CmdReadwrite, CmdRename, CmdRenameNx, CmdReplicaof, CmdRestore, CmdRole, CmdRpop, CmdRpoplpush, CmdRpush, CmdRpushx, CmdSadd, CmdSave, CmdScan, CmdScard, CmdScriptDebug, CmdScriptExists, CmdScriptFlush, CmdScriptKill, CmdScriptLoad, CmdSdiff, CmdSdiffstore, CmdSelect, CmdSet, CmdSetEx, CmdSetExNx, CmdSetExXx, CmdSetNx, CmdSetPx, CmdSetPxNx, CmdSetPxXx, CmdSetXx, CmdSetbit, CmdSetrange, CmdShutdown, CmdSinter, CmdSinterstore, CmdSismember, CmdSlowlogGet, CmdSlowlogLen, CmdSlowlogReset, CmdSmembers, CmdSmove, CmdSort, CmdSpop, CmdSrandmember, CmdSrem, CmdSscan, CmdStralgoLcsIdxKeys, CmdStralgoLcsIdxStrings, CmdStralgoLcsKeys, CmdStralgoLcsLenKeys, CmdStralgoLcsLenStrings, CmdStralgoLcsStrings, CmdStrlen, CmdSubscribe, CmdSunion, CmdSunionstore, CmdSwapdb, CmdTTL, CmdTime, CmdTouch, CmdType, CmdUnlink, CmdUnsubscribe, CmdUnwatch, CmdWait, CmdWatch, CmdXack, CmdXadd, CmdXclaim, CmdXdel, CmdXgroupCreate, CmdXgroupDelconsumer, CmdXgroupDestroy, CmdXgroupHelp, CmdXgroupSetid, CmdXinfoConsumers, CmdXinfoGroups, CmdXinfoHelp, CmdXinfoStream, CmdXlen, CmdXpending, CmdXrange, CmdXread, CmdXreadgroup, CmdXrevrange, CmdXtrim, CmdZadd, CmdZaddCh, CmdZaddNx, CmdZaddXx, CmdZaddXxCh, CmdZcard, CmdZcount, CmdZincrby, CmdZinterstore, CmdZlexcount, CmdZpopmax, CmdZpopmin, CmdZrange, CmdZrangebylex, CmdZrangebyscore, CmdZrank, CmdZrem, CmdZremrangebylex, CmdZremrangebyrank, CmdZremrangebyscore, CmdZrevrange, CmdZrevrangebylex, CmdZrevrangebyscore, CmdZrevrank, CmdZscan, CmdZscore, CmdZunionstore}
