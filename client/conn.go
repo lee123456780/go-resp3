@@ -71,8 +71,8 @@ var (
 type conn struct {
 	inShutdown int32 // atomic access
 
-	mu      sync.RWMutex
-	flushMu sync.Mutex // protect flusch method
+	mu       sync.RWMutex
+	encodemu sync.Mutex // protects encoding + flush
 
 	db *db // connection owned by db - nil otherwise
 
@@ -439,8 +439,8 @@ func (c *conn) reader(wg *sync.WaitGroup, readChan chan<- interface{}, errorChan
 }
 
 func (c *conn) flush(pipeline bool, results []*result) error {
-	c.flushMu.Lock()
-	defer c.flushMu.Unlock()
+	c.encodemu.Lock()
+	defer c.encodemu.Unlock()
 	for _, r := range results {
 		if pipeline {
 			r.flush()
