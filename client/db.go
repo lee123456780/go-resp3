@@ -48,7 +48,7 @@ type DB interface {
 }
 
 // OpenDB open a new database.
-func OpenDB(address string, dialer Dialer) DB {
+func OpenDB(address string, dialer *Dialer) DB {
 	return newDB(address, dialer)
 }
 
@@ -63,7 +63,7 @@ type db struct {
 	waitDuration int64 // Wait duration.
 
 	address string
-	dialer  Dialer
+	dialer  *Dialer
 	closed  int32
 
 	// connection pooling attributes
@@ -85,7 +85,10 @@ type db struct {
 	*command
 }
 
-func newDB(address string, dialer Dialer) *db {
+func newDB(address string, dialer *Dialer) *db {
+	if dialer == nil {
+		dialer = new(Dialer)
+	}
 	db := &db{
 		address:     address,
 		dialer:      dialer,
