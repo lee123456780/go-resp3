@@ -19,7 +19,7 @@ go get github.com/stfnmllr/go-resp3/client
 
 ## Building
 
-To build go-resp3 you need to have a working Go environment with [version 1.14.x or higher installed](https://golang.org/dl/).
+To build go-resp3 you need to have a working Go environment with [version 1.15.x or higher installed](https://golang.org/dl/).
 
 ## Documentation
 
