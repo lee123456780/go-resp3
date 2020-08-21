@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         go: [ '1.15', '1.14' ]
-    name: Go ${{ matrix.go }} build    
+    name: Go ${{ matrix.go }} test    
     
     services:
       redis:
