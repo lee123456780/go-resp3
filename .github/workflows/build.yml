@@ -30,3 +30,6 @@ jobs:
       run: |
         go get -u golang.org/x/lint/golint
         golint ./...
+    
+    - name: REUSE Compliance Check
+      uses: fsfe/reuse-action@v1
