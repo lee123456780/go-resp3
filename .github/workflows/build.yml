@@ -26,6 +26,10 @@ jobs:
       run: |
         go build -v ./...
 
+    - name: Vet
+      run: |
+        go vet ./...
+
     - name: Linter
       run: |
         go get -u golang.org/x/lint/golint
