@@ -149,7 +149,6 @@ func readFile(filename string) ([]byte, error) {
 
 func writeFile(filename string, b []byte) error {
 	return ioutil.WriteFile(filename, b, 0644)
-	return nil
 }
 
 func writeAstFile(filename string, fset *token.FileSet, node ast.Node) error {
