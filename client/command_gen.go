@@ -1017,8 +1017,8 @@ func (c *command) ClientTracking(on bool, redirect *int64, prefix []string, bcas
 		r.request.cmd = append(r.request.cmd, "REDIRECT", redirect)
 	}
 	if prefix != nil {
-		r.request.cmd = append(r.request.cmd, "PREFIX")
 		for _, v := range prefix {
+			r.request.cmd = append(r.request.cmd, "PREFIX")
 			r.request.cmd = append(r.request.cmd, v)
 		}
 	}
